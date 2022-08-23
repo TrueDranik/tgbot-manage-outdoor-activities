@@ -1,6 +1,7 @@
-package com.bot.sup.service.callbackquery;
+package com.bot.sup.enums;
 
 public enum ActivityEnum {
+    MENU,
     SCHEDULE,
     INSTRUCTORS,
     ACTIVITIES,
