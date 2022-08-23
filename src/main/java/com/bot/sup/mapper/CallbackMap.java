@@ -1,4 +1,4 @@
-package com.bot.sup.enums;
+package com.bot.sup.mapper;
 
 import com.bot.sup.service.callbackquery.Callback;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,7 @@ public class CallbackMap {
         callbacks.forEach(c -> c.getSupportedActivities()
                 .forEach(c1 -> CALLBACK_MAP.put(c1.name(), c)));
     }
+
     public Callback getCallback(String keyCallback) {
         return CALLBACK_MAP.get(keyCallback);
     }
