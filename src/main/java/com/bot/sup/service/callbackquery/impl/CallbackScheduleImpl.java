@@ -64,7 +64,7 @@ public class CallbackScheduleImpl implements Callback {
                 InlineKeyboardButton.builder()
                         .text("Каноэ")
                         .callbackData("jfkd")
-                .build()
+                        .build()
         );
         secondRow.add(
                 InlineKeyboardButton.builder()

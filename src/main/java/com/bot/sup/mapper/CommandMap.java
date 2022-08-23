@@ -19,4 +19,3 @@ public class CommandMap {
         return COMMAND_MAP.get(keyCommand);
     }
 }
-
