@@ -1,17 +1,22 @@
 package com.bot.sup.service;
 
+import com.bot.sup.api.telegram.handler.Handle;
 import com.bot.sup.config.properties.TelegramProperties;
+import com.bot.sup.mapper.CallbackMap;
+import com.bot.sup.mapper.CommandMap;
+import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Component
 @RequiredArgsConstructor
 public class Bot extends TelegramLongPollingBot {
     final TelegramProperties config;
+    private final CallbackMap callbackMap;
+    private final CommandMap commandMap;
 
     @Override
     public String getBotUsername() { return config.getNameBot(); }
@@ -21,36 +26,15 @@ public class Bot extends TelegramLongPollingBot {
         return config.getTokenBot();
     }
 
+    @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()){
-            String messageText = update.getMessage().getText();
-            long chatId = update.getMessage().getChatId();
-
-            switch (messageText){
-                case "/start":
-                    startCommandReceived(chatId);
-                    break;
-            }
+        if (update.hasCallbackQuery()) {
+            Callback callback = callbackMap.getCallback(update.getCallbackQuery().getData());
+            execute(callback.getCallbackQuery(update.getCallbackQuery()));
+        }else if (update.getMessage().hasText()) {
+            Handle command = commandMap.getCommand(update.getMessage().getText());
+            execute(command.getMessage(update));
         }
-    }
-
-    private void startCommandReceived(long chatId){
-        String answer = "Расписание(кнопка)\n" + "Инструкторы(кнопка)\n" + "Активности(кнопка)\n";
-
-        sendMessage(chatId, answer);
-    }
-
-    private SendMessage sendMessage(long chatId, String textToSend){
-        SendMessage message = new SendMessage();
-        message.setChatId(String.valueOf(chatId));
-        message.setText(textToSend);
-
-        try {
-            execute(message);
-        } catch (TelegramApiException e) {
-        }
-
-        return message;
     }
 }
