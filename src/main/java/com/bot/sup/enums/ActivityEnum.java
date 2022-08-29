@@ -4,5 +4,5 @@ public enum ActivityEnum {
     MENU,
     SCHEDULE,
     INSTRUCTORS,
-    ACTIVITIES,
+    ACTIVISM,
 }
