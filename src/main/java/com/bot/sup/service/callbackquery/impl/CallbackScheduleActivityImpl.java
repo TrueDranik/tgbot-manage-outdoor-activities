@@ -15,7 +15,7 @@ import static com.bot.sup.enums.ActivityEnum.SCHEDULE_ACTIVITY;
 @RequiredArgsConstructor
 @Service
 public class CallbackScheduleActivityImpl implements Callback {
-    public static final Set<ActivityEnum> ACTIVTIES = Set.of(SCHEDULE_ACTIVITY);
+    public static final Set<ActivityEnum> ACTIVITIES = Set.of(SCHEDULE_ACTIVITY);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -24,6 +24,6 @@ public class CallbackScheduleActivityImpl implements Callback {
 
     @Override
     public Collection<ActivityEnum> getSupportedActivities() {
-        return ACTIVTIES;
+        return ACTIVITIES;
     }
 }

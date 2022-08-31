@@ -18,7 +18,7 @@ import static com.bot.sup.enums.ActivityEnum.DELETE_ACTIVITY;
 @RequiredArgsConstructor
 @Service
 public class CallbackDeleteActivityImpl implements Callback {
-    public static final Set<ActivityEnum> ACTIVTIES = Set.of(DELETE_ACTIVITY);
+    public static final Set<ActivityEnum> ACTIVITIES = Set.of(DELETE_ACTIVITY);
     private final ActivityRepository activityRepository;
 
     @Override
@@ -28,7 +28,7 @@ public class CallbackDeleteActivityImpl implements Callback {
         deleteActivity(Long.parseLong(activityId));
 
         return EditMessageText.builder().messageId(callbackQuery.getMessage().getMessageId())
-                .text("Ваш профиль удален.\nВернитесь в главное меню.")
+                .text("Активность удалена.\nВернитесь в главное меню.")
                 .chatId(chatId)
                 .replyMarkup(createKeyboardForDeleteActivity())
                 .build();
@@ -53,6 +53,6 @@ public class CallbackDeleteActivityImpl implements Callback {
 
     @Override
     public Collection<ActivityEnum> getSupportedActivities() {
-        return ACTIVTIES;
+        return ACTIVITIES;
     }
 }

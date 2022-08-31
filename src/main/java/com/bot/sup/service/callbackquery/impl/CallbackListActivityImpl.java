@@ -30,8 +30,8 @@ public class CallbackListActivityImpl implements Callback {
         if (activities.size() == 0) {
             buttonEmptyInstructors.add(Collections.singletonList(
                     InlineKeyboardButton.builder()
-                            .text("Меню")
-                            .callbackData("MENU")
+                            .text("⬅️Назад")
+                            .callbackData("SAP_ACTIVITY")
                             .build()
             ));
             InlineKeyboardMarkup keyboard = InlineKeyboardMarkup.builder()
@@ -74,8 +74,8 @@ public class CallbackListActivityImpl implements Callback {
         }
 
         rowSecond.add(InlineKeyboardButton.builder()
-                .text("Меню")
-                .callbackData("MENU")
+                .text("⬅️Назад")
+                .callbackData("SAP_ACTIVITY")
                 .build());
 
         mainKeyboard.add(rowSecond);

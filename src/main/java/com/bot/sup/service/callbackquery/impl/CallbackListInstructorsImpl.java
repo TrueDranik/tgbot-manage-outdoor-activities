@@ -30,8 +30,8 @@ public class CallbackListInstructorsImpl implements Callback {
         if (instructor.size() == 0) {
             buttonEmptyInstructors.add(Collections.singletonList(
                     InlineKeyboardButton.builder()
-                            .text("Меню")
-                            .callbackData("MENU")
+                            .text("⬅️Назад")
+                            .callbackData("INSTRUCTORS")
                             .build()
             ));
             InlineKeyboardMarkup keyboard = InlineKeyboardMarkup.builder()
@@ -59,7 +59,7 @@ public class CallbackListInstructorsImpl implements Callback {
         instructor.forEach(i -> {
                     rowMain.add(InlineKeyboardButton.builder()
                             .text(i.getFirstName() + " " + i.getSecondName())
-                            .callbackData("DELETE_INSTRUCTOR/" + i.getTgId())
+                            .callbackData("INSTRUCTOR_OPTION/" + i.getTgId())
                             .build());
                     if (rowMain.size() == 2) {
                         List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);
@@ -74,8 +74,8 @@ public class CallbackListInstructorsImpl implements Callback {
         }
 
         rowSecond.add(InlineKeyboardButton.builder()
-                .text("Меню")
-                .callbackData("MENU")
+                .text("⬅️Назад")
+                .callbackData("INSTRUCTORS")
                 .build());
 
         mainKeyboard.add(rowSecond);
