@@ -5,6 +5,7 @@ public enum ActivityEnum {
     // РАСПИСАНИЕ
     SCHEDULE,
     SCHEDULE_ACTIVITY,
+    SCHEDULE_OPTION,
     // ИНСТРУКТОРЫ
     INSTRUCTORS,
     LIST_INSTRUCTORS,

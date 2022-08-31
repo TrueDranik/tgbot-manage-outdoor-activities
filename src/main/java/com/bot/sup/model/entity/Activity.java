@@ -1,10 +1,12 @@
 package com.bot.sup.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "activity")
@@ -36,6 +38,9 @@ public class Activity {
     @ManyToOne
     @JoinColumn(name = "route_id")
     private Route route;
+
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Schedule> schedules;
 
     @Column(name = "duration")
     private LocalDateTime duration;
