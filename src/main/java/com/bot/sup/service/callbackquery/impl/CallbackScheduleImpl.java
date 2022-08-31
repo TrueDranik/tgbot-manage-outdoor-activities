@@ -1,6 +1,8 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.enums.ActivityEnum;
+import com.bot.sup.model.entity.Activity;
+import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,65 +23,53 @@ import static com.bot.sup.enums.ActivityEnum.SCHEDULE;
 @Service
 public class CallbackScheduleImpl implements Callback {
     public static final Set<ActivityEnum> ACTIVTIES = Set.of(SCHEDULE);
+    private final ActivityRepository activityRepository;
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
+        List<Activity> activities = activityRepository.findAll();
         Long chatId = callbackQuery.getMessage()
                 .getChatId();
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
                 .text("Расписание какой активности Вы хотите настроить?")
-                .replyMarkup(setUpKeyboard())
+                .replyMarkup(generateKeyboardWithActivity(activities))
                 .build();
     }
 
-    private InlineKeyboardMarkup setUpKeyboard() {
-        List<InlineKeyboardButton> firstRow = new ArrayList<>();
-        List<InlineKeyboardButton> secondRow = new ArrayList<>();
-        List<InlineKeyboardButton> Buttons = new ArrayList<>();
+    private InlineKeyboardMarkup generateKeyboardWithActivity(List<Activity> activities) {
+        List<List<InlineKeyboardButton>> mainKeyboard = new ArrayList<>();
+        List<InlineKeyboardButton> rowMain = new ArrayList<>();
+        List<InlineKeyboardButton> rowSecond = new ArrayList<>();
 
-        InlineKeyboardButton menu =
-                InlineKeyboardButton.builder()
-                        .text("Меню")
-                        .callbackData("MENU")
-                        .build();
-
-        Buttons.add(menu);
-
-        firstRow.add(
-                InlineKeyboardButton.builder()
-                        .text("Сап-тур")
-                        .callbackData("MваиваENU")
-                        .build()
-        );
-        firstRow.add(
-                InlineKeyboardButton.builder()
-                        .text("байдарка")
-                        .callbackData("вив")
-                        .build()
+        activities.forEach(i -> {
+                    rowMain.add(InlineKeyboardButton.builder()
+                            .text(i.getName())
+                            .callbackData("SCHEDULE_ACTIVITY/" + i.getId())
+                            .build());
+                    if (rowMain.size() == 2) {
+                        List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);
+                        mainKeyboard.add(temporaryKeyboardRow);
+                        rowMain.clear();
+                    }
+                }
         );
 
-        secondRow.add(
-                InlineKeyboardButton.builder()
-                        .text("Каноэ")
-                        .callbackData("jfkd")
-                        .build()
-        );
-        secondRow.add(
-                InlineKeyboardButton.builder()
-                        .text("Дог-трекинг")
-                        .callbackData("fdsa")
-                        .build()
-        );
+        if (rowMain.size() == 1) {
+            mainKeyboard.add(rowMain);
+        }
 
-        InlineKeyboardMarkup build = InlineKeyboardMarkup.builder()
-                .keyboardRow(firstRow)
-                .keyboardRow(secondRow)
-                .keyboardRow(Buttons)
+        rowSecond.add(InlineKeyboardButton.builder()
+                .text("Меню")
+                .callbackData("MENU")
+                .build());
+
+        mainKeyboard.add(rowSecond);
+
+        return InlineKeyboardMarkup.builder()
+                .keyboard(mainKeyboard)
                 .build();
-
-        return build;
     }
 
     @Override
