@@ -8,6 +8,8 @@ public enum ActivityEnum {
     // ИНСТРУКТОРЫ
     INSTRUCTORS,
     LIST_INSTRUCTORS,
+    INSTRUCTOR_OPTION,
+    DELETE_INSTRUCTOR,
     //АКТИВНОСТИ
     SAP_ACTIVITY,
     LIST_ACTIVITY,
