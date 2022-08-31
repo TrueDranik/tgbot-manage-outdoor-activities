@@ -22,7 +22,7 @@ import static com.bot.sup.enums.ActivityEnum.SCHEDULE;
 @RequiredArgsConstructor
 @Service
 public class CallbackScheduleImpl implements Callback {
-    public static final Set<ActivityEnum> ACTIVTIES = Set.of(SCHEDULE);
+    public static final Set<ActivityEnum> ACTIVITIES = Set.of(SCHEDULE);
     private final ActivityRepository activityRepository;
 
     @Override
@@ -61,7 +61,7 @@ public class CallbackScheduleImpl implements Callback {
         }
 
         rowSecond.add(InlineKeyboardButton.builder()
-                .text("Меню")
+                .text("↖️Меню↖️")
                 .callbackData("MENU")
                 .build());
 
@@ -74,6 +74,6 @@ public class CallbackScheduleImpl implements Callback {
 
     @Override
     public Collection<ActivityEnum> getSupportedActivities() {
-        return ACTIVTIES;
+        return ACTIVITIES;
     }
 }

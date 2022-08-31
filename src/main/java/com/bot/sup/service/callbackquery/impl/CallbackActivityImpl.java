@@ -39,17 +39,17 @@ public class CallbackActivityImpl implements Callback {
 
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("Список активностей")
+                        .text("\uD83D\uDCDDСписок активностей")
                         .callbackData("LIST_ACTIVITY")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("Добавить активность")
+                        .text("\uD83C\uDD95Добавить активность")
                         .callbackData("ADD_ACTIVITY")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("Меню")
+                        .text("↖️Меню↖️")
                         .callbackData("MENU")
                         .build()));
 

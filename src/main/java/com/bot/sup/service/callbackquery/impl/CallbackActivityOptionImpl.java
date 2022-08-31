@@ -19,7 +19,7 @@ import static com.bot.sup.enums.ActivityEnum.ACTIVITY_OPTION;
 @RequiredArgsConstructor
 @Service
 public class CallbackActivityOptionImpl implements Callback {
-    public static final Set<ActivityEnum> ACTIVTIES = Set.of(ACTIVITY_OPTION);
+    public static final Set<ActivityEnum> ACTIVITIES = Set.of(ACTIVITY_OPTION);
     private final ActivityRepository activityRepository;
 
     @Override
@@ -37,26 +37,33 @@ public class CallbackActivityOptionImpl implements Callback {
 
     private InlineKeyboardMarkup generateKeyboardWithActivity(String activityId) {
         List<InlineKeyboardButton> firstRow = new ArrayList<>();
+        List<InlineKeyboardButton> secondRow = new ArrayList<>();
 
         firstRow.add(
                 InlineKeyboardButton.builder()
-                        .text("Изменить")
+                        .text("\uD83D\uDD04Изменить")
                         .callbackData("ACTIVITY_CHANGE")
                         .build());
         firstRow.add(
                 InlineKeyboardButton.builder()
-                        .text("Удалить")
+                        .text("❌Удалить")
                         .callbackData("DELETE_ACTIVITY/" + activityId)
                         .build());
 
+        secondRow.add(
+                InlineKeyboardButton.builder()
+                        .text("⬅️Назад")
+                        .callbackData("LIST_ACTIVITY")
+                        .build());
 
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(firstRow)
+                .keyboardRow(secondRow)
                 .build();
     }
 
     @Override
     public Collection<ActivityEnum> getSupportedActivities() {
-        return ACTIVTIES;
+        return ACTIVITIES;
     }
 }
