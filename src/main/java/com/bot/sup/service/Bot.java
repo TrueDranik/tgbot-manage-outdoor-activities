@@ -7,12 +7,14 @@ import com.bot.sup.mapper.CommandMap;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class Bot extends TelegramLongPollingBot {
     final TelegramProperties config;
     private final CallbackMap callbackMap;
@@ -30,7 +32,8 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasCallbackQuery()) {
-            Callback callback = callbackMap.getCallback(update.getCallbackQuery().getData());
+            Callback callback = callbackMap.getCallback(update.getCallbackQuery().getData().split("/")[0]);
+            log.info("callback = " + update.getCallbackQuery().getData());
             execute(callback.getCallbackQuery(update.getCallbackQuery()));
         }else if (update.getMessage().hasText()) {
             Handle command = commandMap.getCommand(update.getMessage().getText());

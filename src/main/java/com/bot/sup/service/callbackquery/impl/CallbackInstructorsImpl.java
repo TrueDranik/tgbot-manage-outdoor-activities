@@ -20,11 +20,12 @@ import static com.bot.sup.enums.ActivityEnum.INSTRUCTORS;
 @RequiredArgsConstructor
 @Service
 public class CallbackInstructorsImpl implements Callback {
-    public static final Set<ActivityEnum> ACTIVTIES = Set.of(INSTRUCTORS);
+    public static final Set<ActivityEnum> ACTIVITIES = Set.of(INSTRUCTORS);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.getMessage().getChatId();
+
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
@@ -39,12 +40,12 @@ public class CallbackInstructorsImpl implements Callback {
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text("Список инструкторов")
-                        .callbackData("MваиваENU")
+                        .callbackData("LIST_INSTRUCTORS")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text("Добавить инструктора")
-                        .callbackData("jfkd")
+                        .callbackData("ADD_INSTRUCTOR")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
@@ -59,6 +60,6 @@ public class CallbackInstructorsImpl implements Callback {
 
     @Override
     public Collection<ActivityEnum> getSupportedActivities() {
-        return ACTIVTIES;
+        return ACTIVITIES;
     }
 }
