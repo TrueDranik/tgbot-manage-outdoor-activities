@@ -33,11 +33,20 @@ public class CallbackScheduleActivityImpl implements Callback {
         List<Schedule> schedules = scheduleRepository.findAll();
         Optional<Activity> activity = activityRepository.findById(Long.parseLong(scheduleId));
 
+        if (generateKeyboardWithSchedule(schedules, activity).getKeyboard().size() <= 1) {
+            return EditMessageText.builder()
+                    .messageId(callbackQuery.getMessage().getMessageId())
+                    .chatId(chatId)
+                    .text("❌Расписание для '" + activity.get().getName() + "' отсутствует.\nВернитесь назад.")
+                    .replyMarkup(generateKeyboardWithSchedule(schedules, activity))
+                    .build();
+        }
+
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text("Выберите дату для " + activity.get().getName())
-                .replyMarkup(generateKeyboardWithSchedule(schedules,activity))
+                .text("Выберите дату для '" + activity.get().getName() + "'")
+                .replyMarkup(generateKeyboardWithSchedule(schedules, activity))
                 .build();
     }
 
@@ -76,5 +85,7 @@ public class CallbackScheduleActivityImpl implements Callback {
     }
 
     @Override
-    public Collection<ActivityEnum> getSupportedActivities() { return ACTIVITIES; }
+    public Collection<ActivityEnum> getSupportedActivities() {
+        return ACTIVITIES;
+    }
 }
