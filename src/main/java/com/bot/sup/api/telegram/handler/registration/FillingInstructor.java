@@ -46,9 +46,7 @@ public class FillingInstructor implements HandleRegistration {
         if (instructorCurrentState.equals(RegistrationInstructorStateEnum.ASK_FULL_NAME)) {
             instructorDataCache.setInstructorCurrentState(chatId, RegistrationInstructorStateEnum.ASK_PHONE_NUMBER);
             replyToUser = messageService.buildReplyMessage(chatId, "Введи ниже имя и фамилию (через пробел).");
-        }
-
-        if (instructorCurrentState.equals(RegistrationInstructorStateEnum.ASK_PHONE_NUMBER)) {
+        }else if (instructorCurrentState.equals(RegistrationInstructorStateEnum.ASK_PHONE_NUMBER)) {
             if (Validation.isValidText(userAnswer)) {
                 try {
                     String[] fullName = userAnswer.split(" ");
@@ -69,30 +67,36 @@ public class FillingInstructor implements HandleRegistration {
 
                 replyToUser = messageService.buildReplyMessage(chatId, "Введите номер телефона.");
 
-                instructorDataCache.setInstructorCurrentState(chatId, RegistrationInstructorStateEnum.REGISTERED);
+                instructorDataCache.setInstructorCurrentState(chatId, RegistrationInstructorStateEnum.ASK_TELEGRAM_ID);
             } else {
                 replyToUser = messageService.buildReplyMessage(chatId, "Допустимы только кириллица и английский!");
                 instructorDataCache.setInstructorCurrentState(chatId, RegistrationInstructorStateEnum.ASK_PHONE_NUMBER);
 
                 return replyToUser;
             }
-        } else if (instructorCurrentState.equals(RegistrationInstructorStateEnum.REGISTERED)) {
+        } else if (instructorCurrentState.equals(RegistrationInstructorStateEnum.ASK_TELEGRAM_ID)) {
             if (Validation.isValidPhoneNumber(userAnswer)) {
                 instructorDto.setPhoneNumber(userAnswer);
 
-                instructorService.save(instructorDto);
+                log.info("instructor phone number = " + userAnswer);
 
-                log.info("data instructor save in db");
+                replyToUser = messageService.buildReplyMessage(chatId,
+                        "Перешлите любое сообщение инструктора для получегия его telegramId");
 
-                replyToUser = messageService.getReplyMessageWithKeyboard(chatId, "Инструктор зарегистрирован!", keyboardMenu());
-
-                instructorDataCache.setInstructorCurrentState(chatId, RegistrationInstructorStateEnum.NONE);
+                instructorDataCache.setInstructorCurrentState(chatId, RegistrationInstructorStateEnum.REGISTERED);
             } else {
                 replyToUser = messageService.buildReplyMessage(chatId, "Неверный формат номера!");
-                instructorDataCache.setInstructorCurrentState(chatId, RegistrationInstructorStateEnum.REGISTERED);
+                instructorDataCache.setInstructorCurrentState(chatId, RegistrationInstructorStateEnum.ASK_TELEGRAM_ID);
 
                 return replyToUser;
             }
+        } else if (instructorCurrentState.equals(RegistrationInstructorStateEnum.REGISTERED)) {
+            instructorDto.setTgId(inputMessage.getForwardFrom().getId());
+
+            instructorService.save(instructorDto);
+            log.info("data instructor save in db");
+
+            replyToUser = messageService.getReplyMessageWithKeyboard(chatId, "Инструктор зарегистрирован!", keyboardMenu());
         }
 
         instructorDataCache.saveInstructorProfileData(chatId, instructorDto);
