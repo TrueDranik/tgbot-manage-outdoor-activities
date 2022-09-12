@@ -1,6 +1,6 @@
 package com.bot.sup.service.callbackquery.impl;
 
-import com.bot.sup.enums.ActivityEnum;
+import com.bot.sup.model.common.ActivityEnum;
 import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.*;
 
-import static com.bot.sup.enums.ActivityEnum.DELETE_ACTIVITY;
+import static com.bot.sup.model.common.ActivityEnum.DELETE_ACTIVITY;
 
 @RequiredArgsConstructor
 @Service

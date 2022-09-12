@@ -1,6 +1,6 @@
 package com.bot.sup.service.callbackquery.impl;
 
-import com.bot.sup.enums.ActivityEnum;
+import com.bot.sup.model.common.ActivityEnum;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.ActivityRepository;
@@ -16,7 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.*;
 
-import static com.bot.sup.enums.ActivityEnum.SCHEDULE_ACTIVITY;
+import static com.bot.sup.model.common.ActivityEnum.SCHEDULE_ACTIVITY;
 
 @RequiredArgsConstructor
 @Service

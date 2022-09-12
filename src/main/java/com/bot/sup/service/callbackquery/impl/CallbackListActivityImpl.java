@@ -1,6 +1,6 @@
 package com.bot.sup.service.callbackquery.impl;
 
-import com.bot.sup.enums.ActivityEnum;
+import com.bot.sup.model.common.ActivityEnum;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -14,19 +14,20 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.*;
 
-import static com.bot.sup.enums.ActivityEnum.LIST_ACTIVITY;
+import static com.bot.sup.model.common.ActivityEnum.LIST_ACTIVITY;
 
 @Service
 @RequiredArgsConstructor
 public class CallbackListActivityImpl implements Callback {
     public static final Set<ActivityEnum> ACTIVITIES = Set.of(LIST_ACTIVITY);
     private final ActivityRepository activityRepository;
+//    private final InstructorCacheService cacheService;
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         List<List<InlineKeyboardButton>> buttonEmptyInstructors = new ArrayList<>();
         List<Activity> activities = activityRepository.findAll();
-
+//        cacheService.findByTelegramId(1L);
         if (activities.size() == 0) {
             buttonEmptyInstructors.add(Collections.singletonList(
                     InlineKeyboardButton.builder()

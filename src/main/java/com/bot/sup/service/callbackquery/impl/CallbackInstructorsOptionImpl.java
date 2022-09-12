@@ -1,6 +1,6 @@
 package com.bot.sup.service.callbackquery.impl;
 
-import com.bot.sup.enums.ActivityEnum;
+import com.bot.sup.model.common.ActivityEnum;
 import com.bot.sup.model.entity.Instructor;
 import com.bot.sup.repository.InstructorRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -12,9 +12,10 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
-import static com.bot.sup.enums.ActivityEnum.INSTRUCTOR_OPTION;
+import static com.bot.sup.model.common.ActivityEnum.INSTRUCTOR_OPTION;
 
 @RequiredArgsConstructor
 @Service
@@ -26,12 +27,13 @@ public class CallbackInstructorsOptionImpl implements Callback {
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.getMessage().getChatId();
         String instructorId = callbackQuery.getData().split("/")[1];
-        Optional<Instructor> instructor = instructorRepository.findById(Long.parseLong(instructorId));
+        Instructor instructor = instructorRepository.findByTgId(Long.parseLong(instructorId))
+                .orElseThrow(EntityNotFoundException::new);
 
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text(instructor.get().getFirstName() + " " +instructor.get().getSecondName())
+                .text(instructor.getFirstName() + " " + instructor.getSecondName())
                 .replyMarkup(generateKeyboardWithInstructors(instructorId))
                 .build();
     }

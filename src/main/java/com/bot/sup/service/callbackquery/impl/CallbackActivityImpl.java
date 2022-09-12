@@ -1,6 +1,6 @@
 package com.bot.sup.service.callbackquery.impl;
 
-import com.bot.sup.enums.ActivityEnum;
+import com.bot.sup.model.common.ActivityEnum;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,10 +15,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.bot.sup.enums.ActivityEnum.SAP_ACTIVITY;
+import static com.bot.sup.model.common.ActivityEnum.SAP_ACTIVITY;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class CallbackActivityImpl implements Callback {
     public static final Set<ActivityEnum> ACTIVITIES = Set.of(SAP_ACTIVITY);
 
@@ -36,7 +36,6 @@ public class CallbackActivityImpl implements Callback {
 
     private InlineKeyboardMarkup setUpKeyboard() {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
-
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text("\uD83D\uDCDDСписок активностей")
@@ -52,7 +51,6 @@ public class CallbackActivityImpl implements Callback {
                         .text("↖️Меню↖️")
                         .callbackData("MENU")
                         .build()));
-
         return InlineKeyboardMarkup.builder()
                 .keyboard(buttons)
                 .build();

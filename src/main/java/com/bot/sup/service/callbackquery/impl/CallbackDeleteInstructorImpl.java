@@ -1,10 +1,11 @@
 package com.bot.sup.service.callbackquery.impl;
 
-import com.bot.sup.enums.ActivityEnum;
+import com.bot.sup.model.common.ActivityEnum;
 import com.bot.sup.repository.InstructorRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -13,7 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.*;
 
-import static com.bot.sup.enums.ActivityEnum.DELETE_INSTRUCTOR;
+import static com.bot.sup.model.common.ActivityEnum.DELETE_INSTRUCTOR;
 
 @RequiredArgsConstructor
 @Service
@@ -21,6 +22,7 @@ public class CallbackDeleteInstructorImpl implements Callback {
     public static final Set<ActivityEnum> ACTIVITIES = Set.of(DELETE_INSTRUCTOR);
     private final InstructorRepository instructorRepository;
 
+    @Transactional
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.getMessage().getChatId();
@@ -33,6 +35,7 @@ public class CallbackDeleteInstructorImpl implements Callback {
                 .replyMarkup(createKeyboardForDeleteInstructor())
                 .build();
     }
+
 
     private InlineKeyboardMarkup createKeyboardForDeleteInstructor() {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
@@ -47,8 +50,13 @@ public class CallbackDeleteInstructorImpl implements Callback {
                 .build();
     }
 
-    private void deleteInstructor(long chatId) { instructorRepository.deleteById(chatId); }
+    @Transactional
+    public void deleteInstructor(Long instructorId) {
+        instructorRepository.deleteByTgId(instructorId);
+    }
 
     @Override
-    public Collection<ActivityEnum> getSupportedActivities() {return ACTIVITIES;}
+    public Collection<ActivityEnum> getSupportedActivities() {
+        return ACTIVITIES;
+    }
 }
