@@ -91,12 +91,20 @@ public class FillingInstructor implements HandleRegistration {
                 return replyToUser;
             }
         } else if (instructorCurrentState.equals(RegistrationInstructorStateEnum.REGISTERED)) {
-            instructorDto.setTgId(inputMessage.getForwardFrom().getId());
+            if(inputMessage.getForwardFrom() != null
+                    && inputMessage.getChatId() != inputMessage.getForwardFrom().getId()){
+                instructorDto.setTgId(inputMessage.getForwardFrom().getId());
+                instructorService.save(instructorDto);
 
-            instructorService.save(instructorDto);
-            log.info("data instructor save in db");
+                log.info("data instructor save in db");
 
-            replyToUser = messageService.getReplyMessageWithKeyboard(chatId, "Инструктор зарегистрирован!", keyboardMenu());
+                replyToUser =
+                        messageService.getReplyMessageWithKeyboard(chatId, "Инструктор зарегистрирован!", keyboardMenu());
+            }else {
+                replyToUser = messageService.buildReplyMessage(chatId, "Вы не переслали сообщение!");
+
+                return replyToUser;
+            }
         }
 
         instructorDataCache.saveInstructorProfileData(chatId, instructorDto);
