@@ -1,4 +1,4 @@
-package com.bot.sup.enums;
+package com.bot.sup.model.common;
 
 public enum ActivityEnum {
     MENU,
@@ -11,6 +11,7 @@ public enum ActivityEnum {
     LIST_INSTRUCTORS,
     INSTRUCTOR_OPTION,
     DELETE_INSTRUCTOR,
+    ADD_INSTRUCTOR,
     //АКТИВНОСТИ
     SAP_ACTIVITY,
     LIST_ACTIVITY,
