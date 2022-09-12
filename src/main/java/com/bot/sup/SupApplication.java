@@ -1,6 +1,6 @@
 package com.bot.sup;
 
-import com.bot.sup.config.properties.TelegramProperties;
+import com.bot.sup.model.common.TelegramProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

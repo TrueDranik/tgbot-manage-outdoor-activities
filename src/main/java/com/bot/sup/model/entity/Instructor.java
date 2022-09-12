@@ -21,7 +21,7 @@ public class Instructor {
     private String secondName;
 
     @Column(name = "tg_id")
-    private long tgId;
+    private Long tgId;
 
     @Column(name = "phone_number")
     private String phoneNumber;
