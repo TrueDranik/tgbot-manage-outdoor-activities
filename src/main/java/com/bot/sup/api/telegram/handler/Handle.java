@@ -6,5 +6,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 public interface Handle {
     BotApiMethod<?> getMessage(Update update);
+
     InlineKeyboardMarkup createInlineKeyboard();
 }
