@@ -1,7 +1,7 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.api.telegram.handler.impl.HandleMainMenuImpl;
-import com.bot.sup.enums.ActivityEnum;
+import com.bot.sup.model.common.ActivityEnum;
 import com.bot.sup.service.callbackquery.Callback;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import java.util.Collection;
 import java.util.Set;
 
-import static com.bot.sup.enums.ActivityEnum.MENU;
+import static com.bot.sup.model.common.ActivityEnum.MENU;
 
 @Service
 public class CallbackMenuImpl implements Callback {
@@ -31,5 +31,7 @@ public class CallbackMenuImpl implements Callback {
     }
 
     @Override
-    public Collection<ActivityEnum> getSupportedActivities() {return ACTIVITIES;}
+    public Collection<ActivityEnum> getSupportedActivities() {
+        return ACTIVITIES;
+    }
 }

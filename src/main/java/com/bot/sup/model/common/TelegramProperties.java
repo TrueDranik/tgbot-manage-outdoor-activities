@@ -1,4 +1,4 @@
-package com.bot.sup.config.properties;
+package com.bot.sup.model.common;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

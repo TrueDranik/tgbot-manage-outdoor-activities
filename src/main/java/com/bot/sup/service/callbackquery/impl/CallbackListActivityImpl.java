@@ -12,29 +12,43 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import static com.bot.sup.model.common.ActivityEnum.SCHEDULE;
+import static com.bot.sup.model.common.ActivityEnum.LIST_ACTIVITY;
 
-@RequiredArgsConstructor
 @Service
-public class CallbackScheduleImpl implements Callback {
-    public static final Set<ActivityEnum> ACTIVITIES = Set.of(SCHEDULE);
+@RequiredArgsConstructor
+public class CallbackListActivityImpl implements Callback {
+    public static final Set<ActivityEnum> ACTIVITIES = Set.of(LIST_ACTIVITY);
     private final ActivityRepository activityRepository;
+//    private final InstructorCacheService cacheService;
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
+        List<List<InlineKeyboardButton>> buttonEmptyInstructors = new ArrayList<>();
         List<Activity> activities = activityRepository.findAll();
-        Long chatId = callbackQuery.getMessage()
-                .getChatId();
+//        cacheService.findByTelegramId(1L);
+        if (activities.size() == 0) {
+            buttonEmptyInstructors.add(Collections.singletonList(
+                    InlineKeyboardButton.builder()
+                            .text("⬅️Назад")
+                            .callbackData("SAP_ACTIVITY")
+                            .build()
+            ));
+            InlineKeyboardMarkup keyboard = InlineKeyboardMarkup.builder()
+                    .keyboard(buttonEmptyInstructors)
+                    .build();
+
+            return EditMessageText.builder().messageId(callbackQuery.getMessage().getMessageId()).replyMarkup(keyboard)
+                    .text("Активности не найдены.\nВернитесь на главное меню")
+                    .chatId(callbackQuery.getMessage().getChatId()).build();
+        }
+
         return EditMessageText.builder()
+                .chatId(callbackQuery.getMessage().getChatId())
                 .messageId(callbackQuery.getMessage().getMessageId())
-                .chatId(chatId)
-                .text("Расписание какой активности Вы хотите настроить?")
                 .replyMarkup(generateKeyboardWithActivity(activities))
+                .text("Список активностей")
                 .build();
     }
 
@@ -46,7 +60,7 @@ public class CallbackScheduleImpl implements Callback {
         activities.forEach(i -> {
                     rowMain.add(InlineKeyboardButton.builder()
                             .text(i.getName())
-                            .callbackData("SCHEDULE_ACTIVITY/" + i.getId())
+                            .callbackData("ACTIVITY_OPTION/" + i.getId())
                             .build());
                     if (rowMain.size() == 2) {
                         List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);
@@ -61,8 +75,8 @@ public class CallbackScheduleImpl implements Callback {
         }
 
         rowSecond.add(InlineKeyboardButton.builder()
-                .text("↖️Меню↖️")
-                .callbackData("MENU")
+                .text("⬅️Назад")
+                .callbackData("SAP_ACTIVITY")
                 .build());
 
         mainKeyboard.add(rowSecond);

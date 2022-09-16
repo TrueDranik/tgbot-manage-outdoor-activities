@@ -15,12 +15,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.bot.sup.model.common.ActivityEnum.INSTRUCTORS;
+import static com.bot.sup.model.common.ActivityEnum.SAP_ACTIVITY;
 
-@RequiredArgsConstructor
 @Service
-public class CallbackInstructorsImpl implements Callback {
-    public static final Set<ActivityEnum> ACTIVITIES = Set.of(INSTRUCTORS);
+@RequiredArgsConstructor
+public class CallbackActivityImpl implements Callback {
+    public static final Set<ActivityEnum> ACTIVITIES = Set.of(SAP_ACTIVITY);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -29,30 +29,28 @@ public class CallbackInstructorsImpl implements Callback {
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text("Меню -> Инструкторы")
+                .text("Меню -> Активности")
                 .replyMarkup(setUpKeyboard())
                 .build();
     }
 
     private InlineKeyboardMarkup setUpKeyboard() {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
-
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("\uD83D\uDCDDСписок инструкторов")
-                        .callbackData("LIST_INSTRUCTORS")
+                        .text("\uD83D\uDCDDСписок активностей")
+                        .callbackData("LIST_ACTIVITY")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("\uD83C\uDD95Добавить инструктора")
-                        .callbackData("ADD_INSTRUCTOR")
+                        .text("\uD83C\uDD95Добавить активность")
+                        .callbackData("ADD_ACTIVITY")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text("↖️Меню↖️")
                         .callbackData("MENU")
                         .build()));
-
         return InlineKeyboardMarkup.builder()
                 .keyboard(buttons)
                 .build();
