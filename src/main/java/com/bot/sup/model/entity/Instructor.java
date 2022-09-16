@@ -14,14 +14,14 @@ public class Instructor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", length = 30)
     private String firstName;
 
-    @Column(name = "second_name")
-    private String secondName;
+    @Column(name = "last_name", length = 30)
+    private String lastName;
 
-    @Column(name = "tg_id", unique = true)
-    private Long tgId;
+    @Column(name = "telegram_id", unique = true, length = 30)
+    private Long telegramId;
 
     @Column(name = "phone_number")
     private String phoneNumber;

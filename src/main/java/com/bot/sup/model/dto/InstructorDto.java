@@ -10,9 +10,9 @@ public class InstructorDto {
 
     private String firstName;
 
-    private String secondName;
+    private String lastName;
 
-    private long tgId;
+    private Long telegramId;
 
     private String phoneNumber;
 }

@@ -38,9 +38,9 @@ public class FillingInstructor implements HandleRegistration {
         boolean forUpdate = instructorForUpdateId != null;
         Instructor instructor;
         if (forUpdate) {
-            instructor = instructorRepository.findByTgId(instructorForUpdateId)
+            instructor = instructorRepository.findByTelegramId(instructorForUpdateId)
                     .orElseThrow(EntityNotFoundException::new);
-            log.info("Found instructor with tgId - {} and name - {}", instructor.getTgId(), instructor.getFirstName());
+            log.info("Found instructor with tgId - {} and name - {}", instructor.getTelegramId(), instructor.getFirstName());
         } else {
             instructor = instructorDataCache.getInstructorProfileData(chatId);
         }
@@ -65,9 +65,9 @@ public class FillingInstructor implements HandleRegistration {
                     String[] fullName = userAnswer.split(" ");
 
                     instructor.setFirstName(fullName[0]);
-                    instructor.setSecondName(fullName[1]);
+                    instructor.setLastName(fullName[1]);
                     if (instructor.getFirstName().length() < 2 || instructor.getFirstName().length() > 15
-                            && instructor.getSecondName().length() < 2 || instructor.getSecondName().length() > 15) {
+                            && instructor.getLastName().length() < 2 || instructor.getLastName().length() > 15) {
                         return messageService.buildReplyMessage(chatId, "Имя и фамилия может быть от 2 до 15 символов!");
                     }
                 } catch (IndexOutOfBoundsException e) {
@@ -103,7 +103,7 @@ public class FillingInstructor implements HandleRegistration {
         } else if (instructorCurrentState.equals(RegistrationInstructorStateEnum.REGISTERED)) {
             Optional<User> forwardFrom = Optional.ofNullable(inputMessage.getForwardFrom());
 
-            if (forwardFrom.isPresent() && instructorRepository.existsByTgId(forwardFrom.get().getId()) && !forUpdate) {
+            if (forwardFrom.isPresent() && instructorRepository.existsByTelegramId(forwardFrom.get().getId()) && !forUpdate) {
                 replyToUser = messageService.buildReplyMessage(chatId, "Пользователь с таким telegramId уже существует!");
                 instructorDataCache.setInstructorCurrentState(chatId, RegistrationInstructorStateEnum.REGISTERED);
 
@@ -115,7 +115,7 @@ public class FillingInstructor implements HandleRegistration {
                 return replyToUser;
             }
 
-            instructor.setTgId(inputMessage.getForwardFrom().getId());
+            instructor.setTelegramId(inputMessage.getForwardFrom().getId());
 
             if (forUpdate) {
                 instructorDataCache.removeInstructorForUpdate(chatId);
@@ -136,9 +136,9 @@ public class FillingInstructor implements HandleRegistration {
     }
 
     private String instructorInfo(Instructor instructor) {
-        return "ФИ: " + instructor.getFirstName() + " " + instructor.getSecondName()
+        return "ФИ: " + instructor.getFirstName() + " " + instructor.getLastName()
                 + "\nНомер телефона: " + instructor.getPhoneNumber()
-                + "\nTelegramId: " + instructor.getTgId();
+                + "\nTelegramId: " + instructor.getTelegramId();
     }
 
     private InlineKeyboardMarkup keyboardMenu() {

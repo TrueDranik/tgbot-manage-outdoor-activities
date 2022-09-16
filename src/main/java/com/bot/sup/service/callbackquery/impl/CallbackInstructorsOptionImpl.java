@@ -30,7 +30,7 @@ public class CallbackInstructorsOptionImpl implements Callback {
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.getMessage().getChatId();
         String instructorId = callbackQuery.getData().split("/")[1];
-        Instructor instructor = instructorRepository.findByTgId(Long.parseLong(instructorId))
+        Instructor instructor = instructorRepository.findByTelegramId(Long.parseLong(instructorId))
                 .orElseThrow(EntityNotFoundException::new);
 
         return EditMessageText.builder()
@@ -70,9 +70,9 @@ public class CallbackInstructorsOptionImpl implements Callback {
 
     private String instructorInfo(Instructor instructor) {
 
-        return "ФИ: " + instructor.getFirstName() + " " + instructor.getSecondName()
+        return "ФИ: " + instructor.getFirstName() + " " + instructor.getLastName()
                 + "\nНомер телефона: " + instructor.getPhoneNumber()
-                + "\nTelegramId: " + instructor.getTgId();
+                + "\nTelegramId: " + instructor.getTelegramId();
     }
 
     @Override

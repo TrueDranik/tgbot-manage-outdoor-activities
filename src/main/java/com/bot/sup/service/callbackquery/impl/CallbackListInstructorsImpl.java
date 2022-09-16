@@ -58,8 +58,8 @@ public class CallbackListInstructorsImpl implements Callback {
 
         instructor.forEach(i -> {
                     rowMain.add(InlineKeyboardButton.builder()
-                            .text(i.getFirstName() + " " + i.getSecondName())
-                            .callbackData("INSTRUCTOR_OPTION/" + i.getTgId())
+                            .text(i.getFirstName() + " " + i.getLastName())
+                            .callbackData("INSTRUCTOR_OPTION/" + i.getTelegramId())
                             .build());
                     if (rowMain.size() == 2) {
                         List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);

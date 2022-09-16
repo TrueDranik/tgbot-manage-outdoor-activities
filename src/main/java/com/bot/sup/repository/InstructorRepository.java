@@ -8,10 +8,10 @@ import java.util.Optional;
 
 @Repository
 public interface InstructorRepository extends JpaRepository<Instructor, Long> {
-    Optional<Instructor> findByTgId(Long tgId);
+    Optional<Instructor> findByTelegramId(Long telegramId);
 
-    void deleteByTgId(Long tgId);
+    void deleteByTelegramId(Long telegramId);
 
-    boolean existsByTgId(Long telegramId);
+    boolean existsByTelegramId(Long telegramId);
 }
 

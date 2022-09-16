@@ -52,7 +52,7 @@ public class CallbackDeleteInstructorImpl implements Callback {
 
     @Transactional
     public void deleteInstructor(Long instructorId) {
-        instructorRepository.deleteByTgId(instructorId);
+        instructorRepository.deleteByTelegramId(instructorId);
     }
 
     @Override

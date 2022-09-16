@@ -14,18 +14,15 @@ public class ActivityDto {
 
     private String name;
 
-    private String seasonality;
+    private String startPointCoordinates;
 
-    private String activityFormat;
+    private String startPointName;
 
-    private String activityType;
+    private String finishPointCoordinates;
 
-    private String description;
+    private String finishPointName;
 
-    private String venue;       // место проведения
+    private String mapLink;
 
-    @ManyToOne
-    private Route route;
-
-    private LocalDateTime duration;
+    private Route routeId;
 }

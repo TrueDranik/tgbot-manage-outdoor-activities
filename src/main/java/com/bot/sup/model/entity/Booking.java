@@ -16,8 +16,11 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn(name = "client_id")
-    private Client client;
+    private Client clientId;
 
-    @Column(name = "number_invited")
-    private int numberInvited;
+    @Column(name = "invited_users")
+    private int invitedUsers;
+
+    @Column(name = "payment_status", length = 300)
+    private String paymentStatus;
 }
