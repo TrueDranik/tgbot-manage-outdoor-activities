@@ -1,5 +1,6 @@
 package com.bot.sup.service.callbackquery.impl;
 
+import com.bot.sup.api.telegram.handler.registration.FillingInstructor;
 import com.bot.sup.model.common.ActivityEnum;
 import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.service.callbackquery.Callback;
