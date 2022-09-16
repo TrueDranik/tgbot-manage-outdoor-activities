@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HandleMainMenuImpl implements Handle {
-
     @Override
     public BotApiMethod<?> getMessage(Update update) {
         return SendMessage.builder()

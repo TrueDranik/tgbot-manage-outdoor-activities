@@ -39,7 +39,7 @@ public class CallbackListInstructorsImpl implements Callback {
                     .build();
 
             return EditMessageText.builder().messageId(callbackQuery.getMessage().getMessageId()).replyMarkup(keyboard)
-                    .text("Инструкторы не найдены.\nВернитесь на главное меню")
+                    .text("Инструкторы не найдены!\nВернитесь на главное меню.")
                     .chatId(callbackQuery.getMessage().getChatId()).build();
         }
 
@@ -47,7 +47,7 @@ public class CallbackListInstructorsImpl implements Callback {
                 .chatId(callbackQuery.getMessage().getChatId())
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .replyMarkup(generateKeyboardWithInstructors(instructor))
-                .text("Список инструкторов")
+                .text("Список инструкторов:")
                 .build();
     }
 
