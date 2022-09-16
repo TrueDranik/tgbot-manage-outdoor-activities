@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "schedule")
@@ -16,19 +17,11 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "event_date")
-    private LocalDate eventDate;
-
     @ManyToOne
     @JoinColumn(name = "activity_id")
     @JsonIgnore
-    private Activity activity;
+    private Activity activityId;
 
-    @ManyToOne
-    @JoinColumn(name = "instructor_id")
-    private Instructor instructor;
-
-    @ManyToOne
-    @JoinColumn(name = "booking_id")
-    private Booking booking;
+    @Column(name = "event_date_time")
+    private LocalDateTime eventDate;
 }
