@@ -20,7 +20,7 @@ public class Instructor {
     @Column(name = "second_name")
     private String secondName;
 
-    @Column(name = "tg_id")
+    @Column(name = "tg_id", unique = true)
     private Long tgId;
 
     @Column(name = "phone_number")

@@ -9,6 +9,9 @@ import java.util.Optional;
 @Repository
 public interface InstructorRepository extends JpaRepository<Instructor, Long> {
     Optional<Instructor> findByTgId(Long tgId);
+
     void deleteByTgId(Long tgId);
+
+    boolean existsByTgId(Long telegramId);
 }
 

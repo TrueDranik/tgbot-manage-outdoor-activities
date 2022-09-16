@@ -18,8 +18,8 @@ public class InstructorStateContext {
         messageHandlers.forEach(handler -> this.messageHandlers.put(handler.getFullName(), handler));
     }
 
-    public BotApiMethod<?> processInputMessage(RegistrationInstructorStateEnum masterBotState, Message message)  {
-        HandleRegistration handleRegistration = findMessageHandler(masterBotState);
+    public BotApiMethod<?> processInputMessage(RegistrationInstructorStateEnum instructorState, Message message)  {
+        HandleRegistration handleRegistration = findMessageHandler(instructorState);
         return handleRegistration.getMessage(message);
     }
 
@@ -30,8 +30,8 @@ public class InstructorStateContext {
         return messageHandlers.get(masterBotState);
     }
 
-    private boolean isFillingProfileState(RegistrationInstructorStateEnum masterBotState) {
-        return switch (masterBotState) {
+    private boolean isFillingProfileState(RegistrationInstructorStateEnum instructorState) {
+        return switch (instructorState) {
             case ASK_FULL_NAME, ASK_PHONE_NUMBER, ASK_TELEGRAM_ID, REGISTERED -> true;
             default -> false;
         };

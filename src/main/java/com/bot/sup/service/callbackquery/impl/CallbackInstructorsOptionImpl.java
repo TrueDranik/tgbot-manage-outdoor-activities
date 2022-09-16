@@ -13,7 +13,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 import static com.bot.sup.model.common.ActivityEnum.INSTRUCTOR_OPTION;
 
@@ -33,7 +36,7 @@ public class CallbackInstructorsOptionImpl implements Callback {
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text(instructor.getFirstName() + " " + instructor.getSecondName())
+                .text(instructorInfo(instructor))
                 .replyMarkup(generateKeyboardWithInstructors(instructorId))
                 .build();
     }
@@ -45,7 +48,7 @@ public class CallbackInstructorsOptionImpl implements Callback {
         firstRow.add(
                 InlineKeyboardButton.builder()
                         .text("\uD83D\uDD04Изменить")
-                        .callbackData("ACTIVITY_CHANGE")
+                        .callbackData("CHANGE_INSTRUCTOR/" + instructorId)
                         .build());
         firstRow.add(
                 InlineKeyboardButton.builder()
@@ -63,6 +66,13 @@ public class CallbackInstructorsOptionImpl implements Callback {
                 .keyboardRow(firstRow)
                 .keyboardRow(secondRow)
                 .build();
+    }
+
+    private String instructorInfo(Instructor instructor) {
+
+        return "ФИ: " + instructor.getFirstName() + " " + instructor.getSecondName()
+                + "\nНомер телефона: " + instructor.getPhoneNumber()
+                + "\nTelegramId: " + instructor.getTgId();
     }
 
     @Override
