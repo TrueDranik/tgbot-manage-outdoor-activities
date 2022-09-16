@@ -61,7 +61,6 @@ public class Bot extends TelegramLongPollingBot {
                 replyMessage = instructorStateContext.processInputMessage(registrationInstructorStateEnum, message);
                 execute(replyMessage);
             }
-
         }
     }
 }
