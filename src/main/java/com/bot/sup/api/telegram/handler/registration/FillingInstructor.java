@@ -97,6 +97,7 @@ public class FillingInstructor implements HandleRegistration {
             } else {
                 replyToUser = messageService.buildReplyMessage(chatId, "Неверный формат номера!");
                 instructorDataCache.setInstructorCurrentState(chatId, RegistrationInstructorStateEnum.ASK_TELEGRAM_ID);
+
                 return replyToUser;
             }
         } else if (instructorCurrentState.equals(RegistrationInstructorStateEnum.REGISTERED)) {
@@ -105,10 +106,12 @@ public class FillingInstructor implements HandleRegistration {
             if (forwardFrom.isPresent() && instructorRepository.existsByTgId(forwardFrom.get().getId()) && !forUpdate) {
                 replyToUser = messageService.buildReplyMessage(chatId, "Пользователь с таким telegramId уже существует!");
                 instructorDataCache.setInstructorCurrentState(chatId, RegistrationInstructorStateEnum.REGISTERED);
+
                 return replyToUser;
             } else if (forwardFrom.isEmpty()) {
                 replyToUser = messageService.buildReplyMessage(chatId, "В сообщении нет telegramId!");
                 instructorDataCache.setInstructorCurrentState(chatId, RegistrationInstructorStateEnum.REGISTERED);
+
                 return replyToUser;
             }
 
@@ -133,7 +136,6 @@ public class FillingInstructor implements HandleRegistration {
     }
 
     private String instructorInfo(Instructor instructor) {
-
         return "ФИ: " + instructor.getFirstName() + " " + instructor.getSecondName()
                 + "\nНомер телефона: " + instructor.getPhoneNumber()
                 + "\nTelegramId: " + instructor.getTgId();
