@@ -8,7 +8,7 @@ stages:
 build:
   stage: build
   script:
-    - 'mvn clean package'
+    - 'mvn clean package ; pwd ; ls'
   artifacts:
     paths:
       - target/*.jar
