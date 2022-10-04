@@ -1,0 +1,30 @@
+image: maven:latest
+
+stages:
+  - build
+  - publish
+
+
+build:
+  stage: build
+  script:
+    - 'mvn clean package'
+  artifacts:
+    paths:
+      - target/*.jar
+    expire_in: 1 hour
+
+publish:
+  stage: publish
+  only:
+    refs:
+      - master
+  image:
+    name: docker:19.03
+  script:
+    - docker login --username $DOCKERHUB_USER --password $DOCKERHUB_PASSWORD
+    - docker build --pull -t $CI_REGISTRY/$NAME_IMAGE:$CI_COMMIT_SHORT_SHA -t $CI_REGISTRY/$NAME_IMAGE:$CI_COMMIT_REF_NAME .
+    - docker push $CI_REGISTRY/$NAME_IMAGE
+
+
+
