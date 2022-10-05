@@ -1,6 +1,6 @@
 package com.bot.sup.service.callbackquery.impl;
 
-import com.bot.sup.model.common.ActivityEnum;
+import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.ActivityRepository;
@@ -16,12 +16,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.*;
 
-import static com.bot.sup.model.common.ActivityEnum.SCHEDULE_ACTIVITY;
+import static com.bot.sup.model.common.CallbackEnum.SCHEDULE_ACTIVITY;
 
 @RequiredArgsConstructor
 @Service
 public class CallbackScheduleActivityImpl implements Callback {
-    public static final Set<ActivityEnum> ACTIVITIES = Set.of(SCHEDULE_ACTIVITY);
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(SCHEDULE_ACTIVITY);
     private final ScheduleRepository scheduleRepository;
     private final ActivityRepository activityRepository;
 
@@ -55,7 +55,7 @@ public class CallbackScheduleActivityImpl implements Callback {
         List<InlineKeyboardButton> rowMain = new ArrayList<>();
         List<InlineKeyboardButton> rowSecond = new ArrayList<>();
         schedules.forEach(i -> {
-            if (activity.get().getName().equals(i.getActivityId().getName())) {
+            if (activity.get().getName().equals(i.getActivity().getName())) {
                 rowMain.add(InlineKeyboardButton.builder()
                         .text(i.getEventDate().toString())
                         .callbackData("SCHEDULE_OPTION/" + i.getId())
@@ -85,7 +85,7 @@ public class CallbackScheduleActivityImpl implements Callback {
     }
 
     @Override
-    public Collection<ActivityEnum> getSupportedActivities() {
+    public Collection<CallbackEnum> getSupportedActivities() {
         return ACTIVITIES;
     }
 }
