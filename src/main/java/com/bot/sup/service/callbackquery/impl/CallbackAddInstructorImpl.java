@@ -1,9 +1,11 @@
 package com.bot.sup.service.callbackquery.impl;
 
-import com.bot.sup.api.telegram.handler.InstructorStateContext;
+import com.bot.sup.api.telegram.handler.StateContext;
 import com.bot.sup.cache.impl.InstructorDataCache;
-import com.bot.sup.model.common.ActivityEnum;
-import com.bot.sup.model.common.RegistrationInstructorStateEnum;
+import com.bot.sup.cache.impl.MiddlewareDataCache;
+import com.bot.sup.model.common.CallbackEnum;
+//import com.bot.sup.model.common.BotStateEnum;
+import com.bot.sup.model.common.InstructorStateEnum;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,27 +16,30 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.Collection;
 import java.util.Set;
 
-import static com.bot.sup.model.common.ActivityEnum.ADD_INSTRUCTOR;
+import static com.bot.sup.model.common.CallbackEnum.ADD_INSTRUCTOR;
 
 @RequiredArgsConstructor
 @Service
 public class CallbackAddInstructorImpl implements Callback {
-    public static final Set<ActivityEnum> ACTIVITIES = Set.of(ADD_INSTRUCTOR);
-    private final InstructorStateContext instructorStateContext;
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ADD_INSTRUCTOR);
+    private final StateContext stateContext;
     private final InstructorDataCache instructorDataCache;
+    private final MiddlewareDataCache middlewareDataCache;
+
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
 
-        RegistrationInstructorStateEnum registrationInstructorStateEnum = RegistrationInstructorStateEnum.FILLING_PROFILE;
-        instructorDataCache.setInstructorCurrentState(chatId, registrationInstructorStateEnum);
+        InstructorStateEnum botStateEnum = InstructorStateEnum.FILLING_INSTRUCTOR;
+        instructorDataCache.setInstructorCurrentState(chatId, botStateEnum);
+        middlewareDataCache.validCurrentState(chatId, instructorDataCache);
 
-        return instructorStateContext.processInputMessage(registrationInstructorStateEnum, callbackQuery.getMessage());
+        return stateContext.processInputMessage(botStateEnum, callbackQuery.getMessage());
     }
 
     @Override
-    public Collection<ActivityEnum> getSupportedActivities() {
+    public Collection<CallbackEnum> getSupportedActivities() {
         return ACTIVITIES;
     }
 }

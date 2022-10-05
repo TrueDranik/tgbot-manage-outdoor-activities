@@ -1,6 +1,6 @@
 package com.bot.sup.service.callbackquery.impl;
 
-import com.bot.sup.model.common.ActivityEnum;
+import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -17,12 +17,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.bot.sup.model.common.ActivityEnum.SCHEDULE;
+import static com.bot.sup.model.common.CallbackEnum.SCHEDULE;
 
 @RequiredArgsConstructor
 @Service
 public class CallbackScheduleImpl implements Callback {
-    public static final Set<ActivityEnum> ACTIVITIES = Set.of(SCHEDULE);
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(SCHEDULE);
     private final ActivityRepository activityRepository;
 
     @Override
@@ -73,7 +73,7 @@ public class CallbackScheduleImpl implements Callback {
     }
 
     @Override
-    public Collection<ActivityEnum> getSupportedActivities() {
+    public Collection<CallbackEnum> getSupportedActivities() {
         return ACTIVITIES;
     }
 }

@@ -1,7 +1,6 @@
 package com.bot.sup.service.callbackquery.impl;
 
-import com.bot.sup.api.telegram.handler.registration.FillingInstructor;
-import com.bot.sup.model.common.ActivityEnum;
+import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +13,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.*;
 
-import static com.bot.sup.model.common.ActivityEnum.DELETE_ACTIVITY;
+import static com.bot.sup.model.common.CallbackEnum.DELETE_ACTIVITY;
 
 @RequiredArgsConstructor
 @Service
 public class CallbackDeleteActivityImpl implements Callback {
-    public static final Set<ActivityEnum> ACTIVITIES = Set.of(DELETE_ACTIVITY);
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(DELETE_ACTIVITY);
     private final ActivityRepository activityRepository;
 
     @Override
@@ -53,7 +52,7 @@ public class CallbackDeleteActivityImpl implements Callback {
     }
 
     @Override
-    public Collection<ActivityEnum> getSupportedActivities() {
+    public Collection<CallbackEnum> getSupportedActivities() {
         return ACTIVITIES;
     }
 }

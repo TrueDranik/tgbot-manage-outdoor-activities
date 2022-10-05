@@ -1,6 +1,6 @@
 package com.bot.sup.service.callbackquery.impl;
 
-import com.bot.sup.model.common.ActivityEnum;
+import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.entity.Instructor;
 import com.bot.sup.repository.InstructorRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -18,12 +18,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.bot.sup.model.common.ActivityEnum.INSTRUCTOR_OPTION;
+import static com.bot.sup.model.common.CallbackEnum.INSTRUCTOR_OPTION;
 
 @RequiredArgsConstructor
 @Service
 public class CallbackInstructorsOptionImpl implements Callback {
-    public static final Set<ActivityEnum> ACTIVITIES = Set.of(INSTRUCTOR_OPTION);
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(INSTRUCTOR_OPTION);
     private final InstructorRepository instructorRepository;
 
     @Override
@@ -76,7 +76,7 @@ public class CallbackInstructorsOptionImpl implements Callback {
     }
 
     @Override
-    public Collection<ActivityEnum> getSupportedActivities() {
+    public Collection<CallbackEnum> getSupportedActivities() {
         return ACTIVITIES;
     }
 }
