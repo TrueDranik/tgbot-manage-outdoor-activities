@@ -1,4 +1,4 @@
-package com.bot.sup.mapper;
+package com.bot.sup.model.common;
 
 import com.bot.sup.api.telegram.handler.Handle;
 import com.bot.sup.api.telegram.handler.impl.HandleMainMenuImpl;

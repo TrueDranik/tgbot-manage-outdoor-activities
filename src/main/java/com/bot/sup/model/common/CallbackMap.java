@@ -1,4 +1,4 @@
-package com.bot.sup.mapper;
+package com.bot.sup.model.common;
 
 import com.bot.sup.service.callbackquery.Callback;
 import org.springframework.stereotype.Service;
