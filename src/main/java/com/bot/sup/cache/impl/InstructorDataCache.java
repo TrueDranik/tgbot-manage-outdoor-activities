@@ -1,38 +1,35 @@
 package com.bot.sup.cache.impl;
 
-import com.bot.sup.cache.DataCache;
-import com.bot.sup.model.common.RegistrationInstructorStateEnum;
-import com.bot.sup.model.dto.InstructorDto;
+//import com.bot.sup.model.common.BotStateEnum;
+import com.bot.sup.model.common.InstructorStateEnum;
 import com.bot.sup.model.entity.Instructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
-public class InstructorDataCache implements DataCache {
-    private final Map<Long, RegistrationInstructorStateEnum> instructorState = new ConcurrentHashMap<>();
-    private final Map<Long, Instructor> instructorData = new ConcurrentHashMap<>();
+public class InstructorDataCache {
+    private final Map<Long, InstructorStateEnum> instructorState = new WeakHashMap<>();
+    private final Map<Long, Instructor> instructorData = new WeakHashMap<>();
 
-    private final Map<Long, Long> instructorForUpdate = new ConcurrentHashMap<>();
+    private final Map<Long, Long> instructorForUpdate = new WeakHashMap<>();
 
-
-    @Override
-    public void setInstructorCurrentState(Long instructorId, RegistrationInstructorStateEnum instructorRegistrutionState) {
-        instructorState.put(instructorId, instructorRegistrutionState);
+    public void setInstructorCurrentState(Long chatId, InstructorStateEnum registrationState) {
+        instructorState.put(chatId, registrationState);
     }
 
-    @Override
-    public RegistrationInstructorStateEnum getInstructorCurrentState(Long instructorId) {
-        return instructorState.getOrDefault(instructorId, RegistrationInstructorStateEnum.FILLING_PROFILE);
+    public InstructorStateEnum getInstructorCurrentState(Long chatId) {
+        return instructorState.getOrDefault(chatId, InstructorStateEnum.FILLING_INSTRUCTOR);
     }
 
-    public Instructor getInstructorProfileData(Long userId) {
-        return instructorData.getOrDefault(userId, new Instructor());
+    public Instructor getInstructorProfileData(Long chatId) {
+        return instructorData.getOrDefault(chatId, new Instructor());
     }
 
-    public void saveInstructorProfileData(Long userId, Instructor instructorDto) {
-        instructorData.put(userId, instructorDto);
+    public void saveInstructorProfileData(Long chatId, Instructor instructorDto) {
+        instructorData.put(chatId, instructorDto);
     }
 
     public void saveInstructorForUpdate(Long chatId, Long instructorId) {

@@ -1,6 +1,6 @@
 package com.bot.sup.model.common;
 
-public enum ActivityEnum {
+public enum CallbackEnum {
     MENU,
     // РАСПИСАНИЕ
     SCHEDULE,
@@ -16,7 +16,7 @@ public enum ActivityEnum {
     //АКТИВНОСТИ
     SAP_ACTIVITY,
     LIST_ACTIVITY,
-    ACTIVITY_CHANGE,
+    ADD_ACTIVITY,
     ACTIVITY_OPTION,
     DELETE_ACTIVITY,
 }
