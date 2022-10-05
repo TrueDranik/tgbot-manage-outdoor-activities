@@ -61,7 +61,7 @@ public class CallbackScheduleImpl implements Callback {
         }
 
         rowSecond.add(InlineKeyboardButton.builder()
-                .text("↖️Меню↖️")
+                .text("↖️Меню")
                 .callbackData("MENU")
                 .build());
 
