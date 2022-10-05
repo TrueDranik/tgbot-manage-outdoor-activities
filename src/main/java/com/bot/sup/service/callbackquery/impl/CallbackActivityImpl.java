@@ -1,6 +1,6 @@
 package com.bot.sup.service.callbackquery.impl;
 
-import com.bot.sup.model.common.ActivityEnum;
+import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,12 +15,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.bot.sup.model.common.ActivityEnum.SAP_ACTIVITY;
+import static com.bot.sup.model.common.CallbackEnum.SAP_ACTIVITY;
 
 @Service
 @RequiredArgsConstructor
 public class CallbackActivityImpl implements Callback {
-    public static final Set<ActivityEnum> ACTIVITIES = Set.of(SAP_ACTIVITY);
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(SAP_ACTIVITY);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -57,7 +57,7 @@ public class CallbackActivityImpl implements Callback {
     }
 
     @Override
-    public Collection<ActivityEnum> getSupportedActivities() {
+    public Collection<CallbackEnum> getSupportedActivities() {
         return ACTIVITIES;
     }
 }

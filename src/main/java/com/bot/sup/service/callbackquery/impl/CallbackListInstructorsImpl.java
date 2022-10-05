@@ -1,6 +1,6 @@
 package com.bot.sup.service.callbackquery.impl;
 
-import com.bot.sup.model.common.ActivityEnum;
+import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.entity.Instructor;
 import com.bot.sup.repository.InstructorRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -14,12 +14,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.*;
 
-import static com.bot.sup.model.common.ActivityEnum.LIST_INSTRUCTORS;
+import static com.bot.sup.model.common.CallbackEnum.LIST_INSTRUCTORS;
 
 @Service
 @RequiredArgsConstructor
 public class CallbackListInstructorsImpl implements Callback {
-    public static final Set<ActivityEnum> ACTIVITIES = Set.of(LIST_INSTRUCTORS);
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(LIST_INSTRUCTORS);
     private final InstructorRepository instructorRepository;
 
     @Override
@@ -58,8 +58,8 @@ public class CallbackListInstructorsImpl implements Callback {
 
         instructor.forEach(i -> {
                     rowMain.add(InlineKeyboardButton.builder()
-                            .text(i.getFirstName() + " " + i.getSecondName())
-                            .callbackData("INSTRUCTOR_OPTION/" + i.getTgId())
+                            .text(i.getFirstName() + " " + i.getLastName())
+                            .callbackData("INSTRUCTOR_OPTION/" + i.getTelegramId())
                             .build());
                     if (rowMain.size() == 2) {
                         List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);
@@ -86,7 +86,7 @@ public class CallbackListInstructorsImpl implements Callback {
     }
 
     @Override
-    public Collection<ActivityEnum> getSupportedActivities() {
+    public Collection<CallbackEnum> getSupportedActivities() {
         return ACTIVITIES;
     }
 }

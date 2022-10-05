@@ -1,11 +1,9 @@
 package com.bot.sup.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -17,31 +15,25 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", length = 30)
     private String name;
 
-    @Column(name = "seasonality")
-    private String seasonality;
+    @Column(name = "start_point_coordinates", length = 300)
+    private String startPointCoordinates;
 
-    @Column(name = "activity_format")
-    private String activityFormat;
+    @Column(name = "start_point_name", length = 30)
+    private String startPointName;
 
-    @Column(name = "activity_type")
-    private String activityType;
+    @Column(name = "finish_point_coordinates", length = 300)
+    private String finishPointCoordinates;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "finish_point_name", length = 30)
+    private String finishPointName;
 
-    @Column(name = "venue")
-    private String venue;       // место проведения
+    @Column(name = "map_link", length = 300)
+    private String mapLink;
 
     @ManyToOne
     @JoinColumn(name = "route_id")
     private Route route;
-
-    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Schedule> schedules;
-
-    @Column(name = "duration")
-    private LocalDateTime duration;
 }

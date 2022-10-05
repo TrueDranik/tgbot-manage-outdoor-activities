@@ -1,6 +1,6 @@
 package com.bot.sup.service.callbackquery.impl;
 
-import com.bot.sup.model.common.ActivityEnum;
+import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.entity.Instructor;
 import com.bot.sup.repository.InstructorRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -18,19 +18,19 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.bot.sup.model.common.ActivityEnum.INSTRUCTOR_OPTION;
+import static com.bot.sup.model.common.CallbackEnum.INSTRUCTOR_OPTION;
 
 @RequiredArgsConstructor
 @Service
 public class CallbackInstructorsOptionImpl implements Callback {
-    public static final Set<ActivityEnum> ACTIVITIES = Set.of(INSTRUCTOR_OPTION);
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(INSTRUCTOR_OPTION);
     private final InstructorRepository instructorRepository;
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.getMessage().getChatId();
         String instructorId = callbackQuery.getData().split("/")[1];
-        Instructor instructor = instructorRepository.findByTgId(Long.parseLong(instructorId))
+        Instructor instructor = instructorRepository.findByTelegramId(Long.parseLong(instructorId))
                 .orElseThrow(EntityNotFoundException::new);
 
         return EditMessageText.builder()
@@ -70,13 +70,13 @@ public class CallbackInstructorsOptionImpl implements Callback {
 
     private String instructorInfo(Instructor instructor) {
 
-        return "ФИ: " + instructor.getFirstName() + " " + instructor.getSecondName()
+        return "ФИ: " + instructor.getFirstName() + " " + instructor.getLastName()
                 + "\nНомер телефона: " + instructor.getPhoneNumber()
-                + "\nTelegramId: " + instructor.getTgId();
+                + "\nTelegramId: " + instructor.getTelegramId();
     }
 
     @Override
-    public Collection<ActivityEnum> getSupportedActivities() {
+    public Collection<CallbackEnum> getSupportedActivities() {
         return ACTIVITIES;
     }
 }

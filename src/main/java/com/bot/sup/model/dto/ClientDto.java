@@ -3,6 +3,7 @@ package com.bot.sup.model.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import java.time.LocalDate;
 
 @Getter
@@ -12,11 +13,11 @@ public class ClientDto {
 
     private String firstName;
 
-    private String secondName;
-
-    private long tgId;
-
-    private String phoneNumber;
+    private String lastName;
 
     private LocalDate birthDate;
+
+    private Long telegramId;
+
+    private String phoneNumber;
 }

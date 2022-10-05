@@ -1,6 +1,6 @@
 package com.bot.sup.service.callbackquery.impl;
 
-import com.bot.sup.model.common.ActivityEnum;
+import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -14,12 +14,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.*;
 
-import static com.bot.sup.model.common.ActivityEnum.ACTIVITY_OPTION;
+import static com.bot.sup.model.common.CallbackEnum.ACTIVITY_OPTION;
 
 @RequiredArgsConstructor
 @Service
 public class CallbackActivityOptionImpl implements Callback {
-    public static final Set<ActivityEnum> ACTIVITIES = Set.of(ACTIVITY_OPTION);
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ACTIVITY_OPTION);
     private final ActivityRepository activityRepository;
 
     @Override
@@ -63,7 +63,7 @@ public class CallbackActivityOptionImpl implements Callback {
     }
 
     @Override
-    public Collection<ActivityEnum> getSupportedActivities() {
+    public Collection<CallbackEnum> getSupportedActivities() {
         return ACTIVITIES;
     }
 }

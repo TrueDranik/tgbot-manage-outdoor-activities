@@ -15,18 +15,18 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", length = 30)
     private String firstName;
 
-    @Column(name = "second_name")
-    private String secondName;
-
-    @Column(name = "tg_id")
-    private long tgId;
-
-    @Column(name = "phone_number")
-    private String phoneNumber;
+    @Column(name = "last_name", length = 30)
+    private String lastName;
 
     @Column(name = "birth_date")
     private LocalDate birthDate;
+
+    @Column(name = "telegram_id", unique = true)
+    private Long telegramId;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
 }
