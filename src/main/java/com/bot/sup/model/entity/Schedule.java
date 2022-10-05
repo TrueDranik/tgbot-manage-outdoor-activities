@@ -19,8 +19,8 @@ public class Schedule {
 
     @ManyToOne
     @JoinColumn(name = "activity_id")
-    @JsonIgnore
-    private Activity activityId;
+//    @JsonIgnore
+    private Activity activity;
 
     @Column(name = "event_date_time")
     private LocalDateTime eventDate;
