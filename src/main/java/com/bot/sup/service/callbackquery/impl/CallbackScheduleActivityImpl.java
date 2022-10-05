@@ -55,7 +55,7 @@ public class CallbackScheduleActivityImpl implements Callback {
         List<InlineKeyboardButton> rowMain = new ArrayList<>();
         List<InlineKeyboardButton> rowSecond = new ArrayList<>();
         schedules.forEach(i -> {
-            if (activity.get().getName().equals(i.getActivity().getName())) {
+            if (activity.get().getName().equals(i.getActivityId().getName())) {
                 rowMain.add(InlineKeyboardButton.builder()
                         .text(i.getEventDate().toString())
                         .callbackData("SCHEDULE_OPTION/" + i.getId())

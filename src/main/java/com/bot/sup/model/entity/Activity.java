@@ -36,7 +36,4 @@ public class Activity {
     @ManyToOne
     @JoinColumn(name = "route_id")
     private Route route;
-
-    @OneToMany(mappedBy = "activity")
-    private List<Schedule> schedule;
 }
