@@ -3,7 +3,6 @@ package com.bot.sup.model.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import java.time.LocalDate;
 
 @Getter

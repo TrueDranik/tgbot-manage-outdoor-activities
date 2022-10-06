@@ -34,5 +34,5 @@ public class Activity {
 
     @ManyToOne
     @JoinColumn(name = "route_id")
-    private Route routeId;
+    private Route route;
 }

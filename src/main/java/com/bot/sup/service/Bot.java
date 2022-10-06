@@ -1,12 +1,11 @@
 package com.bot.sup.service;
 
 import com.bot.sup.api.telegram.handler.Handle;
-import com.bot.sup.api.telegram.handler.InstructorStateContext;
-import com.bot.sup.cache.impl.InstructorDataCache;
-import com.bot.sup.model.common.RegistrationInstructorStateEnum;
-import com.bot.sup.model.common.TelegramProperties;
-import com.bot.sup.mapper.CallbackMap;
-import com.bot.sup.mapper.CommandMap;
+import com.bot.sup.api.telegram.handler.StateContext;
+import com.bot.sup.cache.InstructorDataCache;
+import com.bot.sup.cache.MiddlewareDataCache;
+import com.bot.sup.cache.SupActivityDataCache;
+import com.bot.sup.model.common.*;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -26,9 +25,11 @@ public class Bot extends TelegramLongPollingBot {
     final TelegramProperties config;
     private final CallbackMap callbackMap;
     private final CommandMap commandMap;
+    private final MiddlewareDataCache middlewareDataCache;
     private final InstructorDataCache instructorDataCache;
+    private final SupActivityDataCache supActivityDataCache;
+    private final StateContext stateContext;
     private BotApiMethod<?> replyMessage;
-    private  final InstructorStateContext instructorStateContext;
 
     @Override
     public String getBotUsername() {
@@ -44,22 +45,37 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
-        RegistrationInstructorStateEnum registrationInstructorStateEnum;
+        InstructorStateEnum instructorStateEnum;
+        SupActivityStateEnum supActivityStateEnum;
 
         if (update.hasCallbackQuery()) {
             Callback callback = callbackMap.getCallback(update.getCallbackQuery().getData().split("/")[0]);
+
             log.info("callback = " + update.getCallbackQuery().getData());
+
             execute(callback.getCallbackQuery(update.getCallbackQuery()));
         } else if (update.hasMessage()) {
             Long chatId = message.getChatId();
+
             log.info("chatId from message = " + chatId);
+
+            instructorDataCache.removeInstructorForUpdate(chatId);
             if (message.getText().startsWith("/")) {
                 Handle command = commandMap.getCommand(message.getText());
                 execute(command.getMessage(update));
-            }else {
-                registrationInstructorStateEnum = instructorDataCache.getInstructorCurrentState(chatId);
-                log.info("state = " + registrationInstructorStateEnum);
-                replyMessage = instructorStateContext.processInputMessage(registrationInstructorStateEnum, message);
+            } else if (middlewareDataCache.getCurrentData(chatId) instanceof InstructorStateEnum) {
+                instructorStateEnum = instructorDataCache.getInstructorCurrentState(chatId);
+
+                log.info("state = " + instructorStateEnum);
+
+                replyMessage = stateContext.processInputMessage(instructorStateEnum, message);
+                execute(replyMessage);
+            } else if (middlewareDataCache.getCurrentData(chatId) instanceof SupActivityStateEnum) {
+                supActivityStateEnum = supActivityDataCache.getActivityCurrentState(chatId);
+
+                log.info("state = " + supActivityStateEnum);
+
+                replyMessage = stateContext.processInputMessage(supActivityStateEnum, message);
                 execute(replyMessage);
             }
         }

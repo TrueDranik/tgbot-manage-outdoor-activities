@@ -1,6 +1,6 @@
 package com.bot.sup.service.callbackquery.impl;
 
-import com.bot.sup.model.common.ActivityEnum;
+import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -14,12 +14,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.*;
 
-import static com.bot.sup.model.common.ActivityEnum.ACTIVITY_OPTION;
+import static com.bot.sup.model.common.CallbackEnum.ACTIVITY_OPTION;
 
 @RequiredArgsConstructor
 @Service
 public class CallbackActivityOptionImpl implements Callback {
-    public static final Set<ActivityEnum> ACTIVITIES = Set.of(ACTIVITY_OPTION);
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ACTIVITY_OPTION);
     private final ActivityRepository activityRepository;
 
     @Override
@@ -27,6 +27,7 @@ public class CallbackActivityOptionImpl implements Callback {
         Long chatId = callbackQuery.getMessage().getChatId();
         String activityId = callbackQuery.getData().split("/")[1];
         Optional<Activity> activity = activityRepository.findById(Long.parseLong(activityId));
+
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
@@ -41,18 +42,18 @@ public class CallbackActivityOptionImpl implements Callback {
 
         firstRow.add(
                 InlineKeyboardButton.builder()
-                        .text("\uD83D\uDD04Изменить")
+                        .text("\uD83D\uDD04 Изменить")
                         .callbackData("ACTIVITY_CHANGE")
                         .build());
         firstRow.add(
                 InlineKeyboardButton.builder()
-                        .text("❌Удалить")
+                        .text("❌ Удалить")
                         .callbackData("DELETE_ACTIVITY/" + activityId)
                         .build());
 
         secondRow.add(
                 InlineKeyboardButton.builder()
-                        .text("⬅️Назад")
+                        .text("⬅️ Назад")
                         .callbackData("LIST_ACTIVITY")
                         .build());
 
@@ -63,7 +64,7 @@ public class CallbackActivityOptionImpl implements Callback {
     }
 
     @Override
-    public Collection<ActivityEnum> getSupportedActivities() {
+    public Collection<CallbackEnum> getSupportedActivities() {
         return ACTIVITIES;
     }
 }

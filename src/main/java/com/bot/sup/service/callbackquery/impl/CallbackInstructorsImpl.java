@@ -1,6 +1,6 @@
 package com.bot.sup.service.callbackquery.impl;
 
-import com.bot.sup.model.common.ActivityEnum;
+import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,12 +15,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.bot.sup.model.common.ActivityEnum.INSTRUCTORS;
+import static com.bot.sup.model.common.CallbackEnum.INSTRUCTORS;
 
 @RequiredArgsConstructor
 @Service
 public class CallbackInstructorsImpl implements Callback {
-    public static final Set<ActivityEnum> ACTIVITIES = Set.of(INSTRUCTORS);
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(INSTRUCTORS);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -39,17 +39,17 @@ public class CallbackInstructorsImpl implements Callback {
 
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("\uD83D\uDCDDСписок инструкторов")
+                        .text("\uD83D\uDCDD Список инструкторов")
                         .callbackData("LIST_INSTRUCTORS")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("\uD83C\uDD95Добавить инструктора")
+                        .text("\uD83C\uDD95 Добавить инструктора")
                         .callbackData("ADD_INSTRUCTOR")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("↖️Меню↖️")
+                        .text("↖️ Меню")
                         .callbackData("MENU")
                         .build()));
 
@@ -59,7 +59,7 @@ public class CallbackInstructorsImpl implements Callback {
     }
 
     @Override
-    public Collection<ActivityEnum> getSupportedActivities() {
+    public Collection<CallbackEnum> getSupportedActivities() {
         return ACTIVITIES;
     }
 }
