@@ -7,7 +7,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 @SpringBootApplication
 @EnableConfigurationProperties(TelegramProperties.class)
-public class SupApplication { public static void main(String[] args) {
+public class SupApplication {
+    public static void main(String[] args) {
         SpringApplication.run(SupApplication.class, args);
     }
 }

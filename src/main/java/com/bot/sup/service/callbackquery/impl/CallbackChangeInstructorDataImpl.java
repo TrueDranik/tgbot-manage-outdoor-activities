@@ -1,9 +1,8 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.api.telegram.handler.StateContext;
-import com.bot.sup.cache.impl.InstructorDataCache;
+import com.bot.sup.cache.InstructorDataCache;
 import com.bot.sup.model.common.CallbackEnum;
-//import com.bot.sup.model.common.BotStateEnum;
 import com.bot.sup.model.common.InstructorStateEnum;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;

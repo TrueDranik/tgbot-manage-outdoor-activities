@@ -1,7 +1,6 @@
 package com.bot.sup.api.telegram.handler.registration;
 
-import com.bot.sup.cache.impl.InstructorDataCache;
-//import com.bot.sup.model.common.BotStateEnum;
+import com.bot.sup.cache.InstructorDataCache;
 import com.bot.sup.model.common.InstructorStateEnum;
 import com.bot.sup.model.entity.Instructor;
 import com.bot.sup.repository.InstructorRepository;
@@ -34,19 +33,22 @@ public class FillingInstructor implements HandleRegistration {
 
     @Override
     public BotApiMethod<?> getMessage(Message message) {
+        Instructor instructor;
         Long chatId = message.getChatId();
         Long instructorForUpdateId = instructorDataCache.getInstructorForUpdate(chatId);
         boolean forUpdate = instructorForUpdateId != null;
-        Instructor instructor;
+
         if (forUpdate) {
             instructor = instructorRepository.findByTelegramId(instructorForUpdateId)
                     .orElseThrow(EntityNotFoundException::new);
+
             log.info("Found instructor with tgId - {} and name - {}", instructor.getTelegramId(), instructor.getFirstName());
         } else {
             instructor = instructorDataCache.getInstructorProfileData(chatId);
         }
         if (instructorDataCache.getInstructorCurrentState(chatId).equals(InstructorStateEnum.FILLING_INSTRUCTOR))
             instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.ASK_FULL_NAME);
+
         return processInputMessage(message, chatId, instructor, forUpdate);
     }
 
@@ -59,6 +61,7 @@ public class FillingInstructor implements HandleRegistration {
         if (instructorCurrentState.equals(InstructorStateEnum.ASK_FULL_NAME)) {
             replyToUser = messageService.buildReplyMessage(chatId, "Введи ниже имя и фамилию (через пробел).");
             instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.ASK_PHONE_NUMBER);
+
             return replyToUser;
         } else if (instructorCurrentState.equals(InstructorStateEnum.ASK_PHONE_NUMBER)) {
             if (Validation.isValidText(userAnswer)) {
@@ -67,6 +70,7 @@ public class FillingInstructor implements HandleRegistration {
 
                     instructor.setFirstName(fullName[0]);
                     instructor.setLastName(fullName[1]);
+
                     if (instructor.getFirstName().length() < 2 || instructor.getFirstName().length() > 15
                             && instructor.getLastName().length() < 2 || instructor.getLastName().length() > 15) {
                         return messageService.buildReplyMessage(chatId, "Имя и фамилия может быть от 2 до 15 символов!");
@@ -77,12 +81,13 @@ public class FillingInstructor implements HandleRegistration {
 
                 log.info("instructor Name = " + userAnswer);
 
-                replyToUser = messageService.buildReplyMessage(chatId, "Введите номер телефона.");
+                replyToUser = messageService.buildReplyMessage(chatId, "Введите номер телефона в формате '+79123456789'.");
 
                 instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.ASK_TELEGRAM_ID);
             } else {
                 replyToUser = messageService.buildReplyMessage(chatId, "Допустимы только кириллица и английский!");
                 instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.ASK_PHONE_NUMBER);
+
                 return replyToUser;
             }
         } else if (instructorCurrentState.equals(InstructorStateEnum.ASK_TELEGRAM_ID)) {
@@ -123,9 +128,9 @@ public class FillingInstructor implements HandleRegistration {
             } else {
                 instructorService.save(instructor);
             }
+
             replyToUser = messageService.getReplyMessageWithKeyboard(chatId, "Инструктор зарегистрирован!\n" +
                     instructorInfo(instructor), keyboardMenu());
-            //instructorDataCache.removeInstructorForUpdate(chatId);
         }
 
         if (forUpdate) {

@@ -38,7 +38,7 @@ public class CallbackDeleteActivityImpl implements Callback {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
         buttons.add(Collections.singletonList(
                 InlineKeyboardButton.builder()
-                        .text("Меню")
+                        .text("↖️ Меню")
                         .callbackData("MENU")
                         .build()));
 

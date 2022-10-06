@@ -27,10 +27,10 @@ public class CallbackListInstructorsImpl implements Callback {
         List<List<InlineKeyboardButton>> buttonEmptyInstructors = new ArrayList<>();
         List<Instructor> instructor = instructorRepository.findAll();
 
-        if (instructor.size() == 0) {
+        if (instructor.isEmpty()) {
             buttonEmptyInstructors.add(Collections.singletonList(
                     InlineKeyboardButton.builder()
-                            .text("⬅️Назад")
+                            .text("⬅️ Назад")
                             .callbackData("INSTRUCTORS")
                             .build()
             ));
@@ -74,7 +74,7 @@ public class CallbackListInstructorsImpl implements Callback {
         }
 
         rowSecond.add(InlineKeyboardButton.builder()
-                .text("⬅️Назад")
+                .text("⬅️ Назад")
                 .callbackData("INSTRUCTORS")
                 .build());
 

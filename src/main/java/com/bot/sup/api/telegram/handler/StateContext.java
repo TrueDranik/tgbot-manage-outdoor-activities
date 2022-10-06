@@ -15,8 +15,6 @@ import java.util.Set;
 import static com.bot.sup.model.common.InstructorStateEnum.FILLING_INSTRUCTOR;
 import static com.bot.sup.model.common.SupActivityStateEnum.FILLING_ACTIVITY;
 
-//import static com.bot.sup.model.common.BotStateEnum.*;
-
 @Component
 public class StateContext {
     private final Map<Enum<?>, HandleRegistration> messageHandlers = new HashMap<>();
@@ -25,17 +23,10 @@ public class StateContext {
         messageHandlers.forEach(handler -> this.messageHandlers.put(handler.getType(), handler));
     }
 
-    public BotApiMethod<?> processInputMessage(Enum<?> botStateEnum, Message message)  {
+    public BotApiMethod<?> processInputMessage(Enum<?> botStateEnum, Message message) {
         HandleRegistration handleRegistration = isFilling(botStateEnum);
         return handleRegistration.getMessage(message);
     }
-
-//    private HandleRegistration findMessageHandler(RegistrationInstructorStateEnum masterBotState) {
-//        if (isFillingProfileInstrutor(masterBotState)) {
-//            return messageHandlers.get(RegistrationInstructorStateEnum.FILLING_PROFILE);
-//        }
-//        return messageHandlers.get(masterBotState);
-//    }
 
     private HandleRegistration isFilling(Enum<?> botStateEnum) {
         Set<InstructorStateEnum> stateInstructor = Set.of(InstructorStateEnum.values());
@@ -48,10 +39,5 @@ public class StateContext {
         }
 
         return messageHandlers.get(botStateEnum);
-
-//        return switch (instructorState) {
-//            case ASK_FULL_NAME, ASK_PHONE_NUMBER, ASK_TELEGRAM_ID, REGISTERED -> true;
-//            default -> false;
-//        };
     }
 }

@@ -39,9 +39,10 @@ public class CallbackDeleteInstructorImpl implements Callback {
 
     private InlineKeyboardMarkup createKeyboardForDeleteInstructor() {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
+
         buttons.add(Collections.singletonList(
                 InlineKeyboardButton.builder()
-                        .text("⬅️Назад")
+                        .text("⬅️ Назад")
                         .callbackData("LIST_INSTRUCTORS")
                         .build()));
 
