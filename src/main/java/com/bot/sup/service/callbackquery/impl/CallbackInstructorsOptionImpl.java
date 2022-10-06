@@ -47,18 +47,18 @@ public class CallbackInstructorsOptionImpl implements Callback {
 
         firstRow.add(
                 InlineKeyboardButton.builder()
-                        .text("\uD83D\uDD04Изменить")
+                        .text("\uD83D\uDD04 Изменить")
                         .callbackData("CHANGE_INSTRUCTOR/" + instructorId)
                         .build());
         firstRow.add(
                 InlineKeyboardButton.builder()
-                        .text("❌Удалить")
+                        .text("❌ Удалить")
                         .callbackData("DELETE_INSTRUCTOR/" + instructorId)
                         .build());
 
         secondRow.add(
                 InlineKeyboardButton.builder()
-                        .text("⬅️Назад")
+                        .text("⬅️ Назад")
                         .callbackData("LIST_INSTRUCTORS")
                         .build());
 

@@ -37,7 +37,7 @@ public class CallbackScheduleActivityImpl implements Callback {
             return EditMessageText.builder()
                     .messageId(callbackQuery.getMessage().getMessageId())
                     .chatId(chatId)
-                    .text("❌Расписание для '" + activity.get().getName() + "' отсутствует.\nВернитесь назад.")
+                    .text("❌ Расписание для '" + activity.get().getName() + "' отсутствует.\nВернитесь назад.")
                     .replyMarkup(generateKeyboardWithSchedule(schedules, activity))
                     .build();
         }
@@ -54,6 +54,7 @@ public class CallbackScheduleActivityImpl implements Callback {
         List<List<InlineKeyboardButton>> mainKeyboard = new ArrayList<>();
         List<InlineKeyboardButton> rowMain = new ArrayList<>();
         List<InlineKeyboardButton> rowSecond = new ArrayList<>();
+
         schedules.forEach(i -> {
             if (activity.get().getName().equals(i.getActivityId().getName())) {
                 rowMain.add(InlineKeyboardButton.builder()
@@ -73,7 +74,7 @@ public class CallbackScheduleActivityImpl implements Callback {
         }
 
         rowSecond.add(InlineKeyboardButton.builder()
-                .text("⬅️Назад")
+                .text("⬅️ Назад")
                 .callbackData("SCHEDULE")
                 .build());
 

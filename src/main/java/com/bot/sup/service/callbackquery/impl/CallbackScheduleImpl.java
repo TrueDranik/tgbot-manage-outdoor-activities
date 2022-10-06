@@ -28,8 +28,8 @@ public class CallbackScheduleImpl implements Callback {
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         List<Activity> activities = activityRepository.findAll();
-        Long chatId = callbackQuery.getMessage()
-                .getChatId();
+        Long chatId = callbackQuery.getMessage().getChatId();
+
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
@@ -61,7 +61,7 @@ public class CallbackScheduleImpl implements Callback {
         }
 
         rowSecond.add(InlineKeyboardButton.builder()
-                .text("↖️Меню")
+                .text("↖️ Меню")
                 .callbackData("MENU")
                 .build());
 

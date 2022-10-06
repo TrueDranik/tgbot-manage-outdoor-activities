@@ -15,12 +15,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.bot.sup.model.common.CallbackEnum.SAP_ACTIVITY;
+import static com.bot.sup.model.common.CallbackEnum.SUP_ACTIVITY;
 
 @Service
 @RequiredArgsConstructor
 public class CallbackActivityImpl implements Callback {
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(SAP_ACTIVITY);
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(SUP_ACTIVITY);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -38,19 +38,20 @@ public class CallbackActivityImpl implements Callback {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("\uD83D\uDCDDСписок активностей")
+                        .text("\uD83D\uDCDD Список активностей")
                         .callbackData("LIST_ACTIVITY")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("\uD83C\uDD95Добавить активность")
+                        .text("\uD83C\uDD95 Добавить активность")
                         .callbackData("ADD_ACTIVITY")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("↖️Меню↖️")
+                        .text("↖️ Меню")
                         .callbackData("MENU")
                         .build()));
+
         return InlineKeyboardMarkup.builder()
                 .keyboard(buttons)
                 .build();

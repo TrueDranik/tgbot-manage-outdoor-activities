@@ -21,18 +21,17 @@ import static com.bot.sup.model.common.CallbackEnum.LIST_ACTIVITY;
 public class CallbackListActivityImpl implements Callback {
     public static final Set<CallbackEnum> ACTIVITIES = Set.of(LIST_ACTIVITY);
     private final ActivityRepository activityRepository;
-//    private final InstructorCacheService cacheService;
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         List<List<InlineKeyboardButton>> buttonEmptyInstructors = new ArrayList<>();
         List<Activity> activities = activityRepository.findAll();
-//        cacheService.findByTelegramId(1L);
-        if (activities.size() == 0) {
+
+        if (activities.isEmpty()) {
             buttonEmptyInstructors.add(Collections.singletonList(
                     InlineKeyboardButton.builder()
-                            .text("⬅️Назад")
-                            .callbackData("SAP_ACTIVITY")
+                            .text("⬅️ Назад")
+                            .callbackData("SUP_ACTIVITY")
                             .build()
             ));
             InlineKeyboardMarkup keyboard = InlineKeyboardMarkup.builder()
@@ -75,8 +74,8 @@ public class CallbackListActivityImpl implements Callback {
         }
 
         rowSecond.add(InlineKeyboardButton.builder()
-                .text("⬅️Назад")
-                .callbackData("SAP_ACTIVITY")
+                .text("⬅️ Назад")
+                .callbackData("SUP_ACTIVITY")
                 .build());
 
         mainKeyboard.add(rowSecond);

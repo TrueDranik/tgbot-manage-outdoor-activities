@@ -27,6 +27,7 @@ public class CallbackActivityOptionImpl implements Callback {
         Long chatId = callbackQuery.getMessage().getChatId();
         String activityId = callbackQuery.getData().split("/")[1];
         Optional<Activity> activity = activityRepository.findById(Long.parseLong(activityId));
+
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
@@ -41,18 +42,18 @@ public class CallbackActivityOptionImpl implements Callback {
 
         firstRow.add(
                 InlineKeyboardButton.builder()
-                        .text("\uD83D\uDD04Изменить")
+                        .text("\uD83D\uDD04 Изменить")
                         .callbackData("ACTIVITY_CHANGE")
                         .build());
         firstRow.add(
                 InlineKeyboardButton.builder()
-                        .text("❌Удалить")
+                        .text("❌ Удалить")
                         .callbackData("DELETE_ACTIVITY/" + activityId)
                         .build());
 
         secondRow.add(
                 InlineKeyboardButton.builder()
-                        .text("⬅️Назад")
+                        .text("⬅️ Назад")
                         .callbackData("LIST_ACTIVITY")
                         .build());
 
