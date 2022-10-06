@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class ScheduleDto {
     private Long id;
 
-    private Activity activityId;
+    private ActivityDto activityDto;
 
     private LocalDateTime eventDate;
 }
