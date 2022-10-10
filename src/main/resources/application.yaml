@@ -1,0 +1,35 @@
+telegram:
+      url:
+        webapp: https://192.168.110.84:3000/
+      nameBot: '@sup31_bot'
+      tokenBot: 5617783598:AAEVI_edk9ptSp6aFrjRjZ8XeMMdn9m3PEc
+
+spring:
+  jpa:
+    generate-ddl: 'true'
+    database: postgresql
+    hibernate:
+      ddl-auto: update
+    properties:
+      javax:
+        persistence:
+          query:
+            timeout: '0'
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    password: postgres_sub
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: '5'
+    username: postgres_sub
+    url: jdbc:postgresql://10.120.10.6:5433/postgres_sub
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: 'false'
+
+#server:
+#  ssl:
+#    key-store-password: changeit
+#    key-store-type: PKCS12
+#    enabled: 'true'
+#    key-store: classpath:java_ssl.p12
