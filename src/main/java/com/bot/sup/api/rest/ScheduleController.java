@@ -2,13 +2,11 @@ package com.bot.sup.api.rest;
 
 import com.bot.sup.mapper.ScheduleMapper;
 import com.bot.sup.model.dto.ScheduleCreateDto;
-import com.bot.sup.model.dto.ScheduleDto;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.activity.ActivityService;
 import com.bot.sup.service.schedule.ScheduleService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
