@@ -131,7 +131,7 @@ public class FillingInstructor implements HandleRegistration {
                 instructorService.save(instructor);
             }
 
-            replyToUser = messageService.getReplyMessageWithKeyboard(chatId, "Инструктор зарегистрирован!\n" +
+            replyToUser = messageService.getReplyMessageWithKeyboard(chatId, instructorMessageProperties.getRegistrationDone() +
                     instructorInfo(instructor), keyboardMenu());
         }
 
@@ -156,7 +156,7 @@ public class FillingInstructor implements HandleRegistration {
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .callbackData("INSTRUCTORS")
-                        .text(instructorMessageProperties.getInstructors())
+                        .text(instructorMessageProperties.getMenuInstructors())
                         .build()
         ));
 

@@ -61,8 +61,10 @@ public class FillingActivity implements HandleRegistration {
             }
 
             activityService.save(activity);
-            replyToUser = messageService.getReplyMessageWithKeyboard(chatId, "Активность " + '"' + activity.getName()
-                    + '"' + " зарегистрирована!\n", keyboardMenu());
+
+            replyToUser = messageService.getReplyMessageWithKeyboard(chatId, String
+                    .format(activityMessageProperties.getRegisteredActivity(), activity.getName()),
+                    keyboardMenu());
         }
 
         return replyToUser;
