@@ -3,7 +3,7 @@ package com.bot.sup.api.telegram.handler.registration;
 import com.bot.sup.cache.SupActivityDataCache;
 import com.bot.sup.model.common.SupActivityStateEnum;
 import com.bot.sup.model.entity.Activity;
-import com.bot.sup.service.ActivityService;
+import com.bot.sup.service.activity.impl.ActivityServiceImpl;
 import com.bot.sup.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FillingActivity implements HandleRegistration {
     private final MessageService messageService;
-    private final ActivityService activityService;
+    private final ActivityServiceImpl activityServiceImpl;
     private final SupActivityDataCache supActivityDataCache;
 
     @Override
@@ -56,7 +56,7 @@ public class FillingActivity implements HandleRegistration {
                 return messageService.buildReplyMessage(chatId, "Вы не ввели название активности!");
             }
 
-            activityService.save(activity);
+            activityServiceImpl.save(activity);
             replyToUser = messageService.getReplyMessageWithKeyboard(chatId, "Активность " + '"' + activity.getName()
                     + '"' + " зарегистрирована!\n", keyboardMenu());
         }
