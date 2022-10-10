@@ -2,6 +2,8 @@ package com.bot.sup.api.telegram.handler.registration;
 
 import com.bot.sup.cache.SupActivityDataCache;
 import com.bot.sup.model.common.SupActivityStateEnum;
+import com.bot.sup.model.common.properties.message.ActivityMessageProperties;
+import com.bot.sup.model.common.properties.message.MenuMessageProperties;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.service.ActivityService;
 import com.bot.sup.service.MessageService;
@@ -24,6 +26,8 @@ public class FillingActivity implements HandleRegistration {
     private final MessageService messageService;
     private final ActivityService activityService;
     private final SupActivityDataCache supActivityDataCache;
+    private final MenuMessageProperties menuMessageProperties;
+    private final ActivityMessageProperties activityMessageProperties;
 
     @Override
     public BotApiMethod<?> getMessage(Message message) {
@@ -45,7 +49,7 @@ public class FillingActivity implements HandleRegistration {
         SupActivityStateEnum activityCurrentState = supActivityDataCache.getActivityCurrentState(chatId);
 
         if (activityCurrentState.equals(SupActivityStateEnum.ASK_ACTIVITY_NAME)) {
-            replyToUser = messageService.buildReplyMessage(chatId, "Введи наименование активности!");
+            replyToUser = messageService.buildReplyMessage(chatId, activityMessageProperties.getInputActivityName());
             supActivityDataCache.setActivityCurrentState(chatId, SupActivityStateEnum.REGISTERED_ACTIVITY);
 
             return replyToUser;
@@ -53,7 +57,7 @@ public class FillingActivity implements HandleRegistration {
             try {
                 activity.setName(userAnswer);
             } catch (IndexOutOfBoundsException e) {
-                return messageService.buildReplyMessage(chatId, "Вы не ввели название активности!");
+                return messageService.buildReplyMessage(chatId, activityMessageProperties.getInputActivityNameIsEmpty());
             }
 
             activityService.save(activity);
@@ -70,7 +74,7 @@ public class FillingActivity implements HandleRegistration {
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .callbackData("SUP_ACTIVITY")
-                        .text("✅Готово!")
+                        .text(menuMessageProperties.getDone())
                         .build()
         ));
 
