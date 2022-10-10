@@ -3,7 +3,6 @@ package com.bot.sup.api.telegram.handler.registration;
 import com.bot.sup.cache.InstructorDataCache;
 import com.bot.sup.model.common.InstructorStateEnum;
 import com.bot.sup.model.common.properties.message.InstructorMessageProperties;
-import com.bot.sup.model.common.properties.message.MenuMessageProperties;
 import com.bot.sup.model.entity.Instructor;
 import com.bot.sup.repository.InstructorRepository;
 import com.bot.sup.service.InstructorService;
@@ -31,7 +30,6 @@ public class FillingInstructor implements HandleRegistration {
     private final InstructorDataCache instructorDataCache;
     private final MessageService messageService;
     private final InstructorService instructorService;
-    private final MenuMessageProperties menuMessageProperties;
     private final InstructorMessageProperties instructorMessageProperties;
     private final InstructorRepository instructorRepository;
 
