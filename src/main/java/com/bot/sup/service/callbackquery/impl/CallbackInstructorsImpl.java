@@ -34,7 +34,7 @@ public class CallbackInstructorsImpl implements Callback {
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text(instructorMessageProperties.getInstructors())
+                .text(instructorMessageProperties.getMenuInstructors())
                 .replyMarkup(setUpKeyboard())
                 .build();
     }

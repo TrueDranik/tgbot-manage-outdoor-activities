@@ -10,10 +10,12 @@ import org.springframework.context.annotation.PropertySource;
 @ConfigurationProperties(prefix = "message.activity")
 @PropertySource(value = "classpath:messages.yaml", factory = YamlPropertySourceFactory.class)
 public class ActivityMessageProperties {
-    String activities;
+    String activity;
+    String menuActivities;
     String listActivity;
     String addActivity;
     String deleteActivity;
+    String registeredActivity;
     String emptyActivity;
     String inputActivityName;
     String inputActivityNameIsEmpty;
