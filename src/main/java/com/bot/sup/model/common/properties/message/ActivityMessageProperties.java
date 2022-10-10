@@ -15,4 +15,6 @@ public class ActivityMessageProperties {
     String addActivity;
     String deleteActivity;
     String emptyActivity;
+    String inputActivityName;
+    String inputActivityNameIsEmpty;
 }

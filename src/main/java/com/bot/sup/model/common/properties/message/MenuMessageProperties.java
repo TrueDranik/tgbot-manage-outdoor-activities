@@ -16,4 +16,5 @@ public class MenuMessageProperties {
     String delete;
     String back;
     String userChoose;
+    String done;
 }

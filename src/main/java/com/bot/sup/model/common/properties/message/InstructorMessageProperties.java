@@ -14,4 +14,13 @@ public class InstructorMessageProperties {
     String addInstructor;
     String deleteInstructor;
     String emptyInstructor;
+    String inputFullNameInstructor;
+    String inputFullNameInstructorIsEmpty;
+    String validateInputFullName;
+    String validateLanguage;
+    String inputPhoneNumber;
+    String getTelegramId;
+    String phoneNumberNotValid;
+    String telegramIdAlreadyTaken;
+    String telegramIdIsEmpty;
 }
