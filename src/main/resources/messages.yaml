@@ -1,9 +1,21 @@
 message:
-  schedule:
-
-
-  instructor:
-
-
+  menus:
+    menu: "↖️ Меню"
+    change: "\uD83D\uDD04 Изменить"
+    delete: "❌ Удалить"
+    back: "⬅️ Назад"
+    userChoose: "Что Вы хотите выбрать?"
   activity:
-
+    activities: "Меню активностей"
+    listActivity: "\uD83D\uDCDD Список активностей"
+    addActivity: "\uD83C\uDD95 Добавить активность"
+    deleteActivity: "Активность удалена.\nВернитесь в главное меню."
+    emptyActivity: "Активности не найдены.\nВернитесь на главное меню"
+  instructor:
+    instructors: "Меню инструкторов"
+    listInstructor: "\uD83D\uDCDD Список инструкторов"
+    addInstructor: "\uD83C\uDD95 Добавить инструктора"
+    deleteInstructor: "Инструктор удален.\nВернитесь списку инструкторов."
+    emptyInstructors: "Инструкторы не найдены!\nВернитесь на главное меню."
+  schedule:
+    schedules: "Раписание какой активности хотите настроить?"
