@@ -1,6 +1,8 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
+import com.bot.sup.model.common.properties.message.MenuMessageProperties;
+import com.bot.sup.model.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -22,8 +24,11 @@ import static com.bot.sup.model.common.CallbackEnum.SCHEDULE;
 @RequiredArgsConstructor
 @Service
 public class CallbackScheduleImpl implements Callback {
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(SCHEDULE);
+    private final MenuMessageProperties menuMessageProperties;
+    private final ScheduleMessageProperties scheduleMessageProperties;
     private final ActivityRepository activityRepository;
+
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(SCHEDULE);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -33,7 +38,7 @@ public class CallbackScheduleImpl implements Callback {
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text("Расписание какой активности Вы хотите настроить?")
+                .text(scheduleMessageProperties.getSchedules())
                 .replyMarkup(generateKeyboardWithActivity(activities))
                 .build();
     }
@@ -61,7 +66,7 @@ public class CallbackScheduleImpl implements Callback {
         }
 
         rowSecond.add(InlineKeyboardButton.builder()
-                .text("↖️ Меню")
+                .text(menuMessageProperties.getMenu())
                 .callbackData("MENU")
                 .build());
 
