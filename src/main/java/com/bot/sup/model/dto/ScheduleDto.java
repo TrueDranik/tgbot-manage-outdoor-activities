@@ -14,4 +14,9 @@ public class ScheduleDto {
     private ActivityDto activityDto;
 
     private LocalDateTime eventDate;
+
+    public ScheduleDto(LocalDateTime eventDate, ActivityDto activityId) {
+        this.eventDate = eventDate;
+        this.activityDto = activityId;
+    }
 }

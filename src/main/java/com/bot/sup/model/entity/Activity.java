@@ -32,7 +32,7 @@ public class Activity {
     @Column(name = "map_link", length = 300)
     private String mapLink;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "route_id")
     private Route route;
 }

@@ -15,9 +15,9 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "activity_id")
-    private Activity activityId;
+    private Activity activity;
 
     @Column(name = "event_date_time")
     private LocalDateTime eventDate;
