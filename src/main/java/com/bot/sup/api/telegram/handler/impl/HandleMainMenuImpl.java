@@ -15,7 +15,7 @@ public class HandleMainMenuImpl implements Handle {
     public BotApiMethod<?> getMessage(Update update) {
         return SendMessage.builder()
                 .chatId(update.getMessage().getChatId())
-                .text("⬇️Выберите нужное действие⬇️")
+                .text("⬇️ Выберите нужное действие ⬇️")
                 .replyMarkup(createInlineKeyboard())
                 .build();
     }
@@ -25,18 +25,18 @@ public class HandleMainMenuImpl implements Handle {
 
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("\uD83D\uDCC5Расписание\uD83D\uDCC5")
+                        .text("\uD83D\uDCC5 Расписание")
                         .callbackData("SCHEDULE")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("\uD83E\uDDB8Инструкторы\uD83E\uDDB8\u200D♀️")
+                        .text("\uD83E\uDDB8 Инструкторы")
                         .callbackData("INSTRUCTORS")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("\uD83D\uDEA3\u200D♀️Активности\uD83D\uDEB4\u200D♀️")
-                        .callbackData("SAP_ACTIVITY")
+                        .text("\uD83C\uDFC3\uD83C\uDFFD️ Активности")
+                        .callbackData("SUP_ACTIVITY")
                         .build()));
 
         return InlineKeyboardMarkup.builder()

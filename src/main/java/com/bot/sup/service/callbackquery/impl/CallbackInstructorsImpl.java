@@ -1,6 +1,8 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
+import com.bot.sup.model.common.properties.message.InstructorMessageProperties;
+import com.bot.sup.model.common.properties.message.MenuMessageProperties;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,9 @@ import static com.bot.sup.model.common.CallbackEnum.INSTRUCTORS;
 @RequiredArgsConstructor
 @Service
 public class CallbackInstructorsImpl implements Callback {
+    private final MenuMessageProperties menuMessageProperties;
+    private final InstructorMessageProperties instructorMessageProperties;
+
     public static final Set<CallbackEnum> ACTIVITIES = Set.of(INSTRUCTORS);
 
     @Override
@@ -29,7 +34,7 @@ public class CallbackInstructorsImpl implements Callback {
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text("Меню -> Инструкторы")
+                .text(instructorMessageProperties.getMenuInstructors())
                 .replyMarkup(setUpKeyboard())
                 .build();
     }
@@ -39,17 +44,17 @@ public class CallbackInstructorsImpl implements Callback {
 
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("\uD83D\uDCDDСписок инструкторов")
+                        .text(instructorMessageProperties.getListInstructor())
                         .callbackData("LIST_INSTRUCTORS")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("\uD83C\uDD95Добавить инструктора")
+                        .text(instructorMessageProperties.getAddInstructor())
                         .callbackData("ADD_INSTRUCTOR")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("↖️Меню↖️")
+                        .text(menuMessageProperties.getMenu())
                         .callbackData("MENU")
                         .build()));
 

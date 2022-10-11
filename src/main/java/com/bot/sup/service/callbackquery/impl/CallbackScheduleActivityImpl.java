@@ -1,6 +1,7 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
+import com.bot.sup.model.common.properties.message.MenuMessageProperties;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.ActivityRepository;
@@ -21,9 +22,11 @@ import static com.bot.sup.model.common.CallbackEnum.SCHEDULE_ACTIVITY;
 @RequiredArgsConstructor
 @Service
 public class CallbackScheduleActivityImpl implements Callback {
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(SCHEDULE_ACTIVITY);
+    private final MenuMessageProperties menuMessageProperties;
     private final ScheduleRepository scheduleRepository;
     private final ActivityRepository activityRepository;
+
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(SCHEDULE_ACTIVITY);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -37,7 +40,7 @@ public class CallbackScheduleActivityImpl implements Callback {
             return EditMessageText.builder()
                     .messageId(callbackQuery.getMessage().getMessageId())
                     .chatId(chatId)
-                    .text("❌Расписание для '" + activity.get().getName() + "' отсутствует.\nВернитесь назад.")
+                    .text("❌ Расписание для '" + activity.get().getName() + "' отсутствует.\nВернитесь назад.")
                     .replyMarkup(generateKeyboardWithSchedule(schedules, activity))
                     .build();
         }
@@ -54,6 +57,7 @@ public class CallbackScheduleActivityImpl implements Callback {
         List<List<InlineKeyboardButton>> mainKeyboard = new ArrayList<>();
         List<InlineKeyboardButton> rowMain = new ArrayList<>();
         List<InlineKeyboardButton> rowSecond = new ArrayList<>();
+
         schedules.forEach(i -> {
             if (activity.get().getName().equals(i.getActivityId().getName())) {
                 rowMain.add(InlineKeyboardButton.builder()
@@ -73,7 +77,7 @@ public class CallbackScheduleActivityImpl implements Callback {
         }
 
         rowSecond.add(InlineKeyboardButton.builder()
-                .text("⬅️Назад")
+                .text(menuMessageProperties.getBack())
                 .callbackData("SCHEDULE")
                 .build());
 

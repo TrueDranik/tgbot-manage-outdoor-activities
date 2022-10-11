@@ -18,6 +18,7 @@ public class MessageService {
         return SendMessage.builder()
                 .chatId(chatId.toString())
                 .text(text)
+                .parseMode("Markdown")
                 .replyMarkup(keyboard)
                 .build();
     }

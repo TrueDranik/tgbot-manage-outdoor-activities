@@ -1,8 +1,8 @@
 package com.bot.sup.api.telegram.handler.registration;
 
-import com.bot.sup.cache.impl.InstructorDataCache;
-//import com.bot.sup.model.common.BotStateEnum;
+import com.bot.sup.cache.InstructorDataCache;
 import com.bot.sup.model.common.InstructorStateEnum;
+import com.bot.sup.model.common.properties.message.InstructorMessageProperties;
 import com.bot.sup.model.entity.Instructor;
 import com.bot.sup.repository.InstructorRepository;
 import com.bot.sup.service.InstructorService;
@@ -30,23 +30,27 @@ public class FillingInstructor implements HandleRegistration {
     private final InstructorDataCache instructorDataCache;
     private final MessageService messageService;
     private final InstructorService instructorService;
+    private final InstructorMessageProperties instructorMessageProperties;
     private final InstructorRepository instructorRepository;
 
     @Override
     public BotApiMethod<?> getMessage(Message message) {
+        Instructor instructor;
         Long chatId = message.getChatId();
         Long instructorForUpdateId = instructorDataCache.getInstructorForUpdate(chatId);
         boolean forUpdate = instructorForUpdateId != null;
-        Instructor instructor;
+
         if (forUpdate) {
             instructor = instructorRepository.findByTelegramId(instructorForUpdateId)
                     .orElseThrow(EntityNotFoundException::new);
+
             log.info("Found instructor with tgId - {} and name - {}", instructor.getTelegramId(), instructor.getFirstName());
         } else {
             instructor = instructorDataCache.getInstructorProfileData(chatId);
         }
         if (instructorDataCache.getInstructorCurrentState(chatId).equals(InstructorStateEnum.FILLING_INSTRUCTOR))
             instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.ASK_FULL_NAME);
+
         return processInputMessage(message, chatId, instructor, forUpdate);
     }
 
@@ -57,8 +61,9 @@ public class FillingInstructor implements HandleRegistration {
         BotApiMethod<?> replyToUser = null;
 
         if (instructorCurrentState.equals(InstructorStateEnum.ASK_FULL_NAME)) {
-            replyToUser = messageService.buildReplyMessage(chatId, "Введи ниже имя и фамилию (через пробел).");
+            replyToUser = messageService.buildReplyMessage(chatId, instructorMessageProperties.getInputFullNameInstructor());
             instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.ASK_PHONE_NUMBER);
+
             return replyToUser;
         } else if (instructorCurrentState.equals(InstructorStateEnum.ASK_PHONE_NUMBER)) {
             if (Validation.isValidText(userAnswer)) {
@@ -67,22 +72,24 @@ public class FillingInstructor implements HandleRegistration {
 
                     instructor.setFirstName(fullName[0]);
                     instructor.setLastName(fullName[1]);
+
                     if (instructor.getFirstName().length() < 2 || instructor.getFirstName().length() > 15
                             && instructor.getLastName().length() < 2 || instructor.getLastName().length() > 15) {
-                        return messageService.buildReplyMessage(chatId, "Имя и фамилия может быть от 2 до 15 символов!");
+                        return messageService.buildReplyMessage(chatId, instructorMessageProperties.getValidateInputFullName());
                     }
                 } catch (IndexOutOfBoundsException e) {
-                    return messageService.buildReplyMessage(chatId, "Вы не ввели ФИ!");
+                    return messageService.buildReplyMessage(chatId, instructorMessageProperties.getInputFullNameInstructorIsEmpty());
                 }
 
                 log.info("instructor Name = " + userAnswer);
 
-                replyToUser = messageService.buildReplyMessage(chatId, "Введите номер телефона.");
+                replyToUser = messageService.buildReplyMessage(chatId, instructorMessageProperties.getInputPhoneNumber());
 
                 instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.ASK_TELEGRAM_ID);
             } else {
-                replyToUser = messageService.buildReplyMessage(chatId, "Допустимы только кириллица и английский!");
+                replyToUser = messageService.buildReplyMessage(chatId, instructorMessageProperties.getValidateLanguage());
                 instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.ASK_PHONE_NUMBER);
+
                 return replyToUser;
             }
         } else if (instructorCurrentState.equals(InstructorStateEnum.ASK_TELEGRAM_ID)) {
@@ -92,11 +99,11 @@ public class FillingInstructor implements HandleRegistration {
                 log.info("instructor phone number = " + userAnswer);
 
                 replyToUser = messageService.buildReplyMessage(chatId,
-                        "Перешлите любое текстовое сообщение инструктора для получегия его telegramId");
+                        instructorMessageProperties.getGetTelegramId());
 
                 instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.REGISTERED_INSTRUCTOR);
             } else {
-                replyToUser = messageService.buildReplyMessage(chatId, "Неверный формат номера!");
+                replyToUser = messageService.buildReplyMessage(chatId, instructorMessageProperties.getPhoneNumberNotValid());
                 instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.ASK_TELEGRAM_ID);
 
                 return replyToUser;
@@ -105,12 +112,12 @@ public class FillingInstructor implements HandleRegistration {
             Optional<User> forwardFrom = Optional.ofNullable(inputMessage.getForwardFrom());
 
             if (forwardFrom.isPresent() && instructorRepository.existsByTelegramId(forwardFrom.get().getId()) && !forUpdate) {
-                replyToUser = messageService.buildReplyMessage(chatId, "Пользователь с таким telegramId уже существует!");
+                replyToUser = messageService.buildReplyMessage(chatId, instructorMessageProperties.getTelegramIdAlreadyTaken());
                 instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.REGISTERED_INSTRUCTOR);
 
                 return replyToUser;
             } else if (forwardFrom.isEmpty()) {
-                replyToUser = messageService.buildReplyMessage(chatId, "В сообщении нет telegramId!");
+                replyToUser = messageService.buildReplyMessage(chatId, instructorMessageProperties.getTelegramIdIsEmpty());
                 instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.REGISTERED_INSTRUCTOR);
 
                 return replyToUser;
@@ -123,9 +130,9 @@ public class FillingInstructor implements HandleRegistration {
             } else {
                 instructorService.save(instructor);
             }
-            replyToUser = messageService.getReplyMessageWithKeyboard(chatId, "Инструктор зарегистрирован!\n" +
+
+            replyToUser = messageService.getReplyMessageWithKeyboard(chatId, instructorMessageProperties.getRegistrationDone() +
                     instructorInfo(instructor), keyboardMenu());
-            //instructorDataCache.removeInstructorForUpdate(chatId);
         }
 
         if (forUpdate) {
@@ -147,10 +154,15 @@ public class FillingInstructor implements HandleRegistration {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
         buttons.add(List.of(
-                InlineKeyboardButton.builder().callbackData("INSTRUCTORS").text("Инструкторы").build()
+                InlineKeyboardButton.builder()
+                        .callbackData("INSTRUCTORS")
+                        .text(instructorMessageProperties.getMenuInstructors())
+                        .build()
         ));
 
-        return InlineKeyboardMarkup.builder().keyboard(buttons).build();
+        return InlineKeyboardMarkup.builder()
+                .keyboard(buttons)
+                .build();
     }
 
     @Override

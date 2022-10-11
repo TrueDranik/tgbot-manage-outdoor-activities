@@ -1,6 +1,7 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
+import com.bot.sup.model.common.properties.message.MenuMessageProperties;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -19,14 +20,17 @@ import static com.bot.sup.model.common.CallbackEnum.ACTIVITY_OPTION;
 @RequiredArgsConstructor
 @Service
 public class CallbackActivityOptionImpl implements Callback {
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ACTIVITY_OPTION);
+    private final MenuMessageProperties menuMessageProperties;
     private final ActivityRepository activityRepository;
+
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ACTIVITY_OPTION);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.getMessage().getChatId();
         String activityId = callbackQuery.getData().split("/")[1];
         Optional<Activity> activity = activityRepository.findById(Long.parseLong(activityId));
+
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
@@ -41,18 +45,18 @@ public class CallbackActivityOptionImpl implements Callback {
 
         firstRow.add(
                 InlineKeyboardButton.builder()
-                        .text("\uD83D\uDD04Изменить")
+                        .text(menuMessageProperties.getChange())
                         .callbackData("ACTIVITY_CHANGE")
                         .build());
         firstRow.add(
                 InlineKeyboardButton.builder()
-                        .text("❌Удалить")
+                        .text(menuMessageProperties.getDelete())
                         .callbackData("DELETE_ACTIVITY/" + activityId)
                         .build());
 
         secondRow.add(
                 InlineKeyboardButton.builder()
-                        .text("⬅️Назад")
+                        .text(menuMessageProperties.getBack())
                         .callbackData("LIST_ACTIVITY")
                         .build());
 

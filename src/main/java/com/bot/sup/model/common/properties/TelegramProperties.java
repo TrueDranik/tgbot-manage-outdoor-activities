@@ -1,7 +1,8 @@
-package com.bot.sup.model.common;
+package com.bot.sup.model.common.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 
 @Data
 @ConfigurationProperties(prefix = "telegram")

@@ -1,6 +1,8 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
+import com.bot.sup.model.common.properties.message.ActivityMessageProperties;
+import com.bot.sup.model.common.properties.message.MenuMessageProperties;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,12 +17,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.bot.sup.model.common.CallbackEnum.SAP_ACTIVITY;
+import static com.bot.sup.model.common.CallbackEnum.SUP_ACTIVITY;
 
 @Service
 @RequiredArgsConstructor
 public class CallbackActivityImpl implements Callback {
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(SAP_ACTIVITY);
+    private final MenuMessageProperties menuMessageProperties;
+    private final ActivityMessageProperties activityMessageProperties ;
+
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(SUP_ACTIVITY);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -29,7 +34,7 @@ public class CallbackActivityImpl implements Callback {
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text("Меню -> Активности")
+                .text(activityMessageProperties.getMenuActivities())
                 .replyMarkup(setUpKeyboard())
                 .build();
     }
@@ -38,19 +43,20 @@ public class CallbackActivityImpl implements Callback {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("\uD83D\uDCDDСписок активностей")
+                        .text(activityMessageProperties.getListActivity())
                         .callbackData("LIST_ACTIVITY")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("\uD83C\uDD95Добавить активность")
+                        .text(activityMessageProperties.getAddActivity())
                         .callbackData("ADD_ACTIVITY")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("↖️Меню↖️")
+                        .text(menuMessageProperties.getMenu())
                         .callbackData("MENU")
                         .build()));
+
         return InlineKeyboardMarkup.builder()
                 .keyboard(buttons)
                 .build();

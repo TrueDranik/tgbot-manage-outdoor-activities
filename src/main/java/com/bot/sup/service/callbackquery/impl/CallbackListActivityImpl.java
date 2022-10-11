@@ -1,6 +1,8 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
+import com.bot.sup.model.common.properties.message.ActivityMessageProperties;
+import com.bot.sup.model.common.properties.message.MenuMessageProperties;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -19,20 +21,22 @@ import static com.bot.sup.model.common.CallbackEnum.LIST_ACTIVITY;
 @Service
 @RequiredArgsConstructor
 public class CallbackListActivityImpl implements Callback {
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(LIST_ACTIVITY);
+    private final MenuMessageProperties menuMessageProperties;
+    private final ActivityMessageProperties activityMessageProperties;
     private final ActivityRepository activityRepository;
-//    private final InstructorCacheService cacheService;
+
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(LIST_ACTIVITY);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         List<List<InlineKeyboardButton>> buttonEmptyInstructors = new ArrayList<>();
         List<Activity> activities = activityRepository.findAll();
-//        cacheService.findByTelegramId(1L);
-        if (activities.size() == 0) {
+
+        if (activities.isEmpty()) {
             buttonEmptyInstructors.add(Collections.singletonList(
                     InlineKeyboardButton.builder()
-                            .text("⬅️Назад")
-                            .callbackData("SAP_ACTIVITY")
+                            .text(menuMessageProperties.getBack())
+                            .callbackData("SUP_ACTIVITY")
                             .build()
             ));
             InlineKeyboardMarkup keyboard = InlineKeyboardMarkup.builder()
@@ -40,7 +44,7 @@ public class CallbackListActivityImpl implements Callback {
                     .build();
 
             return EditMessageText.builder().messageId(callbackQuery.getMessage().getMessageId()).replyMarkup(keyboard)
-                    .text("Активности не найдены.\nВернитесь на главное меню")
+                    .text(activityMessageProperties.getEmptyActivity())
                     .chatId(callbackQuery.getMessage().getChatId()).build();
         }
 
@@ -48,7 +52,7 @@ public class CallbackListActivityImpl implements Callback {
                 .chatId(callbackQuery.getMessage().getChatId())
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .replyMarkup(generateKeyboardWithActivity(activities))
-                .text("Список активностей")
+                .text(activityMessageProperties.getListActivity())
                 .build();
     }
 
@@ -75,8 +79,8 @@ public class CallbackListActivityImpl implements Callback {
         }
 
         rowSecond.add(InlineKeyboardButton.builder()
-                .text("⬅️Назад")
-                .callbackData("SAP_ACTIVITY")
+                .text(menuMessageProperties.getBack())
+                .callbackData("SUP_ACTIVITY")
                 .build());
 
         mainKeyboard.add(rowSecond);

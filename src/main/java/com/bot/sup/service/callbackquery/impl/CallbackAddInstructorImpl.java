@@ -1,10 +1,9 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.api.telegram.handler.StateContext;
-import com.bot.sup.cache.impl.InstructorDataCache;
-import com.bot.sup.cache.impl.MiddlewareDataCache;
+import com.bot.sup.cache.InstructorDataCache;
+import com.bot.sup.cache.MiddlewareDataCache;
 import com.bot.sup.model.common.CallbackEnum;
-//import com.bot.sup.model.common.BotStateEnum;
 import com.bot.sup.model.common.InstructorStateEnum;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
@@ -26,14 +25,13 @@ public class CallbackAddInstructorImpl implements Callback {
     private final InstructorDataCache instructorDataCache;
     private final MiddlewareDataCache middlewareDataCache;
 
-
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
 
         InstructorStateEnum botStateEnum = InstructorStateEnum.FILLING_INSTRUCTOR;
         instructorDataCache.setInstructorCurrentState(chatId, botStateEnum);
-        middlewareDataCache.validCurrentState(chatId, instructorDataCache);
+        middlewareDataCache.setValidCurrentState(chatId, botStateEnum);
 
         return stateContext.processInputMessage(botStateEnum, callbackQuery.getMessage());
     }
