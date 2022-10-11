@@ -1,6 +1,8 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
+import com.bot.sup.model.common.properties.message.InstructorMessageProperties;
+import com.bot.sup.model.common.properties.message.MenuMessageProperties;
 import com.bot.sup.repository.InstructorRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +21,11 @@ import static com.bot.sup.model.common.CallbackEnum.DELETE_INSTRUCTOR;
 @RequiredArgsConstructor
 @Service
 public class CallbackDeleteInstructorImpl implements Callback {
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(DELETE_INSTRUCTOR);
+    private final MenuMessageProperties menuMessageProperties;
+    private final InstructorMessageProperties instructorMessageProperties;
     private final InstructorRepository instructorRepository;
+
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(DELETE_INSTRUCTOR);
 
     @Transactional
     @Override
@@ -30,7 +35,7 @@ public class CallbackDeleteInstructorImpl implements Callback {
         deleteInstructor(Long.parseLong(instructorId));
 
         return EditMessageText.builder().messageId(callbackQuery.getMessage().getMessageId())
-                .text("Инструктор удален.\nВернитесь списку инструкторов.")
+                .text(instructorMessageProperties.getDeleteInstructor())
                 .chatId(chatId)
                 .replyMarkup(createKeyboardForDeleteInstructor())
                 .build();
@@ -42,7 +47,7 @@ public class CallbackDeleteInstructorImpl implements Callback {
 
         buttons.add(Collections.singletonList(
                 InlineKeyboardButton.builder()
-                        .text("⬅️ Назад")
+                        .text(menuMessageProperties.getBack())
                         .callbackData("LIST_INSTRUCTORS")
                         .build()));
 

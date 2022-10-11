@@ -6,6 +6,7 @@ import com.bot.sup.cache.InstructorDataCache;
 import com.bot.sup.cache.MiddlewareDataCache;
 import com.bot.sup.cache.SupActivityDataCache;
 import com.bot.sup.model.common.*;
+import com.bot.sup.model.common.properties.TelegramProperties;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

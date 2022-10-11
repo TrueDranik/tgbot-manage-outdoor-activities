@@ -35,7 +35,7 @@ public class HandleMainMenuImpl implements Handle {
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("\uD83D\uDEA3\u200D♀️ Активности")
+                        .text("\uD83C\uDFC3\uD83C\uDFFD️ Активности")
                         .callbackData("SUP_ACTIVITY")
                         .build()));
 

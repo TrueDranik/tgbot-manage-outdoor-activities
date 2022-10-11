@@ -1,0 +1,36 @@
+message:
+  menus:
+    menu: "↖️ Меню"
+    change: "\uD83D\uDD04 Изменить"
+    delete: "❌ Удалить"
+    back: "⬅️ Назад"
+    userChoose: "Что Вы хотите выбрать?"
+    done: "✅ Готово!"
+  activity:
+    activity: "Активность"
+    menuActivities: "Меню активностей"
+    listActivity: "\uD83D\uDCDD Список активностей"
+    addActivity: "\uD83C\uDD95 Добавить активность"
+    deleteActivity: "Активность удалена.\nВернитесь в главное меню."
+    emptyActivity: "Активности не найдены.\nВернитесь на главное меню"
+    registeredActivity: "Активность _%s_ зарегистрирована!\n"
+    inputActivityName: "Введите наименование активности"
+    inputActivityNameIsEmpty: "Вы не ввели наименование активности!"
+  instructor:
+    menuInstructors: "Меню инструкторов"
+    listInstructor: "\uD83D\uDCDD Список инструкторов"
+    addInstructor: "\uD83C\uDD95 Добавить инструктора"
+    deleteInstructor: "Инструктор удален.\nВернитесь списку инструкторов."
+    emptyInstructors: "Инструкторы не найдены!\nВернитесь на главное меню."
+    inputFullNameInstructor: "Введи ниже имя и фамилию (через пробел)."
+    inputFullNameInstructorIsEmpty: "Вы не ввели ФИ!"
+    validateInputFullName: "Имя и фамилия может быть от 2 до 15 символов!"
+    validateLanguage: "Допустимы только кириллица и английский!"
+    inputPhoneNumber: 'Введите номер телефона в формате _79123456789_'
+    getTelegramId: "Перешлите любое текстовое сообщение инструктора для получегия его telegramId"
+    phoneNumberNotValid: "Неверный формат номера!"
+    telegramIdAlreadyTaken: "Пользователь с таким telegramId уже существует!"
+    telegramIdIsEmpty: "В сообщении нет telegramId!"
+    registrationDone: "Инструктор зарегистрирован!\n"
+  schedule:
+    schedules: "Раписание какой активности хотите настроить?"
