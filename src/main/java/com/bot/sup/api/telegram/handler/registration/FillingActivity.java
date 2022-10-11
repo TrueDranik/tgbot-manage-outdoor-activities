@@ -1,10 +1,12 @@
 package com.bot.sup.api.telegram.handler.registration;
 
 import com.bot.sup.cache.SupActivityDataCache;
+import com.bot.sup.model.common.InstructorStateEnum;
 import com.bot.sup.model.common.SupActivityStateEnum;
 import com.bot.sup.model.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.model.common.properties.message.MenuMessageProperties;
 import com.bot.sup.model.entity.Activity;
+import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.service.ActivityService;
 import com.bot.sup.service.MessageService;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +14,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -28,6 +31,7 @@ public class FillingActivity implements HandleRegistration {
     private final SupActivityDataCache supActivityDataCache;
     private final MenuMessageProperties menuMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
+    private final ActivityRepository activityRepository;
 
     @Override
     public BotApiMethod<?> getMessage(Message message) {
@@ -54,7 +58,17 @@ public class FillingActivity implements HandleRegistration {
 
             return replyToUser;
         } else if (activityCurrentState.equals(SupActivityStateEnum.REGISTERED_ACTIVITY)) {
+            //Optional<String> forwardFrom = inputMessage;
+
+            if (activityRepository.existsByName(userAnswer)){
+                replyToUser = messageService.buildReplyMessage(chatId, activityMessageProperties.getActivityNameAlreadyTaken());
+                supActivityDataCache.setActivityCurrentState(chatId, SupActivityStateEnum.REGISTERED_ACTIVITY);
+
+                return replyToUser;
+            }
             try {
+
+
                 activity.setName(userAnswer);
             } catch (IndexOutOfBoundsException e) {
                 return messageService.buildReplyMessage(chatId, activityMessageProperties.getInputActivityNameIsEmpty());
