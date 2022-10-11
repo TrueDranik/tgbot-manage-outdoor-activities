@@ -19,6 +19,7 @@
         <telegram.version>6.1.0</telegram.version>
         <postgresql.version>42.5.0</postgresql.version>
         <mapstruct.version>1.5.2.Final</mapstruct.version>
+        <propertyFileWillOverride>true</propertyFileWillOverride>
     </properties>
 
     <dependencies>
@@ -64,7 +65,14 @@
             <version>${mapstruct.version}</version>
         </dependency>
 
-<!--        <dependency>-->
+        <!-- https://mvnrepository.com/artifact/org.liquibase/liquibase-core -->
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>4.17.0</version>
+        </dependency>
+
+        <!--        <dependency>-->
 <!--            <groupId>org.springframework.boot</groupId>-->
 <!--            <artifactId>spring-boot-starter-cache</artifactId>-->
 <!--            <version>2.7.3</version>-->
