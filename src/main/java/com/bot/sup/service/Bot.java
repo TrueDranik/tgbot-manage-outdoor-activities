@@ -5,7 +5,10 @@ import com.bot.sup.api.telegram.handler.StateContext;
 import com.bot.sup.cache.InstructorDataCache;
 import com.bot.sup.cache.MiddlewareDataCache;
 import com.bot.sup.cache.SupActivityDataCache;
-import com.bot.sup.model.common.*;
+import com.bot.sup.model.common.CallbackMap;
+import com.bot.sup.model.common.CommandMap;
+import com.bot.sup.model.common.InstructorStateEnum;
+import com.bot.sup.model.common.SupActivityStateEnum;
 import com.bot.sup.model.common.properties.TelegramProperties;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +26,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Slf4j
 @EnableCaching
 public class Bot extends TelegramLongPollingBot {
-    final TelegramProperties config;
     private final CallbackMap callbackMap;
     private final CommandMap commandMap;
     private final MiddlewareDataCache middlewareDataCache;
@@ -31,16 +33,7 @@ public class Bot extends TelegramLongPollingBot {
     private final SupActivityDataCache supActivityDataCache;
     private final StateContext stateContext;
     private BotApiMethod<?> replyMessage;
-
-    @Override
-    public String getBotUsername() {
-        return config.getNameBot();
-    }
-
-    @Override
-    public String getBotToken() {
-        return config.getTokenBot();
-    }
+    final TelegramProperties config;
 
     @SneakyThrows
     @Override
@@ -80,5 +73,15 @@ public class Bot extends TelegramLongPollingBot {
                 execute(replyMessage);
             }
         }
+    }
+
+    @Override
+    public String getBotUsername() {
+        return config.getNameBot();
+    }
+
+    @Override
+    public String getBotToken() {
+        return config.getTokenBot();
     }
 }
