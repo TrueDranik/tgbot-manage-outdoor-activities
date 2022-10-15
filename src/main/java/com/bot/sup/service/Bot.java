@@ -5,7 +5,10 @@ import com.bot.sup.api.telegram.handler.StateContext;
 import com.bot.sup.cache.InstructorDataCache;
 import com.bot.sup.cache.MiddlewareDataCache;
 import com.bot.sup.cache.SupActivityDataCache;
-import com.bot.sup.model.common.*;
+import com.bot.sup.model.common.CallbackMap;
+import com.bot.sup.model.common.CommandMap;
+import com.bot.sup.model.common.InstructorStateEnum;
+import com.bot.sup.model.common.SupActivityStateEnum;
 import com.bot.sup.model.common.properties.TelegramProperties;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +18,18 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.commands.DeleteMyCommands;
+import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
+import org.telegram.telegrambots.meta.api.methods.menubutton.SetChatMenuButton;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
+import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScope;
+import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
+import org.telegram.telegrambots.meta.api.objects.menubutton.MenuButtonCommands;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -49,6 +62,27 @@ public class Bot extends TelegramLongPollingBot {
         InstructorStateEnum instructorStateEnum;
         SupActivityStateEnum supActivityStateEnum;
 
+        DeleteMyCommands deleteMyCommands = DeleteMyCommands
+                .builder().languageCode("ru").scope(BotCommandScopeDefault.builder().build()).build();
+        //execute(deleteMyCommands);
+
+        SetMyCommands setMyCommands = SetMyCommands
+                .builder()
+                .scope(BotCommandScopeDefault.builder().build())
+                .build();
+        List<BotCommand> commands = new ArrayList<>();
+        commands.add(BotCommand.builder().command("start").description("начать работу с ботом").build());
+        commands.add(BotCommand.builder().command("help").description("дополнительная информация").build());
+        setMyCommands.setCommands(commands);
+        execute(setMyCommands);
+
+        SetChatMenuButton setChatMenuButton = SetChatMenuButton
+                .builder()
+                .chatId(message.getChatId())
+                .menuButton(MenuButtonCommands.builder().build())
+                .build();
+        execute(setChatMenuButton);
+
         if (update.hasCallbackQuery()) {
             Callback callback = callbackMap.getCallback(update.getCallbackQuery().getData().split("/")[0]);
 
@@ -57,7 +91,7 @@ public class Bot extends TelegramLongPollingBot {
             execute(callback.getCallbackQuery(update.getCallbackQuery()));
         } else if (update.hasMessage()) {
             Long chatId = message.getChatId();
-
+            execute(setMyCommands);
             log.info("chatId from message = " + chatId);
 
             instructorDataCache.removeInstructorForUpdate(chatId);
