@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @EnableCaching
 public class Bot extends TelegramLongPollingBot {
-    final TelegramProperties config;
     private final CallbackMap callbackMap;
     private final MiddlewareDataCache middlewareDataCache;
     private final InstructorDataCache instructorDataCache;

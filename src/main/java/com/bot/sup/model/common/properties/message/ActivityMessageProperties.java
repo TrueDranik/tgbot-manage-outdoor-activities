@@ -19,4 +19,5 @@ public class ActivityMessageProperties {
     String emptyActivity;
     String inputActivityName;
     String inputActivityNameIsEmpty;
+    String activityNameAlreadyTaken;
 }

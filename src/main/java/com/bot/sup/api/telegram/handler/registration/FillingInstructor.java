@@ -125,6 +125,9 @@ public class FillingInstructor implements HandleRegistration {
 
             instructor.setTelegramId(inputMessage.getForwardFrom().getId());
 
+            log.info("instructor TelegramId = " + userAnswer);
+            log.info("User name = " + inputMessage.getForwardFrom().getUserName());
+
             if (forUpdate) {
                 instructorDataCache.removeInstructorForUpdate(chatId);
             } else {
