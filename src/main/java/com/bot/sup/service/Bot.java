@@ -40,6 +40,7 @@ public class Bot extends TelegramLongPollingBot {
     private final StateContext stateContext;
     private final List<BaseCommand> commands;
     private BotApiMethod<?> replyMessage;
+    final TelegramProperties config;
 
     @SneakyThrows
     @Override
