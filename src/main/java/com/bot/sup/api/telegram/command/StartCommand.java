@@ -12,6 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 @Component
 @RequiredArgsConstructor
 public class StartCommand implements BaseCommand {
+    private final HandleMainMenuImpl handleMainMenu;
     private final MenuMessageProperties menuMessageProperties;
     @Override
     public BotCommand getBotCommand() {
@@ -23,7 +24,6 @@ public class StartCommand implements BaseCommand {
 
     @Override
     public BotApiMethod<?> getAction(Update update) {
-        HandleMainMenuImpl handleMainMenu = new HandleMainMenuImpl();
         return SendMessage.builder()
                 .chatId(update.getMessage().getChatId())
                 .text(menuMessageProperties.getUserChoose())
