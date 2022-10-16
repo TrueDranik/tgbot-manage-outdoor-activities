@@ -1,6 +1,9 @@
 package com.bot.sup.api.telegram.handler.impl;
 
 import com.bot.sup.api.telegram.handler.Handle;
+import com.bot.sup.model.common.properties.message.MenuMessageProperties;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -10,12 +13,16 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
+@RequiredArgsConstructor
 public class HandleMainMenuImpl implements Handle {
+    private final MenuMessageProperties menuMessageProperties;
+
     @Override
     public BotApiMethod<?> getMessage(Update update) {
         return SendMessage.builder()
                 .chatId(update.getMessage().getChatId())
-                .text("⬇️ Выберите нужное действие ⬇️")
+                .text(menuMessageProperties.getUserChoose())
                 .replyMarkup(createInlineKeyboard())
                 .build();
     }
