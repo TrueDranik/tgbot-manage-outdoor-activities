@@ -1,11 +1,13 @@
 package com.bot.sup.service;
 
-import com.bot.sup.api.telegram.handler.Handle;
+import com.bot.sup.api.telegram.command.BaseCommand;
 import com.bot.sup.api.telegram.handler.StateContext;
 import com.bot.sup.cache.InstructorDataCache;
 import com.bot.sup.cache.MiddlewareDataCache;
 import com.bot.sup.cache.SupActivityDataCache;
-import com.bot.sup.model.common.*;
+import com.bot.sup.model.common.CallbackMap;
+import com.bot.sup.model.common.InstructorStateEnum;
+import com.bot.sup.model.common.SupActivityStateEnum;
 import com.bot.sup.model.common.properties.TelegramProperties;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +17,16 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.commands.DeleteMyCommands;
+import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
+import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
+
+import javax.annotation.PostConstruct;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -25,22 +35,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class Bot extends TelegramLongPollingBot {
     final TelegramProperties config;
     private final CallbackMap callbackMap;
-    private final CommandMap commandMap;
     private final MiddlewareDataCache middlewareDataCache;
     private final InstructorDataCache instructorDataCache;
     private final SupActivityDataCache supActivityDataCache;
     private final StateContext stateContext;
+    private final List<BaseCommand> commands;
     private BotApiMethod<?> replyMessage;
-
-    @Override
-    public String getBotUsername() {
-        return config.getNameBot();
-    }
-
-    @Override
-    public String getBotToken() {
-        return config.getTokenBot();
-    }
 
     @SneakyThrows
     @Override
@@ -59,11 +59,12 @@ public class Bot extends TelegramLongPollingBot {
             Long chatId = message.getChatId();
 
             log.info("chatId from message = " + chatId);
-
-            instructorDataCache.removeInstructorForUpdate(chatId);
-            if (message.getText().startsWith("/")) {
-                Handle command = commandMap.getCommand(message.getText());
-                execute(command.getMessage(update));
+            if (message.isCommand()) {
+                BaseCommand baseCommand = commands.stream()
+                        .filter(it -> message.getText().equals("/" + it.getBotCommand().getCommand()))
+                        .findFirst()
+                        .orElseThrow(() -> new IllegalArgumentException("No such command"));
+                execute(baseCommand.getAction(update));
             } else if (middlewareDataCache.getCurrentData(chatId) instanceof InstructorStateEnum) {
                 instructorStateEnum = instructorDataCache.getInstructorCurrentState(chatId);
 
@@ -80,5 +81,30 @@ public class Bot extends TelegramLongPollingBot {
                 execute(replyMessage);
             }
         }
+    }
+
+    @PostConstruct
+    @SneakyThrows
+    public void initCommands() {
+        List<BotCommand> botCommands = commands.stream()
+                .map(BaseCommand::getBotCommand)
+                .collect(Collectors.toList());
+
+        SetMyCommands myCommands = SetMyCommands
+                .builder()
+                .scope(BotCommandScopeDefault.builder().build())
+                .commands(botCommands)
+                .build();
+        execute(myCommands);
+    }
+
+    @Override
+    public String getBotUsername() {
+        return config.getNameBot();
+    }
+
+    @Override
+    public String getBotToken() {
+        return config.getTokenBot();
     }
 }
