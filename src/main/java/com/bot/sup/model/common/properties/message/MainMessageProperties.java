@@ -8,13 +8,15 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @Data
-@ConfigurationProperties(prefix = "message.menus")
+@ConfigurationProperties(prefix = "message.main")
 @PropertySource(value = "classpath:messages.yaml", factory = YamlPropertySourceFactory.class)
-public class MenuMessageProperties {
+public class MainMessageProperties {
     String menu;
     String change;
     String delete;
     String back;
     String userChoose;
     String done;
+    String commandStart;
+    String commandStartDescription;
 }
