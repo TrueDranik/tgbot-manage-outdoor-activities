@@ -1,7 +1,10 @@
 package com.bot.sup.api.telegram.handler.impl;
 
 import com.bot.sup.api.telegram.handler.Handle;
+import com.bot.sup.model.common.properties.message.ActivityMessageProperties;
+import com.bot.sup.model.common.properties.message.InstructorMessageProperties;
 import com.bot.sup.model.common.properties.message.MenuMessageProperties;
+import com.bot.sup.model.common.properties.message.ScheduleMessageProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -17,6 +20,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HandleMainMenuImpl implements Handle {
     private final MenuMessageProperties menuMessageProperties;
+    private final ActivityMessageProperties activityMessageProperties;
+    private final InstructorMessageProperties instructorMessageProperties;
+    private final ScheduleMessageProperties scheduleMessageProperties;
 
     @Override
     public BotApiMethod<?> getMessage(Update update) {
@@ -32,17 +38,17 @@ public class HandleMainMenuImpl implements Handle {
 
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("\uD83D\uDCC5 Расписание")
+                        .text(scheduleMessageProperties.getSchedules())
                         .callbackData("SCHEDULE")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("\uD83E\uDDB8 Инструкторы")
+                        .text(instructorMessageProperties.getInstructors())
                         .callbackData("INSTRUCTORS")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("\uD83C\uDFC3\uD83C\uDFFD️ Активности")
+                        .text(activityMessageProperties.getActivities())
                         .callbackData("SUP_ACTIVITY")
                         .build()));
 
