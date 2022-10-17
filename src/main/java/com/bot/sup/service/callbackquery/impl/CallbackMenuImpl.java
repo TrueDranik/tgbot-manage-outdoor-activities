@@ -18,14 +18,13 @@ import static com.bot.sup.model.common.CallbackEnum.MENU;
 @Service
 @RequiredArgsConstructor
 public class CallbackMenuImpl implements Callback {
+    private final HandleMainMenuImpl handleMainMenu;
     private final MenuMessageProperties menuMessageProperties;
 
     public static final Set<CallbackEnum> ACTIVITIES = Set.of(MENU);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
-        HandleMainMenuImpl handleMainMenu = new HandleMainMenuImpl();
-
         return EditMessageText.builder().messageId(callbackQuery.getMessage().getMessageId())
                 .replyMarkup(handleMainMenu.createInlineKeyboard())
                 .chatId(callbackQuery.getMessage()
