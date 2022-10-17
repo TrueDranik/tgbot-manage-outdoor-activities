@@ -1,10 +1,9 @@
 package com.bot.sup.api.telegram.handler.registration;
 
 import com.bot.sup.cache.SupActivityDataCache;
-import com.bot.sup.model.common.InstructorStateEnum;
 import com.bot.sup.model.common.SupActivityStateEnum;
 import com.bot.sup.model.common.properties.message.ActivityMessageProperties;
-import com.bot.sup.model.common.properties.message.MenuMessageProperties;
+import com.bot.sup.model.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.service.ActivityService;
@@ -20,7 +19,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 @Slf4j
@@ -29,7 +27,7 @@ public class FillingActivity implements HandleRegistration {
     private final MessageService messageService;
     private final ActivityService activityService;
     private final SupActivityDataCache supActivityDataCache;
-    private final MenuMessageProperties menuMessageProperties;
+    private final MainMessageProperties mainMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
     private final ActivityRepository activityRepository;
 
@@ -90,7 +88,7 @@ public class FillingActivity implements HandleRegistration {
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .callbackData("SUP_ACTIVITY")
-                        .text(menuMessageProperties.getDone())
+                        .text(mainMessageProperties.getDone())
                         .build()
         ));
 

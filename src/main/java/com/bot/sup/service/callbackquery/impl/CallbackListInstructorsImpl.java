@@ -2,7 +2,7 @@ package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.common.properties.message.InstructorMessageProperties;
-import com.bot.sup.model.common.properties.message.MenuMessageProperties;
+import com.bot.sup.model.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.Instructor;
 import com.bot.sup.repository.InstructorRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -21,7 +21,7 @@ import static com.bot.sup.model.common.CallbackEnum.LIST_INSTRUCTORS;
 @Service
 @RequiredArgsConstructor
 public class CallbackListInstructorsImpl implements Callback {
-    private final MenuMessageProperties menuMessageProperties;
+    private final MainMessageProperties mainMessageProperties;
     private final InstructorMessageProperties instructorMessageProperties;
     private final InstructorRepository instructorRepository;
 
@@ -35,7 +35,7 @@ public class CallbackListInstructorsImpl implements Callback {
         if (instructor.isEmpty()) {
             buttonEmptyInstructors.add(Collections.singletonList(
                     InlineKeyboardButton.builder()
-                            .text(menuMessageProperties.getBack())
+                            .text(mainMessageProperties.getBack())
                             .callbackData("INSTRUCTORS")
                             .build()
             ));
@@ -79,7 +79,7 @@ public class CallbackListInstructorsImpl implements Callback {
         }
 
         rowSecond.add(InlineKeyboardButton.builder()
-                .text(menuMessageProperties.getBack())
+                .text(mainMessageProperties.getBack())
                 .callbackData("INSTRUCTORS")
                 .build());
 

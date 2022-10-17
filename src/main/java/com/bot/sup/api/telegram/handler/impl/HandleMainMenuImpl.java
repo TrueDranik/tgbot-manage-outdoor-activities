@@ -3,7 +3,7 @@ package com.bot.sup.api.telegram.handler.impl;
 import com.bot.sup.api.telegram.handler.Handle;
 import com.bot.sup.model.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.model.common.properties.message.InstructorMessageProperties;
-import com.bot.sup.model.common.properties.message.MenuMessageProperties;
+import com.bot.sup.model.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.common.properties.message.ScheduleMessageProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class HandleMainMenuImpl implements Handle {
-    private final MenuMessageProperties menuMessageProperties;
+    private final MainMessageProperties mainMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
     private final InstructorMessageProperties instructorMessageProperties;
     private final ScheduleMessageProperties scheduleMessageProperties;
@@ -28,7 +28,7 @@ public class HandleMainMenuImpl implements Handle {
     public BotApiMethod<?> getMessage(Update update) {
         return SendMessage.builder()
                 .chatId(update.getMessage().getChatId())
-                .text(menuMessageProperties.getUserChoose())
+                .text(mainMessageProperties.getUserChoose())
                 .replyMarkup(createInlineKeyboard())
                 .build();
     }
