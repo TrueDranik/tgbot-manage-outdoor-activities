@@ -9,6 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 @ConfigurationProperties(prefix = "message.instructor")
 @PropertySource(value = "classpath:messages.yaml", factory = YamlPropertySourceFactory.class)
 public class InstructorMessageProperties {
+    String instructors;
     String menuInstructors;
     String listInstructor;
     String addInstructor;
