@@ -16,16 +16,16 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.*;
 
-import static com.bot.sup.model.common.CallbackEnum.LIST_ACTIVITY;
+import static com.bot.sup.model.common.CallbackEnum.LIST_ACTIVITY_FORMAT;
 
 @Service
 @RequiredArgsConstructor
-public class CallbackListActivityImpl implements Callback {
+public class CallbackListActivityFormatImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
     private final RouteRepository routeRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(LIST_ACTIVITY);
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(LIST_ACTIVITY_FORMAT);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -52,7 +52,7 @@ public class CallbackListActivityImpl implements Callback {
                 .chatId(callbackQuery.getMessage().getChatId())
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .replyMarkup(generateKeyboardWithActivity(activities))
-                .text(activityMessageProperties.getListActivity())
+                .text(activityMessageProperties.getListActivityFormat())
                 .build();
     }
 
@@ -64,7 +64,7 @@ public class CallbackListActivityImpl implements Callback {
         activities.forEach(i -> {
                     rowMain.add(InlineKeyboardButton.builder()
                             .text(i.getName())
-                            .callbackData("ACTIVITY_OPTION/" + i.getId())
+                            .callbackData("ACTIVITY_FORMAT_OPTION/" + i.getId())
                             .build());
                     if (rowMain.size() == 2) {
                         List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);

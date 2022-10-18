@@ -17,15 +17,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.bot.sup.model.common.CallbackEnum.SUP_ACTIVITY;
+import static com.bot.sup.model.common.CallbackEnum.SUP_ACTIVITY_FORMAT;
 
 @Service
 @RequiredArgsConstructor
-public class CallbackActivityImpl implements Callback {
+public class CallbackActivityFormatImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
-    private final ActivityMessageProperties activityMessageProperties ;
+    private final ActivityMessageProperties activityMessageProperties;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(SUP_ACTIVITY);
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(SUP_ACTIVITY_FORMAT);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -43,18 +43,18 @@ public class CallbackActivityImpl implements Callback {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text(activityMessageProperties.getListActivity())
-                        .callbackData("LIST_ACTIVITY")
+                        .text(activityMessageProperties.getListActivityFormat())
+                        .callbackData("LIST_ACTIVITY_FORMAT")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text(activityMessageProperties.getAddActivity())
-                        .callbackData("ADD_ACTIVITY")
+                        .text(activityMessageProperties.getAddActivityFormat())
+                        .callbackData("ADD_ACTIVITY_FORMAT")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text(mainMessageProperties.getMenu())
-                        .callbackData("MENU")
+                        .text(mainMessageProperties.getBack())
+                        .callbackData("SUP_ACTIVITIES")
                         .build()));
 
         return InlineKeyboardMarkup.builder()

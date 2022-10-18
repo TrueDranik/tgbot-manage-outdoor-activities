@@ -15,15 +15,15 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.*;
 
-import static com.bot.sup.model.common.CallbackEnum.ACTIVITY_OPTION;
+import static com.bot.sup.model.common.CallbackEnum.ACTIVITY_FORMAT_OPTION;
 
 @RequiredArgsConstructor
 @Service
-public class CallbackActivityOptionImpl implements Callback {
+public class CallbackActivityFormatOptionImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
     private final RouteRepository routeRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ACTIVITY_OPTION);
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ACTIVITY_FORMAT_OPTION);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {

@@ -15,12 +15,12 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.Collection;
 import java.util.Set;
 
-import static com.bot.sup.model.common.CallbackEnum.ADD_ACTIVITY;
+import static com.bot.sup.model.common.CallbackEnum.ADD_ACTIVITY_FORMAT;
 
 @Service
 @RequiredArgsConstructor
-public class CallbackAddActivityImpl implements Callback {
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ADD_ACTIVITY);
+public class CallbackAddActivityFormatImpl implements Callback {
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ADD_ACTIVITY_FORMAT);
     private final StateContext stateContext;
     private final SupActivityDataCache supActivityDataCache;
     private final MiddlewareDataCache middlewareDataCache;
