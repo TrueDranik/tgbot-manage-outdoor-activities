@@ -33,6 +33,7 @@ public class CallbackActivitiesImpl implements Callback {
         Long chatId = callbackQuery.getMessage().getChatId();
 
         return EditMessageText.builder()
+                .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
                 .text(activityMessageProperties.getActivities())
                 .replyMarkup(inlineKeyboardMarkup())

@@ -2,8 +2,9 @@ package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.common.properties.message.MainMessageProperties;
+import com.bot.sup.model.entity.ActivityFormat;
 import com.bot.sup.model.entity.Route;
-import com.bot.sup.repository.RouteRepository;
+import com.bot.sup.repository.ActivityFormatRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ import static com.bot.sup.model.common.CallbackEnum.ACTIVITY_FORMAT_OPTION;
 @Service
 public class CallbackActivityFormatOptionImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
-    private final RouteRepository routeRepository;
+    private final ActivityFormatRepository activityFormatRepository;
 
     public static final Set<CallbackEnum> ACTIVITIES = Set.of(ACTIVITY_FORMAT_OPTION);
 
@@ -29,7 +30,7 @@ public class CallbackActivityFormatOptionImpl implements Callback {
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.getMessage().getChatId();
         String activityId = callbackQuery.getData().split("/")[1];
-        Optional<Route> activity = routeRepository.findById(Long.parseLong(activityId));
+        Optional<ActivityFormat> activity = activityFormatRepository.findById(Long.parseLong(activityId));
 
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
