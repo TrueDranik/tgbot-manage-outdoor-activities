@@ -3,7 +3,7 @@ package com.bot.sup.service.callbackquery.impl;
 import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.common.properties.message.MenuMessageProperties;
 import com.bot.sup.model.common.properties.message.ScheduleMessageProperties;
-import com.bot.sup.model.entity.Activity;
+import com.bot.sup.model.entity.Route;
 import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class CallbackScheduleImpl implements Callback {
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
-        List<Activity> activities = activityRepository.findAll();
+        List<Route> activities = activityRepository.findAll();
         Long chatId = callbackQuery.getMessage().getChatId();
 
         return EditMessageText.builder()
@@ -43,7 +43,7 @@ public class CallbackScheduleImpl implements Callback {
                 .build();
     }
 
-    private InlineKeyboardMarkup generateKeyboardWithActivity(List<Activity> activities) {
+    private InlineKeyboardMarkup generateKeyboardWithActivity(List<Route> activities) {
         List<List<InlineKeyboardButton>> mainKeyboard = new ArrayList<>();
         List<InlineKeyboardButton> rowMain = new ArrayList<>();
         List<InlineKeyboardButton> rowSecond = new ArrayList<>();

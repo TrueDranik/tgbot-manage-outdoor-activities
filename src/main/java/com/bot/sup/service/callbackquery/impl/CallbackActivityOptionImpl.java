@@ -2,7 +2,7 @@ package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.common.properties.message.MenuMessageProperties;
-import com.bot.sup.model.entity.Activity;
+import com.bot.sup.model.entity.Route;
 import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class CallbackActivityOptionImpl implements Callback {
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.getMessage().getChatId();
         String activityId = callbackQuery.getData().split("/")[1];
-        Optional<Activity> activity = activityRepository.findById(Long.parseLong(activityId));
+        Optional<Route> activity = activityRepository.findById(Long.parseLong(activityId));
 
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())

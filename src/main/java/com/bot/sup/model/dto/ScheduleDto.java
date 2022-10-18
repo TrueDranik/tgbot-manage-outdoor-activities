@@ -1,6 +1,5 @@
 package com.bot.sup.model.dto;
 
-import com.bot.sup.model.entity.Activity;
 import lombok.Getter;
 import lombok.Setter;
 

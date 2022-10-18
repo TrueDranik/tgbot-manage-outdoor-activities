@@ -2,7 +2,7 @@ package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.common.properties.message.MenuMessageProperties;
-import com.bot.sup.model.entity.Activity;
+import com.bot.sup.model.entity.Route;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.repository.ScheduleRepository;
@@ -34,7 +34,7 @@ public class CallbackScheduleActivityImpl implements Callback {
         String scheduleId = callbackQuery.getData().split("/")[1];
 
         List<Schedule> schedules = scheduleRepository.findAll();
-        Optional<Activity> activity = activityRepository.findById(Long.parseLong(scheduleId));
+        Optional<Route> activity = activityRepository.findById(Long.parseLong(scheduleId));
 
         if (generateKeyboardWithSchedule(schedules, activity).getKeyboard().size() <= 1) {
             return EditMessageText.builder()
@@ -53,13 +53,13 @@ public class CallbackScheduleActivityImpl implements Callback {
                 .build();
     }
 
-    private InlineKeyboardMarkup generateKeyboardWithSchedule(List<Schedule> schedules, Optional<Activity> activity) {
+    private InlineKeyboardMarkup generateKeyboardWithSchedule(List<Schedule> schedules, Optional<Route> activity) {
         List<List<InlineKeyboardButton>> mainKeyboard = new ArrayList<>();
         List<InlineKeyboardButton> rowMain = new ArrayList<>();
         List<InlineKeyboardButton> rowSecond = new ArrayList<>();
 
         schedules.forEach(i -> {
-            if (activity.get().getName().equals(i.getActivityId().getName())) {
+            if (activity.get().getName().equals(i.getRouteId().getName())) {
                 rowMain.add(InlineKeyboardButton.builder()
                         .text(i.getEventDate().toString())
                         .callbackData("SCHEDULE_OPTION/" + i.getId())

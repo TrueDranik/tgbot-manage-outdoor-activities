@@ -17,7 +17,7 @@ public class Schedule {
 
     @ManyToOne
     @JoinColumn(name = "activity_id")
-    private Activity activityId;
+    private Route routeId;
 
     @Column(name = "event_date_time")
     private LocalDateTime eventDate;

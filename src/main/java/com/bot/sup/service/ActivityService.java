@@ -1,6 +1,6 @@
 package com.bot.sup.service;
 
-import com.bot.sup.model.entity.Activity;
+import com.bot.sup.model.entity.Route;
 import com.bot.sup.repository.ActivityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class ActivityService {
     private final ActivityRepository activityRepository;
 
-    public void save(Activity activity) {
-        activityRepository.save(activity);
+    public void save(Route route) {
+        activityRepository.save(route);
     }
 }
