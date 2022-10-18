@@ -11,6 +11,8 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource(value = "classpath:messages.yaml", factory = YamlPropertySourceFactory.class)
 public class ActivityMessageProperties {
     String activities;
+    String activityFormat;
+    String activityType;
     String menuActivities;
     String listActivityFormat;
     String listActivityType;
