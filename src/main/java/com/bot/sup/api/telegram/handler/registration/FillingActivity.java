@@ -4,7 +4,7 @@ import com.bot.sup.cache.SupActivityDataCache;
 import com.bot.sup.model.common.SupActivityStateEnum;
 import com.bot.sup.model.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.model.common.properties.message.MenuMessageProperties;
-import com.bot.sup.model.entity.Activity;
+import com.bot.sup.model.entity.Route;
 import com.bot.sup.service.ActivityService;
 import com.bot.sup.service.MessageService;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class FillingActivity implements HandleRegistration {
     @Transactional
     public BotApiMethod<?> processInputMessage(Message inputMessage, Long chatId) {
         BotApiMethod<?> replyToUser = null;
-        Activity activity = new Activity();
+        Route route = new Route();
         String userAnswer = inputMessage.getText();
         SupActivityStateEnum activityCurrentState = supActivityDataCache.getActivityCurrentState(chatId);
 
@@ -55,15 +55,15 @@ public class FillingActivity implements HandleRegistration {
             return replyToUser;
         } else if (activityCurrentState.equals(SupActivityStateEnum.REGISTERED_ACTIVITY)) {
             try {
-                activity.setName(userAnswer);
+                route.setName(userAnswer);
             } catch (IndexOutOfBoundsException e) {
                 return messageService.buildReplyMessage(chatId, activityMessageProperties.getInputActivityNameIsEmpty());
             }
 
-            activityService.save(activity);
+            activityService.save(route);
 
             replyToUser = messageService.getReplyMessageWithKeyboard(chatId, String
-                    .format(activityMessageProperties.getRegisteredActivity(), activity.getName()),
+                    .format(activityMessageProperties.getRegisteredActivity(), route.getName()),
                     keyboardMenu());
         }
 
