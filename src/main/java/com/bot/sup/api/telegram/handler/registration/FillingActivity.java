@@ -3,8 +3,9 @@ package com.bot.sup.api.telegram.handler.registration;
 import com.bot.sup.cache.SupActivityDataCache;
 import com.bot.sup.model.common.SupActivityStateEnum;
 import com.bot.sup.model.common.properties.message.ActivityMessageProperties;
-import com.bot.sup.model.common.properties.message.MenuMessageProperties;
+import com.bot.sup.model.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.Route;
+import com.bot.sup.repository.ActivityFormatRepository;
 import com.bot.sup.service.ActivityService;
 import com.bot.sup.service.MessageService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.objects.*;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
@@ -28,13 +29,11 @@ public class FillingActivity implements HandleRegistration {
     private final SupActivityDataCache supActivityDataCache;
     private final MainMessageProperties mainMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
-    private final ActivityRepository activityRepository;
+    private final ActivityFormatRepository activityFormatRepository;
 
     @Override
     public BotApiMethod<?> getMessage(Message message) {
         Long chatId = message.getChatId();
-        Long supActivityForUpdate = supActivityDataCache.getSupActivityForUpdate(chatId);
-
 
         if (supActivityDataCache.getActivityCurrentState(chatId).equals(SupActivityStateEnum.FILLING_ACTIVITY))
             supActivityDataCache.setActivityCurrentState(chatId, SupActivityStateEnum.ASK_ACTIVITY_NAME);
@@ -55,9 +54,7 @@ public class FillingActivity implements HandleRegistration {
 
             return replyToUser;
         } else if (activityCurrentState.equals(SupActivityStateEnum.REGISTERED_ACTIVITY)) {
-            //Optional<String> forwardFrom = inputMessage;
-
-            if (activityRepository.existsByName(userAnswer)){
+            if (activityFormatRepository.existsByName(userAnswer)) {
                 replyToUser = messageService.buildReplyMessage(chatId, activityMessageProperties.getActivityNameAlreadyTaken());
                 supActivityDataCache.setActivityCurrentState(chatId, SupActivityStateEnum.REGISTERED_ACTIVITY);
 
@@ -72,7 +69,7 @@ public class FillingActivity implements HandleRegistration {
             activityService.save(route);
 
             replyToUser = messageService.getReplyMessageWithKeyboard(chatId, String
-                    .format(activityMessageProperties.getRegisteredActivity(), route.getName()),
+                            .format(activityMessageProperties.getRegisteredActivity(), route.getName()),
                     keyboardMenu());
         }
 
