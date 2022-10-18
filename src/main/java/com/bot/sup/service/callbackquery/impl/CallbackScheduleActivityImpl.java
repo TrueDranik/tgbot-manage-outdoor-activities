@@ -3,11 +3,8 @@ package com.bot.sup.service.callbackquery.impl;
 import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.common.properties.message.MenuMessageProperties;
 import com.bot.sup.model.entity.ActivityFormat;
-import com.bot.sup.model.entity.ActivityType;
-import com.bot.sup.model.entity.Route;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.ActivityFormatRepository;
-import com.bot.sup.repository.RouteRepository;
 import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +24,6 @@ import static com.bot.sup.model.common.CallbackEnum.SCHEDULE_ACTIVITY;
 public class CallbackScheduleActivityImpl implements Callback {
     private final MenuMessageProperties menuMessageProperties;
     private final ScheduleRepository scheduleRepository;
-    private final RouteRepository routeRepository;
     private final ActivityFormatRepository activityFormatRepository;
 
     public static final Set<CallbackEnum> ACTIVITIES = Set.of(SCHEDULE_ACTIVITY);
@@ -63,7 +59,7 @@ public class CallbackScheduleActivityImpl implements Callback {
         List<InlineKeyboardButton> rowSecond = new ArrayList<>();
 
         schedules.forEach(i -> {
-            if (activityFormat.get().getName().equals(i.getName())) {
+            if (activityFormat.get().getName().equals(i.getActivity().getActivityFormat().getName())) {
                 rowMain.add(InlineKeyboardButton.builder()
                         .text(i.getEventDate().toString())
                         .callbackData("SCHEDULE_OPTION/" + i.getId())
