@@ -3,7 +3,7 @@ package com.bot.sup.service.callbackquery.impl;
 import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.model.common.properties.message.MenuMessageProperties;
-import com.bot.sup.repository.ActivityRepository;
+import com.bot.sup.repository.RouteRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ import static com.bot.sup.model.common.CallbackEnum.DELETE_ACTIVITY;
 public class CallbackDeleteActivityImpl implements Callback {
     private final MenuMessageProperties menuMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
-    private final ActivityRepository activityRepository;
+    private final RouteRepository routeRepository;
 
     public static final Set<CallbackEnum> ACTIVITIES = Set.of(DELETE_ACTIVITY);
 
@@ -53,7 +53,7 @@ public class CallbackDeleteActivityImpl implements Callback {
     }
 
     private void deleteActivity(Long chatId) {
-        activityRepository.deleteById(chatId);
+        routeRepository.deleteById(chatId);
     }
 
     @Override

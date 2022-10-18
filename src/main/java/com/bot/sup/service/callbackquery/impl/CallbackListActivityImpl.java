@@ -4,7 +4,7 @@ import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.model.common.properties.message.MenuMessageProperties;
 import com.bot.sup.model.entity.Route;
-import com.bot.sup.repository.ActivityRepository;
+import com.bot.sup.repository.RouteRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,14 +23,14 @@ import static com.bot.sup.model.common.CallbackEnum.LIST_ACTIVITY;
 public class CallbackListActivityImpl implements Callback {
     private final MenuMessageProperties menuMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
-    private final ActivityRepository activityRepository;
+    private final RouteRepository routeRepository;
 
     public static final Set<CallbackEnum> ACTIVITIES = Set.of(LIST_ACTIVITY);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         List<List<InlineKeyboardButton>> buttonEmptyInstructors = new ArrayList<>();
-        List<Route> activities = activityRepository.findAll();
+        List<Route> activities = routeRepository.findAll();
 
         if (activities.isEmpty()) {
             buttonEmptyInstructors.add(Collections.singletonList(

@@ -4,7 +4,7 @@ import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.common.properties.message.MenuMessageProperties;
 import com.bot.sup.model.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.Route;
-import com.bot.sup.repository.ActivityRepository;
+import com.bot.sup.repository.RouteRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,13 +26,13 @@ import static com.bot.sup.model.common.CallbackEnum.SCHEDULE;
 public class CallbackScheduleImpl implements Callback {
     private final MenuMessageProperties menuMessageProperties;
     private final ScheduleMessageProperties scheduleMessageProperties;
-    private final ActivityRepository activityRepository;
+    private final RouteRepository routeRepository;
 
     public static final Set<CallbackEnum> ACTIVITIES = Set.of(SCHEDULE);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
-        List<Route> activities = activityRepository.findAll();
+        List<Route> activities = routeRepository.findAll();
         Long chatId = callbackQuery.getMessage().getChatId();
 
         return EditMessageText.builder()
