@@ -21,7 +21,7 @@ public class HelpCommand implements BaseCommand{
         return SendMessage.builder()
                 .chatId(update.getMessage().getChatId())
                 .text("Бот предназначен для администрирования активностей!")
-                .parseMode("Markdown")
+                .parseMode("HTML")
                 .build();
     }
 }

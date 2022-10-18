@@ -1,7 +1,7 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
-import com.bot.sup.model.common.properties.message.MenuMessageProperties;
+import com.bot.sup.model.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -20,7 +20,7 @@ import static com.bot.sup.model.common.CallbackEnum.ACTIVITY_OPTION;
 @RequiredArgsConstructor
 @Service
 public class CallbackActivityOptionImpl implements Callback {
-    private final MenuMessageProperties menuMessageProperties;
+    private final MainMessageProperties mainMessageProperties;
     private final ActivityRepository activityRepository;
 
     public static final Set<CallbackEnum> ACTIVITIES = Set.of(ACTIVITY_OPTION);
@@ -45,18 +45,18 @@ public class CallbackActivityOptionImpl implements Callback {
 
         firstRow.add(
                 InlineKeyboardButton.builder()
-                        .text(menuMessageProperties.getChange())
+                        .text(mainMessageProperties.getChange())
                         .callbackData("ACTIVITY_CHANGE")
                         .build());
         firstRow.add(
                 InlineKeyboardButton.builder()
-                        .text(menuMessageProperties.getDelete())
+                        .text(mainMessageProperties.getDelete())
                         .callbackData("DELETE_ACTIVITY/" + activityId)
                         .build());
 
         secondRow.add(
                 InlineKeyboardButton.builder()
-                        .text(menuMessageProperties.getBack())
+                        .text(mainMessageProperties.getBack())
                         .callbackData("LIST_ACTIVITY")
                         .build());
 

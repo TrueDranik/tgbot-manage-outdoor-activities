@@ -2,7 +2,7 @@ package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.common.properties.message.InstructorMessageProperties;
-import com.bot.sup.model.common.properties.message.MenuMessageProperties;
+import com.bot.sup.model.common.properties.message.MainMessageProperties;
 import com.bot.sup.repository.InstructorRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import static com.bot.sup.model.common.CallbackEnum.DELETE_INSTRUCTOR;
 @RequiredArgsConstructor
 @Service
 public class CallbackDeleteInstructorImpl implements Callback {
-    private final MenuMessageProperties menuMessageProperties;
+    private final MainMessageProperties mainMessageProperties;
     private final InstructorMessageProperties instructorMessageProperties;
     private final InstructorRepository instructorRepository;
 
@@ -47,7 +47,7 @@ public class CallbackDeleteInstructorImpl implements Callback {
 
         buttons.add(Collections.singletonList(
                 InlineKeyboardButton.builder()
-                        .text(menuMessageProperties.getBack())
+                        .text(mainMessageProperties.getBack())
                         .callbackData("LIST_INSTRUCTORS")
                         .build()));
 

@@ -2,7 +2,7 @@ package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.common.properties.message.ActivityMessageProperties;
-import com.bot.sup.model.common.properties.message.MenuMessageProperties;
+import com.bot.sup.model.common.properties.message.MainMessageProperties;
 import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import static com.bot.sup.model.common.CallbackEnum.DELETE_ACTIVITY;
 @RequiredArgsConstructor
 @Service
 public class CallbackDeleteActivityImpl implements Callback {
-    private final MenuMessageProperties menuMessageProperties;
+    private final MainMessageProperties mainMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
     private final ActivityRepository activityRepository;
 
@@ -43,7 +43,7 @@ public class CallbackDeleteActivityImpl implements Callback {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
         buttons.add(Collections.singletonList(
                 InlineKeyboardButton.builder()
-                        .text(menuMessageProperties.getMenu())
+                        .text(mainMessageProperties.getMenu())
                         .callbackData("MENU")
                         .build()));
 

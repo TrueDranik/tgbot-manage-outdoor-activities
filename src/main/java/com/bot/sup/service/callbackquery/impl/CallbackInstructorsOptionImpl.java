@@ -1,13 +1,14 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
-import com.bot.sup.model.common.properties.message.MenuMessageProperties;
+import com.bot.sup.model.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.Instructor;
 import com.bot.sup.repository.InstructorRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -24,7 +25,7 @@ import static com.bot.sup.model.common.CallbackEnum.INSTRUCTOR_OPTION;
 @RequiredArgsConstructor
 @Service
 public class CallbackInstructorsOptionImpl implements Callback {
-    private final MenuMessageProperties menuMessageProperties;
+    private final MainMessageProperties mainMessageProperties;
     private final InstructorRepository instructorRepository;
 
     public static final Set<CallbackEnum> ACTIVITIES = Set.of(INSTRUCTOR_OPTION);
@@ -39,7 +40,11 @@ public class CallbackInstructorsOptionImpl implements Callback {
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text(instructorInfo(instructor))
+                .text("ФИ: " + instructor.getFirstName() + " " + instructor.getLastName()
+                        + "\nНомер телефона: " + instructor.getPhoneNumber()
+                        + String.format("<a href=\"tg://user?id=%s\">инструктор</a>", instructor.getTelegramId())
+                        + "<a href=\"tg://user?id=2033719412\">инструктор</a>")
+                .parseMode("HTML")
                 .replyMarkup(generateKeyboardWithInstructors(instructorId))
                 .build();
     }
@@ -50,18 +55,18 @@ public class CallbackInstructorsOptionImpl implements Callback {
 
         firstRow.add(
                 InlineKeyboardButton.builder()
-                        .text(menuMessageProperties.getChange())
+                        .text(mainMessageProperties.getChange())
                         .callbackData("CHANGE_INSTRUCTOR/" + instructorId)
                         .build());
         firstRow.add(
                 InlineKeyboardButton.builder()
-                        .text(menuMessageProperties.getDelete())
+                        .text(mainMessageProperties.getDelete())
                         .callbackData("DELETE_INSTRUCTOR/" + instructorId)
                         .build());
 
         secondRow.add(
                 InlineKeyboardButton.builder()
-                        .text(menuMessageProperties.getBack())
+                        .text(mainMessageProperties.getBack())
                         .callbackData("LIST_INSTRUCTORS")
                         .build());
 

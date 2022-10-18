@@ -10,4 +10,5 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource(value = "classpath:messages.yaml", factory = YamlPropertySourceFactory.class)
 public class ScheduleMessageProperties {
     String schedules;
+    String menuSchedules;
 }

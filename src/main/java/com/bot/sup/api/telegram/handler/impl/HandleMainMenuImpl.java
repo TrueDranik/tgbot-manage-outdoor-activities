@@ -1,6 +1,12 @@
 package com.bot.sup.api.telegram.handler.impl;
 
 import com.bot.sup.api.telegram.handler.Handle;
+import com.bot.sup.model.common.properties.message.ActivityMessageProperties;
+import com.bot.sup.model.common.properties.message.InstructorMessageProperties;
+import com.bot.sup.model.common.properties.message.MainMessageProperties;
+import com.bot.sup.model.common.properties.message.ScheduleMessageProperties;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -10,12 +16,19 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
+@RequiredArgsConstructor
 public class HandleMainMenuImpl implements Handle {
+    private final MainMessageProperties mainMessageProperties;
+    private final ActivityMessageProperties activityMessageProperties;
+    private final InstructorMessageProperties instructorMessageProperties;
+    private final ScheduleMessageProperties scheduleMessageProperties;
+
     @Override
     public BotApiMethod<?> getMessage(Update update) {
         return SendMessage.builder()
                 .chatId(update.getMessage().getChatId())
-                .text("⬇️ Выберите нужное действие ⬇️")
+                .text(mainMessageProperties.getUserChoose())
                 .replyMarkup(createInlineKeyboard())
                 .build();
     }
@@ -25,17 +38,17 @@ public class HandleMainMenuImpl implements Handle {
 
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("\uD83D\uDCC5 Расписание")
+                        .text(scheduleMessageProperties.getSchedules())
                         .callbackData("SCHEDULE")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("\uD83E\uDDB8 Инструкторы")
+                        .text(instructorMessageProperties.getInstructors())
                         .callbackData("INSTRUCTORS")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("\uD83C\uDFC3\uD83C\uDFFD️ Активности")
+                        .text(activityMessageProperties.getActivities())
                         .callbackData("SUP_ACTIVITY")
                         .build()));
 
