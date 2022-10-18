@@ -32,7 +32,6 @@ public class Route {
     @Column(name = "map_link", length = 300)
     private String mapLink;
 
-    @ManyToOne
-    @JoinColumn(name = "route_id")
-    private Activity activity;
+    @Column(name = "lenght", length = 30)
+    private String activity;
 }

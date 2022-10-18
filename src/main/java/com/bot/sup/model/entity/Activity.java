@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalTime;
 
 @Entity
 @Table(name = "activity")
@@ -20,8 +18,8 @@ public class Activity {
     private String seasonality;
 
     @OneToOne
-    @JoinColumn(name = "activity_form_id")
-    private ActivityForm activityForm;
+    @JoinColumn(name = "activity_format_id")
+    private ActivityFormat activityFormat;
 
     @OneToOne
     @JoinColumn(name = "activity_type_id")
@@ -35,7 +33,7 @@ public class Activity {
     private Activity route;
 
     @Column(name = "duration")
-    private LocalTime duration;
+    private String duration;
 
     @Column(name = "age", length = 10)
     private String age;
@@ -44,5 +42,5 @@ public class Activity {
     private String complexity;
 
     @Column(name = "price")
-    private BigDecimal price;
+    private String price;
 }
