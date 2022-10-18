@@ -1,7 +1,7 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
-import com.bot.sup.model.common.properties.message.MenuMessageProperties;
+import com.bot.sup.model.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.Route;
 import com.bot.sup.repository.RouteRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -20,7 +20,7 @@ import static com.bot.sup.model.common.CallbackEnum.ACTIVITY_OPTION;
 @RequiredArgsConstructor
 @Service
 public class CallbackActivityOptionImpl implements Callback {
-    private final MenuMessageProperties menuMessageProperties;
+    private final MainMessageProperties mainMessageProperties;
     private final RouteRepository routeRepository;
 
     public static final Set<CallbackEnum> ACTIVITIES = Set.of(ACTIVITY_OPTION);

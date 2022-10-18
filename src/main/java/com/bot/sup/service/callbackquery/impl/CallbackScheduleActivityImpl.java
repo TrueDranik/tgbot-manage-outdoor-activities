@@ -1,7 +1,7 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
-import com.bot.sup.model.common.properties.message.MenuMessageProperties;
+import com.bot.sup.model.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.ActivityFormat;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.ActivityFormatRepository;
