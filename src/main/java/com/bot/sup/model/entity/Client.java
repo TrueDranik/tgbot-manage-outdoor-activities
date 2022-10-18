@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "client")
@@ -27,6 +28,13 @@ public class Client {
     @Column(name = "telegram_id", unique = true)
     private Long telegramId;
 
+    @Column(name = "username")
+    private String username;
+
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @ManyToMany
+    @JoinColumn(name = "schedule_id")
+    private List<Schedule> schedules;
 }
