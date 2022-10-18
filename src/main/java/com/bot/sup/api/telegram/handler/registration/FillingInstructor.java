@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -124,6 +125,9 @@ public class FillingInstructor implements HandleRegistration {
             }
 
             instructor.setTelegramId(inputMessage.getForwardFrom().getId());
+
+            log.info("instructor TelegramId = " + userAnswer);
+            log.info("User name = " + inputMessage.getForwardFrom().getUserName());
 
             if (forUpdate) {
                 instructorDataCache.removeInstructorForUpdate(chatId);

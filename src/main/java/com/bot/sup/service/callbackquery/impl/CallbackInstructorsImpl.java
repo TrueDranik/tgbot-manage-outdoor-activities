@@ -2,7 +2,7 @@ package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.common.properties.message.InstructorMessageProperties;
-import com.bot.sup.model.common.properties.message.MenuMessageProperties;
+import com.bot.sup.model.common.properties.message.MainMessageProperties;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ import static com.bot.sup.model.common.CallbackEnum.INSTRUCTORS;
 @RequiredArgsConstructor
 @Service
 public class CallbackInstructorsImpl implements Callback {
-    private final MenuMessageProperties menuMessageProperties;
+    private final MainMessageProperties mainMessageProperties;
     private final InstructorMessageProperties instructorMessageProperties;
 
     public static final Set<CallbackEnum> ACTIVITIES = Set.of(INSTRUCTORS);
@@ -54,7 +54,7 @@ public class CallbackInstructorsImpl implements Callback {
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text(menuMessageProperties.getMenu())
+                        .text(mainMessageProperties.getMenu())
                         .callbackData("MENU")
                         .build()));
 

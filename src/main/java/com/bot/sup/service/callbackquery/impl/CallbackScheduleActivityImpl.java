@@ -22,7 +22,7 @@ import static com.bot.sup.model.common.CallbackEnum.SCHEDULE_ACTIVITY;
 @RequiredArgsConstructor
 @Service
 public class CallbackScheduleActivityImpl implements Callback {
-    private final MenuMessageProperties menuMessageProperties;
+    private final MainMessageProperties mainMessageProperties;
     private final ScheduleRepository scheduleRepository;
     private final ActivityFormatRepository activityFormatRepository;
 
@@ -77,7 +77,7 @@ public class CallbackScheduleActivityImpl implements Callback {
         }
 
         rowSecond.add(InlineKeyboardButton.builder()
-                .text(menuMessageProperties.getBack())
+                .text(mainMessageProperties.getBack())
                 .callbackData("SCHEDULE")
                 .build());
 

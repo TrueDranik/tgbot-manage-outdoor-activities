@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
@@ -26,8 +26,9 @@ public class FillingActivity implements HandleRegistration {
     private final MessageService messageService;
     private final ActivityService activityService;
     private final SupActivityDataCache supActivityDataCache;
-    private final MenuMessageProperties menuMessageProperties;
+    private final MainMessageProperties mainMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
+    private final ActivityRepository activityRepository;
 
     @Override
     public BotApiMethod<?> getMessage(Message message) {
@@ -54,6 +55,14 @@ public class FillingActivity implements HandleRegistration {
 
             return replyToUser;
         } else if (activityCurrentState.equals(SupActivityStateEnum.REGISTERED_ACTIVITY)) {
+            //Optional<String> forwardFrom = inputMessage;
+
+            if (activityRepository.existsByName(userAnswer)){
+                replyToUser = messageService.buildReplyMessage(chatId, activityMessageProperties.getActivityNameAlreadyTaken());
+                supActivityDataCache.setActivityCurrentState(chatId, SupActivityStateEnum.REGISTERED_ACTIVITY);
+
+                return replyToUser;
+            }
             try {
                 route.setName(userAnswer);
             } catch (IndexOutOfBoundsException e) {
@@ -76,7 +85,7 @@ public class FillingActivity implements HandleRegistration {
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .callbackData("SUP_ACTIVITY")
-                        .text(menuMessageProperties.getDone())
+                        .text(mainMessageProperties.getDone())
                         .build()
         ));
 

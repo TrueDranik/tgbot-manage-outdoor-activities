@@ -20,7 +20,7 @@ import static com.bot.sup.model.common.CallbackEnum.DELETE_ACTIVITY;
 @RequiredArgsConstructor
 @Service
 public class CallbackDeleteActivityImpl implements Callback {
-    private final MenuMessageProperties menuMessageProperties;
+    private final MainMessageProperties mainMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
     private final RouteRepository routeRepository;
 
@@ -43,7 +43,7 @@ public class CallbackDeleteActivityImpl implements Callback {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
         buttons.add(Collections.singletonList(
                 InlineKeyboardButton.builder()
-                        .text(menuMessageProperties.getMenu())
+                        .text(mainMessageProperties.getMenu())
                         .callbackData("MENU")
                         .build()));
 

@@ -1,7 +1,7 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
-import com.bot.sup.model.common.properties.message.MenuMessageProperties;
+import com.bot.sup.model.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.Route;
 import com.bot.sup.repository.RouteRepository;
@@ -24,7 +24,7 @@ import static com.bot.sup.model.common.CallbackEnum.SCHEDULE;
 @RequiredArgsConstructor
 @Service
 public class CallbackScheduleImpl implements Callback {
-    private final MenuMessageProperties menuMessageProperties;
+    private final MainMessageProperties mainMessageProperties;
     private final ScheduleMessageProperties scheduleMessageProperties;
     private final RouteRepository routeRepository;
 
@@ -66,7 +66,7 @@ public class CallbackScheduleImpl implements Callback {
         }
 
         rowSecond.add(InlineKeyboardButton.builder()
-                .text(menuMessageProperties.getMenu())
+                .text(mainMessageProperties.getMenu())
                 .callbackData("MENU")
                 .build());
 

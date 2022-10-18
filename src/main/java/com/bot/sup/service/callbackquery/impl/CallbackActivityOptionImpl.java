@@ -45,18 +45,18 @@ public class CallbackActivityOptionImpl implements Callback {
 
         firstRow.add(
                 InlineKeyboardButton.builder()
-                        .text(menuMessageProperties.getChange())
+                        .text(mainMessageProperties.getChange())
                         .callbackData("ACTIVITY_CHANGE")
                         .build());
         firstRow.add(
                 InlineKeyboardButton.builder()
-                        .text(menuMessageProperties.getDelete())
+                        .text(mainMessageProperties.getDelete())
                         .callbackData("DELETE_ACTIVITY/" + activityId)
                         .build());
 
         secondRow.add(
                 InlineKeyboardButton.builder()
-                        .text(menuMessageProperties.getBack())
+                        .text(mainMessageProperties.getBack())
                         .callbackData("LIST_ACTIVITY")
                         .build());
 

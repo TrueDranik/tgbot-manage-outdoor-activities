@@ -21,7 +21,7 @@ import static com.bot.sup.model.common.CallbackEnum.LIST_ACTIVITY;
 @Service
 @RequiredArgsConstructor
 public class CallbackListActivityImpl implements Callback {
-    private final MenuMessageProperties menuMessageProperties;
+    private final MainMessageProperties mainMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
     private final RouteRepository routeRepository;
 
@@ -35,7 +35,7 @@ public class CallbackListActivityImpl implements Callback {
         if (activities.isEmpty()) {
             buttonEmptyInstructors.add(Collections.singletonList(
                     InlineKeyboardButton.builder()
-                            .text(menuMessageProperties.getBack())
+                            .text(mainMessageProperties.getBack())
                             .callbackData("SUP_ACTIVITY")
                             .build()
             ));
@@ -79,7 +79,7 @@ public class CallbackListActivityImpl implements Callback {
         }
 
         rowSecond.add(InlineKeyboardButton.builder()
-                .text(menuMessageProperties.getBack())
+                .text(mainMessageProperties.getBack())
                 .callbackData("SUP_ACTIVITY")
                 .build());
 
