@@ -8,10 +8,7 @@ import lombok.Setter;
 @Setter
 public class BookingDto {
     private Long id;
-
     private Client clientId;
-
     private int invitedUsers;
-
-    private String paymentStatus;
+    private Boolean paymentStatus;
 }
