@@ -12,8 +12,10 @@ import org.springframework.context.annotation.PropertySource;
 public class ActivityMessageProperties {
     String activities;
     String menuActivities;
-    String listActivity;
-    String addActivity;
+    String listActivityFormat;
+    String listActivityType;
+    String addActivityFormat;
+    String addActivityType;
     String deleteActivity;
     String registeredActivity;
     String emptyActivity;
