@@ -16,4 +16,8 @@ public class MiddlewareDataCache {
     public Object getCurrentData(Long chatId) {
         return middlewareCache.get(chatId);
     }
+
+    public void removeCurrentState(Long chatId){
+        middlewareCache.remove(chatId);
+    }
 }

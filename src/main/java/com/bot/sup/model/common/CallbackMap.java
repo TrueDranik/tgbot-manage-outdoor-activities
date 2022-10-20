@@ -1,6 +1,7 @@
 package com.bot.sup.model.common;
 
 import com.bot.sup.service.callbackquery.Callback;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class CallbackMap {
     private static final Map<String, Callback> CALLBACK_MAP = new HashMap<>();
 

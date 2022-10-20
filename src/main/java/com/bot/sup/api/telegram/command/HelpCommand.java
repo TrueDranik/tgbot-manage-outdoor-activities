@@ -20,7 +20,8 @@ public class HelpCommand implements BaseCommand{
     public BotApiMethod<?> getAction(Update update) {
         return SendMessage.builder()
                 .chatId(update.getMessage().getChatId())
-                .text("Бот предназначен для администрирования активностей!")
+                .text("Бот предназначен для администрирования активностей!" +
+                        "\n/start")
                 .parseMode("HTML")
                 .build();
     }

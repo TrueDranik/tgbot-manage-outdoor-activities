@@ -49,7 +49,7 @@ public class HandleMainMenuImpl implements Handle {
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text(activityMessageProperties.getActivities())
-                        .callbackData("SUP_ACTIVITY")
+                        .callbackData("SUP_ACTIVITIES")
                         .build()));
 
         return InlineKeyboardMarkup.builder()
