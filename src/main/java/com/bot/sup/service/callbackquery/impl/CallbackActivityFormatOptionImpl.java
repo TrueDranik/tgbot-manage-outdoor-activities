@@ -3,7 +3,6 @@ package com.bot.sup.service.callbackquery.impl;
 import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.ActivityFormat;
-import com.bot.sup.model.entity.Route;
 import com.bot.sup.repository.ActivityFormatRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
