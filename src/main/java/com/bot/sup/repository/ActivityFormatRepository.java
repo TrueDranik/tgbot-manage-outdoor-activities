@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ActivityFormatRepository extends JpaRepository<ActivityFormat, Long> {
-
+    boolean existsByName(String userAnswer);
 }

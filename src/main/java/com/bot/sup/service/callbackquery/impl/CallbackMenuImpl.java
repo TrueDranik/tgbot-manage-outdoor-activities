@@ -27,9 +27,7 @@ public class CallbackMenuImpl implements Callback {
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         return EditMessageText.builder().messageId(callbackQuery.getMessage().getMessageId())
                 .replyMarkup(handleMainMenu.createInlineKeyboard())
-                .chatId(callbackQuery.getMessage()
-                        .getChatId()
-                        .toString())
+                .chatId(callbackQuery.getMessage().getChatId().toString())
                 .text(mainMessageProperties.getUserChoose())
                 .build();
     }

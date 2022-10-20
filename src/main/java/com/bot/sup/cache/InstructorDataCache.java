@@ -21,6 +21,10 @@ public class InstructorDataCache {
         return instructorState.getOrDefault(chatId, InstructorStateEnum.FILLING_INSTRUCTOR);
     }
 
+    public void removeInstructorCurrentState(Long chatId){
+        instructorState.remove(chatId);
+    }
+
     public Instructor getInstructorProfileData(Long chatId) {
         return instructorData.getOrDefault(chatId, new Instructor());
     }

@@ -2,12 +2,14 @@ package com.bot.sup.service;
 
 import com.bot.sup.api.telegram.command.BaseCommand;
 import com.bot.sup.api.telegram.handler.StateContext;
+import com.bot.sup.cache.ActivityTypeDataCache;
 import com.bot.sup.cache.InstructorDataCache;
 import com.bot.sup.cache.MiddlewareDataCache;
-import com.bot.sup.cache.SupActivityDataCache;
+import com.bot.sup.cache.ActivityFormatDataCache;
+import com.bot.sup.model.common.ActivityTypeStateEnum;
 import com.bot.sup.model.common.CallbackMap;
 import com.bot.sup.model.common.InstructorStateEnum;
-import com.bot.sup.model.common.SupActivityStateEnum;
+import com.bot.sup.model.common.ActivityFormatStateEnum;
 import com.bot.sup.model.common.properties.TelegramProperties;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +19,6 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.commands.DeleteMyCommands;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -36,7 +37,8 @@ public class Bot extends TelegramLongPollingBot {
     private final CallbackMap callbackMap;
     private final MiddlewareDataCache middlewareDataCache;
     private final InstructorDataCache instructorDataCache;
-    private final SupActivityDataCache supActivityDataCache;
+    private final ActivityFormatDataCache activityFormatDataCache;
+    private final ActivityTypeDataCache activityTypeDataCache;
     private final StateContext stateContext;
     private final List<BaseCommand> commands;
     private BotApiMethod<?> replyMessage;
@@ -47,7 +49,8 @@ public class Bot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
         InstructorStateEnum instructorStateEnum;
-        SupActivityStateEnum supActivityStateEnum;
+        ActivityFormatStateEnum activityFormatStateEnum;
+        ActivityTypeStateEnum activityTypeStateEnum;
 
         if (update.hasCallbackQuery()) {
             Callback callback = callbackMap.getCallback(update.getCallbackQuery().getData().split("/")[0]);
@@ -72,12 +75,19 @@ public class Bot extends TelegramLongPollingBot {
 
                 replyMessage = stateContext.processInputMessage(instructorStateEnum, message);
                 execute(replyMessage);
-            } else if (middlewareDataCache.getCurrentData(chatId) instanceof SupActivityStateEnum) {
-                supActivityStateEnum = supActivityDataCache.getActivityCurrentState(chatId);
+            } else if (middlewareDataCache.getCurrentData(chatId) instanceof ActivityFormatStateEnum) {
+                activityFormatStateEnum = activityFormatDataCache.getActivityFormatCurrentState(chatId);
 
-                log.info("state = " + supActivityStateEnum);
+                log.info("state = " + activityFormatStateEnum);
 
-                replyMessage = stateContext.processInputMessage(supActivityStateEnum, message);
+                replyMessage = stateContext.processInputMessage(activityFormatStateEnum, message);
+                execute(replyMessage);
+            } else if (middlewareDataCache.getCurrentData(chatId) instanceof ActivityTypeStateEnum) {
+                activityTypeStateEnum = activityTypeDataCache.getActivityTypeCurrentState(chatId);
+
+                log.info("state = " + activityTypeStateEnum);
+
+                replyMessage = stateContext.processInputMessage(activityTypeStateEnum, message);
                 execute(replyMessage);
             }
         }

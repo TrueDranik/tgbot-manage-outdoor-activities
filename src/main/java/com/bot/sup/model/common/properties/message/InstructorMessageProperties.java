@@ -14,7 +14,7 @@ public class InstructorMessageProperties {
     String listInstructor;
     String addInstructor;
     String deleteInstructor;
-    String emptyInstructor;
+    String emptyInstructors;
     String inputFullNameInstructor;
     String inputFullNameInstructorIsEmpty;
     String validateInputFullName;
