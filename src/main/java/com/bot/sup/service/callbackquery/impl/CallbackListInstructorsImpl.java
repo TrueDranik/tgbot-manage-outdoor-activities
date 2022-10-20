@@ -43,9 +43,12 @@ public class CallbackListInstructorsImpl implements Callback {
                     .keyboard(buttonEmptyInstructors)
                     .build();
 
-            return EditMessageText.builder().messageId(callbackQuery.getMessage().getMessageId()).replyMarkup(keyboard)
-                    .text(instructorMessageProperties.getEmptyInstructor())
-                    .chatId(callbackQuery.getMessage().getChatId()).build();
+            return EditMessageText.builder().messageId(callbackQuery.getMessage().getMessageId())
+                    .chatId(callbackQuery.getMessage().getChatId())
+                    .text(instructorMessageProperties.getEmptyInstructors())
+                    .replyMarkup(keyboard)
+                    .parseMode("Markdown")
+                    .build();
         }
 
         return EditMessageText.builder()

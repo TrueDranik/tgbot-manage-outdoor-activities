@@ -60,6 +60,6 @@ public class CallbackDeleteActivityTypeImpl implements Callback {
 
     @Override
     public Collection<CallbackEnum> getSupportedActivities() {
-        return null;
+        return ACTIVITIES;
     }
 }
