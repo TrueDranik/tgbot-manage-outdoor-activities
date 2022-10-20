@@ -21,7 +21,7 @@ public class ActivityMessageProperties {
     String deleteActivity;
     String registeredActivity;
     String emptyActivity;
-    String inputActivityName;
+    String inputActivityFormatName;
     String inputActivityNameIsEmpty;
     String activityNameAlreadyTaken;
 }
