@@ -40,11 +40,8 @@ public class CallbackInstructorsOptionImpl implements Callback {
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text("ФИ: " + instructor.getFirstName() + " " + instructor.getLastName()
-                        + "\nНомер телефона: " + instructor.getPhoneNumber()
-                        + String.format("<a href=\"tg://user?id=%s\">инструктор</a>", instructor.getTelegramId())
-                        + "<a href=\"tg://user?id=2033719412\">инструктор</a>")
-                .parseMode("HTML")
+                .text(instructorInfo(instructor))
+                .parseMode("Markdown")
                 .replyMarkup(generateKeyboardWithInstructors(instructorId))
                 .build();
     }
@@ -77,9 +74,9 @@ public class CallbackInstructorsOptionImpl implements Callback {
     }
 
     private String instructorInfo(Instructor instructor) {
-        return "ФИ: " + instructor.getFirstName() + " " + instructor.getLastName()
-                + "\nНомер телефона: " + instructor.getPhoneNumber()
-                + "\nTelegramId: " + instructor.getTelegramId();
+        return "*ФИ:* " + instructor.getFirstName() + " " + instructor.getLastName()
+                + "\n*Номер телефона:* " + instructor.getPhoneNumber()
+                + "\n*Имя пользователя:* " + instructor.getUsername();
     }
 
     @Override

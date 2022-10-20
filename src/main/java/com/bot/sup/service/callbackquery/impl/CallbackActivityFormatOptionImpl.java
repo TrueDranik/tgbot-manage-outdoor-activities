@@ -29,14 +29,14 @@ public class CallbackActivityFormatOptionImpl implements Callback {
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.getMessage().getChatId();
-        String activityId = callbackQuery.getData().split("/")[1];
-        Optional<ActivityFormat> activity = activityFormatRepository.findById(Long.parseLong(activityId));
+        String activityFormatId = callbackQuery.getData().split("/")[1];
+        Optional<ActivityFormat> activityFormat = activityFormatRepository.findById(Long.parseLong(activityFormatId));
 
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text(activity.get().getName())
-                .replyMarkup(generateKeyboardWithActivity(activityId))
+                .text(activityFormat.get().getName())
+                .replyMarkup(generateKeyboardWithActivity(activityFormatId))
                 .build();
     }
 
@@ -47,18 +47,18 @@ public class CallbackActivityFormatOptionImpl implements Callback {
         firstRow.add(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getChange())
-                        .callbackData("ACTIVITY_CHANGE")
+                        .callbackData("ACTIVITY_FORMAT_CHANGE")
                         .build());
         firstRow.add(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getDelete())
-                        .callbackData("DELETE_ACTIVITY/" + activityId)
+                        .callbackData("DELETE_ACTIVITY_FORMAT/" + activityId)
                         .build());
 
         secondRow.add(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getBack())
-                        .callbackData("LIST_ACTIVITY")
+                        .callbackData("LIST_ACTIVITY_FORMAT")
                         .build());
 
         return InlineKeyboardMarkup.builder()

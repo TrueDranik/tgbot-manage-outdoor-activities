@@ -3,7 +3,7 @@ package com.bot.sup.service.callbackquery.impl;
 import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.model.common.properties.message.MainMessageProperties;
-import com.bot.sup.repository.RouteRepository;
+import com.bot.sup.repository.ActivityFormatRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ import static com.bot.sup.model.common.CallbackEnum.DELETE_ACTIVITY_FORMAT;
 public class CallbackDeleteActivityFormatImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
-    private final RouteRepository routeRepository;
+    private final ActivityFormatRepository activityFormatRepository;
 
     public static final Set<CallbackEnum> ACTIVITIES = Set.of(DELETE_ACTIVITY_FORMAT);
 
@@ -43,8 +43,8 @@ public class CallbackDeleteActivityFormatImpl implements Callback {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
         buttons.add(Collections.singletonList(
                 InlineKeyboardButton.builder()
-                        .text(mainMessageProperties.getMenu())
-                        .callbackData("MENU")
+                        .text(mainMessageProperties.getBack())
+                        .callbackData("SUP_ACTIVITY_FORMAT")
                         .build()));
 
         return InlineKeyboardMarkup.builder()
@@ -53,7 +53,7 @@ public class CallbackDeleteActivityFormatImpl implements Callback {
     }
 
     private void deleteActivity(Long chatId) {
-        routeRepository.deleteById(chatId);
+        activityFormatRepository.deleteById(chatId);
     }
 
     @Override

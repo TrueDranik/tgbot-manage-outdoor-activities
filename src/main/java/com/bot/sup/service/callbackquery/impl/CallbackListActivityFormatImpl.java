@@ -3,8 +3,8 @@ package com.bot.sup.service.callbackquery.impl;
 import com.bot.sup.model.common.CallbackEnum;
 import com.bot.sup.model.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.model.common.properties.message.MainMessageProperties;
-import com.bot.sup.model.entity.Route;
-import com.bot.sup.repository.RouteRepository;
+import com.bot.sup.model.entity.ActivityFormat;
+import com.bot.sup.repository.ActivityFormatRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,29 +23,32 @@ import static com.bot.sup.model.common.CallbackEnum.LIST_ACTIVITY_FORMAT;
 public class CallbackListActivityFormatImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
-    private final RouteRepository routeRepository;
+    private final ActivityFormatRepository activityFormatRepository;
 
     public static final Set<CallbackEnum> ACTIVITIES = Set.of(LIST_ACTIVITY_FORMAT);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
-        List<List<InlineKeyboardButton>> buttonEmptyInstructors = new ArrayList<>();
-        List<Route> activities = routeRepository.findAll();
+        List<List<InlineKeyboardButton>> buttonActivityFormat = new ArrayList<>();
+        List<ActivityFormat> activities = activityFormatRepository.findAll();
 
         if (activities.isEmpty()) {
-            buttonEmptyInstructors.add(Collections.singletonList(
+            buttonActivityFormat.add(Collections.singletonList(
                     InlineKeyboardButton.builder()
                             .text(mainMessageProperties.getBack())
-                            .callbackData("SUP_ACTIVITY")
+                            .callbackData("SUP_ACTIVITY_FORMAT")
                             .build()
             ));
             InlineKeyboardMarkup keyboard = InlineKeyboardMarkup.builder()
-                    .keyboard(buttonEmptyInstructors)
+                    .keyboard(buttonActivityFormat)
                     .build();
 
-            return EditMessageText.builder().messageId(callbackQuery.getMessage().getMessageId()).replyMarkup(keyboard)
+            return EditMessageText.builder()
+                    .messageId(callbackQuery.getMessage().getMessageId())
+                    .chatId(callbackQuery.getMessage().getChatId())
                     .text(activityMessageProperties.getEmptyActivity())
-                    .chatId(callbackQuery.getMessage().getChatId()).build();
+                    .replyMarkup(keyboard)
+                    .build();
         }
 
         return EditMessageText.builder()
@@ -56,7 +59,7 @@ public class CallbackListActivityFormatImpl implements Callback {
                 .build();
     }
 
-    private InlineKeyboardMarkup generateKeyboardWithActivity(List<Route> activities) {
+    private InlineKeyboardMarkup generateKeyboardWithActivity(List<ActivityFormat> activities) {
         List<List<InlineKeyboardButton>> mainKeyboard = new ArrayList<>();
         List<InlineKeyboardButton> rowMain = new ArrayList<>();
         List<InlineKeyboardButton> rowSecond = new ArrayList<>();
@@ -80,7 +83,7 @@ public class CallbackListActivityFormatImpl implements Callback {
 
         rowSecond.add(InlineKeyboardButton.builder()
                 .text(mainMessageProperties.getBack())
-                .callbackData("SUP_ACTIVITY")
+                .callbackData("SUP_ACTIVITY_FORMAT")
                 .build());
 
         mainKeyboard.add(rowSecond);
