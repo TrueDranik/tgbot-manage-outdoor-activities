@@ -31,7 +31,7 @@ public class CallbackListActivityTypeImpl implements Callback {
         List<List<InlineKeyboardButton>> buttonActivityType = new ArrayList<>();
         List<ActivityType> activityTypes = activityTypeRepository.findAll();
 
-        if (activityTypes.isEmpty()){
+        if (activityTypes.isEmpty()) {
             buttonActivityType.add(Collections.singletonList(
                     InlineKeyboardButton.builder()
                             .text(mainMessageProperties.getBack())
@@ -58,7 +58,7 @@ public class CallbackListActivityTypeImpl implements Callback {
                 .build();
     }
 
-    private InlineKeyboardMarkup generateKeyboardWithActivity(List<ActivityType> activityTypes){
+    private InlineKeyboardMarkup generateKeyboardWithActivity(List<ActivityType> activityTypes) {
         List<List<InlineKeyboardButton>> mainKeyboard = new ArrayList<>();
         List<InlineKeyboardButton> mainRow = new ArrayList<>();
         List<InlineKeyboardButton> secondRow = new ArrayList<>();
@@ -75,7 +75,7 @@ public class CallbackListActivityTypeImpl implements Callback {
             }
         });
 
-        if (mainRow.size() == 1){
+        if (mainRow.size() == 1) {
             mainKeyboard.add(mainRow);
         }
 
