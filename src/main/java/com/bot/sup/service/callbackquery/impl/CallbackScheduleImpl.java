@@ -1,8 +1,10 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
-import com.bot.sup.model.entity.Activity;
-import com.bot.sup.repository.ActivityRepository;
+import com.bot.sup.model.common.properties.message.MainMessageProperties;
+import com.bot.sup.model.common.properties.message.ScheduleMessageProperties;
+import com.bot.sup.model.entity.Route;
+import com.bot.sup.repository.RouteRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,23 +24,26 @@ import static com.bot.sup.model.common.CallbackEnum.SCHEDULE;
 @RequiredArgsConstructor
 @Service
 public class CallbackScheduleImpl implements Callback {
+    private final MainMessageProperties mainMessageProperties;
+    private final ScheduleMessageProperties scheduleMessageProperties;
+    private final RouteRepository routeRepository;
+
     public static final Set<CallbackEnum> ACTIVITIES = Set.of(SCHEDULE);
-    private final ActivityRepository activityRepository;
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
-        List<Activity> activities = activityRepository.findAll();
+        List<Route> activities = routeRepository.findAll();
         Long chatId = callbackQuery.getMessage().getChatId();
 
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text("Расписание какой активности Вы хотите настроить?")
+                .text(scheduleMessageProperties.getSchedules())
                 .replyMarkup(generateKeyboardWithActivity(activities))
                 .build();
     }
 
-    private InlineKeyboardMarkup generateKeyboardWithActivity(List<Activity> activities) {
+    private InlineKeyboardMarkup generateKeyboardWithActivity(List<Route> activities) {
         List<List<InlineKeyboardButton>> mainKeyboard = new ArrayList<>();
         List<InlineKeyboardButton> rowMain = new ArrayList<>();
         List<InlineKeyboardButton> rowSecond = new ArrayList<>();
@@ -61,7 +66,7 @@ public class CallbackScheduleImpl implements Callback {
         }
 
         rowSecond.add(InlineKeyboardButton.builder()
-                .text("↖️ Меню")
+                .text(mainMessageProperties.getMenu())
                 .callbackData("MENU")
                 .build());
 

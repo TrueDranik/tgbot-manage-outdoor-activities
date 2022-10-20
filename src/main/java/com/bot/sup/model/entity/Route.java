@@ -4,10 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalTime;
 
 @Entity
-@Table(name = "route")
+@Table(name = "activity")
 @Getter
 @Setter
 public class Route {
@@ -15,24 +14,24 @@ public class Route {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 100)
+    @Column(name = "name", length = 30)
     private String name;
 
-    @Column(name = "seasonality")
-    private String seasonality;
+    @Column(name = "start_point_coordinates", length = 300)
+    private String startPointCoordinates;
 
-    @Column(name = "activity_form")
-    private String activityForm;
+    @Column(name = "start_point_name", length = 30)
+    private String startPointName;
 
-    @Column(name = "activity_type", length = 50)
-    private String activityType;
+    @Column(name = "finish_point_coordinates", length = 300)
+    private String finishPointCoordinates;
 
-    @Column(name = "description", length = 3000)
-    private String description;
+    @Column(name = "finish_point_name", length = 30)
+    private String finishPointName;
 
-    @Column(name = "location")
-    private String location;
+    @Column(name = "map_link", length = 300)
+    private String mapLink;
 
-    @Column(name = "duration")
-    private LocalTime duration;
+    @Column(name = "lenght", length = 30)
+    private String activity;
 }

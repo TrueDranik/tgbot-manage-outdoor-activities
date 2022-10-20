@@ -10,6 +10,7 @@ public class MessageService {
     public SendMessage buildReplyMessage(Long chatId, String text) {
         return SendMessage.builder()
                 .text(text)
+                .parseMode("Markdown")
                 .chatId(chatId.toString())
                 .build();
     }
@@ -18,6 +19,7 @@ public class MessageService {
         return SendMessage.builder()
                 .chatId(chatId.toString())
                 .text(text)
+                .parseMode("Markdown")
                 .replyMarkup(keyboard)
                 .build();
     }

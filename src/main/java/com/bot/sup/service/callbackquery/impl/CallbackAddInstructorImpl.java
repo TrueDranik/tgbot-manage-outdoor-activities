@@ -20,10 +20,11 @@ import static com.bot.sup.model.common.CallbackEnum.ADD_INSTRUCTOR;
 @RequiredArgsConstructor
 @Service
 public class CallbackAddInstructorImpl implements Callback {
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ADD_INSTRUCTOR);
     private final StateContext stateContext;
     private final InstructorDataCache instructorDataCache;
     private final MiddlewareDataCache middlewareDataCache;
+
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ADD_INSTRUCTOR);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {

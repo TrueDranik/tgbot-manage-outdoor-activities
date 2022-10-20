@@ -1,9 +1,10 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
-import com.bot.sup.model.entity.Activity;
+import com.bot.sup.model.common.properties.message.MainMessageProperties;
+import com.bot.sup.model.entity.ActivityFormat;
 import com.bot.sup.model.entity.Schedule;
-import com.bot.sup.repository.ActivityRepository;
+import com.bot.sup.repository.ActivityFormatRepository;
 import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,11 @@ import static com.bot.sup.model.common.CallbackEnum.SCHEDULE_ACTIVITY;
 @RequiredArgsConstructor
 @Service
 public class CallbackScheduleActivityImpl implements Callback {
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(SCHEDULE_ACTIVITY);
+    private final MainMessageProperties mainMessageProperties;
     private final ScheduleRepository scheduleRepository;
-    private final ActivityRepository activityRepository;
+    private final ActivityFormatRepository activityFormatRepository;
+
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(SCHEDULE_ACTIVITY);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -31,32 +34,32 @@ public class CallbackScheduleActivityImpl implements Callback {
         String scheduleId = callbackQuery.getData().split("/")[1];
 
         List<Schedule> schedules = scheduleRepository.findAll();
-        Optional<Activity> activity = activityRepository.findById(Long.parseLong(scheduleId));
+        Optional<ActivityFormat> activityFormat = activityFormatRepository.findById(Long.parseLong(scheduleId));
 
-        if (generateKeyboardWithSchedule(schedules, activity).getKeyboard().size() <= 1) {
+        if (generateKeyboardWithSchedule(schedules, activityFormat).getKeyboard().size() <= 1) {
             return EditMessageText.builder()
                     .messageId(callbackQuery.getMessage().getMessageId())
                     .chatId(chatId)
-                    .text("❌ Расписание для '" + activity.get().getName() + "' отсутствует.\nВернитесь назад.")
-                    .replyMarkup(generateKeyboardWithSchedule(schedules, activity))
+                    .text("❌ Расписание для '" + activityFormat.get().getName() + "' отсутствует.\nВернитесь назад.")
+                    .replyMarkup(generateKeyboardWithSchedule(schedules, activityFormat))
                     .build();
         }
 
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text("Выберите дату для '" + activity.get().getName() + "'")
-                .replyMarkup(generateKeyboardWithSchedule(schedules, activity))
+                .text("Выберите дату для '" + activityFormat.get().getName() + "'")
+                .replyMarkup(generateKeyboardWithSchedule(schedules, activityFormat))
                 .build();
     }
 
-    private InlineKeyboardMarkup generateKeyboardWithSchedule(List<Schedule> schedules, Optional<Activity> activity) {
+    private InlineKeyboardMarkup generateKeyboardWithSchedule(List<Schedule> schedules, Optional<ActivityFormat> activityFormat) {
         List<List<InlineKeyboardButton>> mainKeyboard = new ArrayList<>();
         List<InlineKeyboardButton> rowMain = new ArrayList<>();
         List<InlineKeyboardButton> rowSecond = new ArrayList<>();
 
         schedules.forEach(i -> {
-            if (activity.get().getName().equals(i.getActivity().getName())) {
+            if (activityFormat.get().getName().equals(i.getActivity().getActivityFormat().getName())) {
                 rowMain.add(InlineKeyboardButton.builder()
                         .text(i.getEventDate().toString())
                         .callbackData("SCHEDULE_OPTION/" + i.getId())
@@ -74,7 +77,7 @@ public class CallbackScheduleActivityImpl implements Callback {
         }
 
         rowSecond.add(InlineKeyboardButton.builder()
-                .text("⬅️ Назад")
+                .text(mainMessageProperties.getBack())
                 .callbackData("SCHEDULE")
                 .build());
 

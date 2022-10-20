@@ -1,5 +1,6 @@
 package com.bot.sup.model.entity;
 
+import jdk.jfr.BooleanFlag;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,11 +18,12 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn(name = "client_id")
-    private Client clientId;
+    private Client client;
 
     @Column(name = "invited_users")
     private int invitedUsers;
 
-    @Column(name = "payment_status", length = 300)
-    private String paymentStatus;
+    @BooleanFlag
+    @Column(name = "payment_status")
+    private Boolean paymentStatus;
 }

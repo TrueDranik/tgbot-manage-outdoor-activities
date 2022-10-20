@@ -1,6 +1,8 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
+import com.bot.sup.model.common.properties.message.InstructorMessageProperties;
+import com.bot.sup.model.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.Instructor;
 import com.bot.sup.repository.InstructorRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -19,8 +21,11 @@ import static com.bot.sup.model.common.CallbackEnum.LIST_INSTRUCTORS;
 @Service
 @RequiredArgsConstructor
 public class CallbackListInstructorsImpl implements Callback {
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(LIST_INSTRUCTORS);
+    private final MainMessageProperties mainMessageProperties;
+    private final InstructorMessageProperties instructorMessageProperties;
     private final InstructorRepository instructorRepository;
+
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(LIST_INSTRUCTORS);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -30,7 +35,7 @@ public class CallbackListInstructorsImpl implements Callback {
         if (instructor.isEmpty()) {
             buttonEmptyInstructors.add(Collections.singletonList(
                     InlineKeyboardButton.builder()
-                            .text("⬅️ Назад")
+                            .text(mainMessageProperties.getBack())
                             .callbackData("INSTRUCTORS")
                             .build()
             ));
@@ -38,16 +43,19 @@ public class CallbackListInstructorsImpl implements Callback {
                     .keyboard(buttonEmptyInstructors)
                     .build();
 
-            return EditMessageText.builder().messageId(callbackQuery.getMessage().getMessageId()).replyMarkup(keyboard)
-                    .text("Инструкторы не найдены!\nВернитесь на главное меню.")
-                    .chatId(callbackQuery.getMessage().getChatId()).build();
+            return EditMessageText.builder().messageId(callbackQuery.getMessage().getMessageId())
+                    .chatId(callbackQuery.getMessage().getChatId())
+                    .text(instructorMessageProperties.getEmptyInstructors())
+                    .replyMarkup(keyboard)
+                    .parseMode("Markdown")
+                    .build();
         }
 
         return EditMessageText.builder()
                 .chatId(callbackQuery.getMessage().getChatId())
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .replyMarkup(generateKeyboardWithInstructors(instructor))
-                .text("Список инструкторов:")
+                .text(instructorMessageProperties.getListInstructor())
                 .build();
     }
 
@@ -74,7 +82,7 @@ public class CallbackListInstructorsImpl implements Callback {
         }
 
         rowSecond.add(InlineKeyboardButton.builder()
-                .text("⬅️ Назад")
+                .text(mainMessageProperties.getBack())
                 .callbackData("INSTRUCTORS")
                 .build());
 

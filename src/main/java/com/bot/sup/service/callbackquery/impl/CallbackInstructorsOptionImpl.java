@@ -1,6 +1,7 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
+import com.bot.sup.model.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.Instructor;
 import com.bot.sup.repository.InstructorRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -23,8 +24,10 @@ import static com.bot.sup.model.common.CallbackEnum.INSTRUCTOR_OPTION;
 @RequiredArgsConstructor
 @Service
 public class CallbackInstructorsOptionImpl implements Callback {
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(INSTRUCTOR_OPTION);
+    private final MainMessageProperties mainMessageProperties;
     private final InstructorRepository instructorRepository;
+
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(INSTRUCTOR_OPTION);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -37,6 +40,7 @@ public class CallbackInstructorsOptionImpl implements Callback {
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
                 .text(instructorInfo(instructor))
+                .parseMode("Markdown")
                 .replyMarkup(generateKeyboardWithInstructors(instructorId))
                 .build();
     }
@@ -47,18 +51,18 @@ public class CallbackInstructorsOptionImpl implements Callback {
 
         firstRow.add(
                 InlineKeyboardButton.builder()
-                        .text("\uD83D\uDD04 Изменить")
+                        .text(mainMessageProperties.getChange())
                         .callbackData("CHANGE_INSTRUCTOR/" + instructorId)
                         .build());
         firstRow.add(
                 InlineKeyboardButton.builder()
-                        .text("❌ Удалить")
+                        .text(mainMessageProperties.getDelete())
                         .callbackData("DELETE_INSTRUCTOR/" + instructorId)
                         .build());
 
         secondRow.add(
                 InlineKeyboardButton.builder()
-                        .text("⬅️ Назад")
+                        .text(mainMessageProperties.getBack())
                         .callbackData("LIST_INSTRUCTORS")
                         .build());
 
@@ -69,10 +73,9 @@ public class CallbackInstructorsOptionImpl implements Callback {
     }
 
     private String instructorInfo(Instructor instructor) {
-
-        return "ФИ: " + instructor.getFirstName() + " " + instructor.getLastName()
-                + "\nНомер телефона: " + instructor.getPhoneNumber()
-                + "\nTelegramId: " + instructor.getTelegramId();
+        return "*ФИ:* " + instructor.getFirstName() + " " + instructor.getLastName()
+                + "\n*Номер телефона:* " + instructor.getPhoneNumber()
+                + "\n*Имя пользователя:* " + instructor.getUsername();
     }
 
     @Override

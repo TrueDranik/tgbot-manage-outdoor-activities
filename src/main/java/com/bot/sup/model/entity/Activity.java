@@ -14,25 +14,33 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 30)
-    private String name;
+    @Column(name = "seasonality")
+    private String seasonality;
 
-    @Column(name = "start_point_coordinates", length = 300)
-    private String startPointCoordinates;
+    @OneToOne
+    @JoinColumn(name = "activity_format_id")
+    private ActivityFormat activityFormat;
 
-    @Column(name = "start_point_name", length = 30)
-    private String startPointName;
+    @OneToOne
+    @JoinColumn(name = "activity_type_id")
+    private ActivityType activityType;
 
-    @Column(name = "finish_point_coordinates", length = 300)
-    private String finishPointCoordinates;
+    @Column(name = "description", length = 3000)
+    private String description;
 
-    @Column(name = "finish_point_name", length = 30)
-    private String finishPointName;
-
-    @Column(name = "map_link", length = 300)
-    private String mapLink;
-
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "route_id")
-    private Route route;
+    private Activity route;
+
+    @Column(name = "duration")
+    private String duration;
+
+    @Column(name = "age", length = 10)
+    private String age;
+
+    @Column(name = "complexity", length = 30)
+    private String complexity;
+
+    @Column(name = "price")
+    private String price;
 }
