@@ -30,7 +30,7 @@ public class Activity {
 
     @OneToOne
     @JoinColumn(name = "route_id")
-    private Activity route;
+    private Route route;
 
     @Column(name = "duration")
     private String duration;
