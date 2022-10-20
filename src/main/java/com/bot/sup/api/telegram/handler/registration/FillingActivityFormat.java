@@ -1,12 +1,12 @@
 package com.bot.sup.api.telegram.handler.registration;
 
-import com.bot.sup.cache.SupActivityDataCache;
-import com.bot.sup.model.common.SupActivityStateEnum;
+import com.bot.sup.cache.ActivityFormatDataCache;
+import com.bot.sup.model.common.ActivityFormatStateEnum;
 import com.bot.sup.model.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.model.common.properties.message.MainMessageProperties;
-import com.bot.sup.model.entity.Route;
+import com.bot.sup.model.entity.ActivityFormat;
 import com.bot.sup.repository.ActivityFormatRepository;
-import com.bot.sup.service.ActivityService;
+import com.bot.sup.service.ActivityFormatService;
 import com.bot.sup.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +23,10 @@ import java.util.List;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class FillingActivity implements HandleRegistration {
+public class FillingActivityFormat implements HandleRegistration {
     private final MessageService messageService;
-    private final ActivityService activityService;
-    private final SupActivityDataCache supActivityDataCache;
+    private final ActivityFormatService activityFormatService;
+    private final ActivityFormatDataCache activityFormatDataCache;
     private final MainMessageProperties mainMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
     private final ActivityFormatRepository activityFormatRepository;
@@ -35,8 +35,8 @@ public class FillingActivity implements HandleRegistration {
     public BotApiMethod<?> getMessage(Message message) {
         Long chatId = message.getChatId();
 
-        if (supActivityDataCache.getActivityCurrentState(chatId).equals(SupActivityStateEnum.FILLING_ACTIVITY))
-            supActivityDataCache.setActivityCurrentState(chatId, SupActivityStateEnum.ASK_ACTIVITY_NAME);
+        if (activityFormatDataCache.getActivityFormatCurrentState(chatId).equals(ActivityFormatStateEnum.FILLING_ACTIVITY_FORMAT))
+            activityFormatDataCache.setActivityFormatCurrentState(chatId, ActivityFormatStateEnum.ASK_ACTIVITY_FORMAT_NAME);
 
         return processInputMessage(message, chatId);
     }
@@ -44,32 +44,32 @@ public class FillingActivity implements HandleRegistration {
     @Transactional
     public BotApiMethod<?> processInputMessage(Message inputMessage, Long chatId) {
         BotApiMethod<?> replyToUser = null;
-        Route route = new Route();
+        ActivityFormat activityFormat = new ActivityFormat();
         String userAnswer = inputMessage.getText();
-        SupActivityStateEnum activityCurrentState = supActivityDataCache.getActivityCurrentState(chatId);
+        ActivityFormatStateEnum activityCurrentState = activityFormatDataCache.getActivityFormatCurrentState(chatId);
 
-        if (activityCurrentState.equals(SupActivityStateEnum.ASK_ACTIVITY_NAME)) {
-            replyToUser = messageService.buildReplyMessage(chatId, activityMessageProperties.getInputActivityName());
-            supActivityDataCache.setActivityCurrentState(chatId, SupActivityStateEnum.REGISTERED_ACTIVITY);
+        if (activityCurrentState.equals(ActivityFormatStateEnum.ASK_ACTIVITY_FORMAT_NAME)) {
+            replyToUser = messageService.buildReplyMessage(chatId, activityMessageProperties.getInputActivityFormatName());
+            activityFormatDataCache.setActivityFormatCurrentState(chatId, ActivityFormatStateEnum.REGISTERED_ACTIVITY_FORMAT);
 
             return replyToUser;
-        } else if (activityCurrentState.equals(SupActivityStateEnum.REGISTERED_ACTIVITY)) {
+        } else if (activityCurrentState.equals(ActivityFormatStateEnum.REGISTERED_ACTIVITY_FORMAT)) {
             if (activityFormatRepository.existsByName(userAnswer)) {
                 replyToUser = messageService.buildReplyMessage(chatId, activityMessageProperties.getActivityNameAlreadyTaken());
-                supActivityDataCache.setActivityCurrentState(chatId, SupActivityStateEnum.REGISTERED_ACTIVITY);
+                activityFormatDataCache.setActivityFormatCurrentState(chatId, ActivityFormatStateEnum.REGISTERED_ACTIVITY_FORMAT);
 
                 return replyToUser;
             }
             try {
-                route.setName(userAnswer);
+                activityFormat.setName(userAnswer);
             } catch (IndexOutOfBoundsException e) {
                 return messageService.buildReplyMessage(chatId, activityMessageProperties.getInputActivityNameIsEmpty());
             }
 
-            activityService.save(route);
+            activityFormatService.save(activityFormat);
 
             replyToUser = messageService.getReplyMessageWithKeyboard(chatId, String
-                            .format(activityMessageProperties.getRegisteredActivity(), route.getName()),
+                            .format(activityMessageProperties.getRegisteredActivity(), activityFormat.getName()),
                     keyboardMenu());
         }
 
@@ -81,16 +81,18 @@ public class FillingActivity implements HandleRegistration {
 
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .callbackData("SUP_ACTIVITY")
+                        .callbackData("SUP_ACTIVITY_FORMAT")
                         .text(mainMessageProperties.getDone())
                         .build()
         ));
 
-        return InlineKeyboardMarkup.builder().keyboard(buttons).build();
+        return InlineKeyboardMarkup.builder()
+                .keyboard(buttons)
+                .build();
     }
 
     @Override
-    public SupActivityStateEnum getType() {
-        return SupActivityStateEnum.FILLING_ACTIVITY;
+    public ActivityFormatStateEnum getType() {
+        return ActivityFormatStateEnum.FILLING_ACTIVITY_FORMAT;
     }
 }
