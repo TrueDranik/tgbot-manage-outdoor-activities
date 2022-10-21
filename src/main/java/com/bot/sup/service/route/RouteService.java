@@ -12,7 +12,7 @@ public interface RouteService {
 
     Route getRouteById(Long id);
 
-    void createRoute(RouteCreateDto createDto);
+    Route createRoute(RouteCreateDto createDto);
 
     Route updateRoute(Long id, Route activity);
 

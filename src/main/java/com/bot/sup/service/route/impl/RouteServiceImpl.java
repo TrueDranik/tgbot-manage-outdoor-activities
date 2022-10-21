@@ -2,7 +2,6 @@ package com.bot.sup.service.route.impl;
 
 import com.bot.sup.mapper.RouteMapper;
 import com.bot.sup.model.dto.RouteCreateDto;
-import com.bot.sup.model.entity.Activity;
 import com.bot.sup.model.entity.Route;
 import com.bot.sup.repository.RouteRepository;
 import com.bot.sup.service.route.RouteService;
@@ -30,10 +29,10 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public void createRoute(RouteCreateDto createDto) {
+    public Route createRoute(RouteCreateDto createDto) {
         Route route = routeMapper.dtoToDomain(createDto);
 
-        routeRepository.save(route);
+        return routeRepository.save(route);
     }
 
     @Override
