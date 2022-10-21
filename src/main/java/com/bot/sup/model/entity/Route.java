@@ -6,7 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "activity")
+@Table(name = "route")
 @Getter
 @Setter
 public class Route {
@@ -33,5 +33,5 @@ public class Route {
     private String mapLink;
 
     @Column(name = "lenght", length = 30)
-    private String activity;
+    private String lenght;
 }
