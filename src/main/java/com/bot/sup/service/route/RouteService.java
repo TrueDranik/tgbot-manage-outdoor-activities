@@ -14,7 +14,7 @@ public interface RouteService {
 
     Route createRoute(RouteCreateDto createDto);
 
-    Route updateRoute(Long id, Route activity);
+    Route updateRoute(Long id, RouteCreateDto routeCreateDto);
 
     void deleteRoute(Long id);
 }

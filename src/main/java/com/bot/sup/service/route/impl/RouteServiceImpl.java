@@ -36,12 +36,25 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public Route updateRoute(Long id, Route activity) {
-        return null;
+    public Route updateRoute(Long id, RouteCreateDto routeCreateDto) {
+        Route route = routeRepository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
+
+        route.setName(routeCreateDto.getName());
+        route.setStartPointCoordinates(routeCreateDto.getStartPointCoordinates());
+        route.setStartPointName(routeCreateDto.getStartPointName());
+        route.setFinishPointCoordinates(routeCreateDto.getFinishPointCoordinates());
+        route.setFinishPointName(routeCreateDto.getFinishPointName());
+        route.setMapLink(routeCreateDto.getMapLink());
+        route.setLenght(routeCreateDto.getLenght());
+
+        return routeRepository.save(route);
     }
 
     @Override
     public void deleteRoute(Long id) {
-
+        Route route = routeRepository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
+        routeRepository.delete(route);
     }
 }
