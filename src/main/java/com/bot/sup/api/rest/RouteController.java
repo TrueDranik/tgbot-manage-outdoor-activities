@@ -1,8 +1,6 @@
 package com.bot.sup.api.rest;
 
-import com.bot.sup.mapper.RouteMapper;
 import com.bot.sup.model.dto.RouteCreateDto;
-import com.bot.sup.model.dto.RouteDto;
 import com.bot.sup.model.entity.Route;
 import com.bot.sup.repository.RouteRepository;
 import com.bot.sup.service.route.RouteService;
@@ -22,8 +20,6 @@ import java.util.Optional;
 public class RouteController {
     private final RouteRepository routeRepository;
     private final RouteService routeService;
-    private final RouteMapper routeMapper;
-
 
     @GetMapping("/all")
     public ResponseEntity<List<Route>> getAllRoute(@RequestParam(required = false) Long id) {
@@ -47,23 +43,46 @@ public class RouteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Route> getRouteById(@PathVariable("id") Long id) {
-        Optional<Route> route = Optional.ofNullable(routeService.getRouteById(id));
+    public ResponseEntity<Route> getRouteById(@PathVariable(name = "id") Long id) {
+        try {
+            Optional<Route> route = Optional.ofNullable(routeService.getRouteById(id));
 
-        if (route.isPresent()) {
-            return new ResponseEntity<>(route.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            if (route.isPresent()) {
+                return new ResponseEntity<>(route.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/new")
     public ResponseEntity<Route> createRoute(@RequestBody RouteCreateDto routeCreateDto) {
-       try {
-           return new ResponseEntity<>(routeService.createRoute(routeCreateDto), HttpStatus.CREATED);
-       } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-       }
+        try {
+            return new ResponseEntity<>(routeService.createRoute(routeCreateDto), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Route> updateRoute(@PathVariable(name = "id") Long id, @RequestBody RouteCreateDto routeCreateDto) {
+        try {
+            return new ResponseEntity<>(routeService.updateRoute(id, routeCreateDto), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Route> deleteRoute(@PathVariable(name = "id") Long id) {
+        try {
+            routeService.deleteRoute(id);
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
 }
