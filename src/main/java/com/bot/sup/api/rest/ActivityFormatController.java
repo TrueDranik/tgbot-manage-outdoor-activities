@@ -12,60 +12,42 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+//@CrossOrigin("*")
 @RequestMapping("/activity_format")
 @RequiredArgsConstructor
 public class ActivityFormatController {
     private final ActivityFormatService activityFormatService;
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<ActivityFormat>> getAllActivityFormat() {
-        try {
-            return new ResponseEntity<>(activityFormatService.getAllActivityFormat(), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+        return new ResponseEntity<>(activityFormatService.getAllActivityFormat(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ActivityFormat> getActivityFormatById(@PathVariable(name = "id") Long id) {
-        try {
-            Optional<ActivityFormat> activityFormat = Optional.ofNullable(activityFormatService.getActivityFormatById(id));
+        Optional<ActivityFormat> activityFormat = Optional.ofNullable(activityFormatService.getActivityFormatById(id));
 
-            if (activityFormat.isPresent()) {
-                return new ResponseEntity<>(activityFormat.get(), HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        if (activityFormat.isPresent()) {
+            return new ResponseEntity<>(activityFormat.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
-    @PostMapping("/new")
-    public ResponseEntity<ActivityFormat> createActivityFormat(@RequestBody ActivityFormatCreateDto activityFormatCreateDto){
-        try{
-            return new ResponseEntity<>(activityFormatService.createActivityFormat(activityFormatCreateDto), HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @PostMapping
+    public ResponseEntity<ActivityFormat> createActivityFormat(@RequestBody ActivityFormatCreateDto activityFormatCreateDto) {
+        return new ResponseEntity<>(activityFormatService.createActivityFormat(activityFormatCreateDto), HttpStatus.OK);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<ActivityFormat> updateActivityFormat(@PathVariable(name = "id") Long id, @RequestBody ActivityFormatCreateDto activityFormatCreateDto){
-        try {
-            return new ResponseEntity<>(activityFormatService.updateActivityFormat(id, activityFormatCreateDto), HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @PutMapping("{id}")
+    public ResponseEntity<ActivityFormat> updateActivityFormat(@PathVariable(name = "id") Long id,
+                                                               @RequestBody ActivityFormatCreateDto activityFormatCreateDto) {
+        return new ResponseEntity<>(activityFormatService.updateActivityFormat(id, activityFormatCreateDto), HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ActivityFormat> deleteActivityFormat(@PathVariable(name = "id") Long id){
-        try {
-            activityFormatService.deleteActivityFormat(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @DeleteMapping("{id}")
+    public ResponseEntity<ActivityFormat> deleteActivityFormat(@PathVariable(name = "id") Long id) {
+        activityFormatService.deleteActivityFormat(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
