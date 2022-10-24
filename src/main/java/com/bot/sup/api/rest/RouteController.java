@@ -15,13 +15,14 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/route")
 @RequiredArgsConstructor
 public class RouteController {
     private final RouteRepository routeRepository;
     private final RouteService routeService;
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<Route>> getAllRoute(@RequestParam(required = false) Long id) {
         try {
             List<Route> routes = new ArrayList<>();
@@ -57,7 +58,8 @@ public class RouteController {
         }
     }
 
-    @PostMapping("/new")
+    //@CrossOrigin(value = "https://192.168.1.35:3000")
+    @PostMapping
     public ResponseEntity<Route> createRoute(@RequestBody RouteCreateDto routeCreateDto) {
         try {
             return new ResponseEntity<>(routeService.createRoute(routeCreateDto), HttpStatus.CREATED);
@@ -66,7 +68,7 @@ public class RouteController {
         }
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Route> updateRoute(@PathVariable(name = "id") Long id, @RequestBody RouteCreateDto routeCreateDto) {
         try {
             return new ResponseEntity<>(routeService.updateRoute(id, routeCreateDto), HttpStatus.OK);
@@ -75,7 +77,7 @@ public class RouteController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Route> deleteRoute(@PathVariable(name = "id") Long id) {
         try {
             routeService.deleteRoute(id);

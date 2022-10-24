@@ -32,6 +32,6 @@ public class Route {
     @Column(name = "map_link", length = 300)
     private String mapLink;
 
-    @Column(name = "lenght", length = 30)
-    private String lenght;
+    @Column(name = "length", length = 30)
+    private String length;
 }

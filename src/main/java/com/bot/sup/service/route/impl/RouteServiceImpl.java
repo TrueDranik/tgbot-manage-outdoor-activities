@@ -46,7 +46,7 @@ public class RouteServiceImpl implements RouteService {
         route.setFinishPointCoordinates(routeCreateDto.getFinishPointCoordinates());
         route.setFinishPointName(routeCreateDto.getFinishPointName());
         route.setMapLink(routeCreateDto.getMapLink());
-        route.setLenght(routeCreateDto.getLenght());
+        route.setLength(routeCreateDto.getLength());
 
         return routeRepository.save(route);
     }
