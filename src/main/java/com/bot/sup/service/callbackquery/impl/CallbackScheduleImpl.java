@@ -13,6 +13,7 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,27 +48,30 @@ public class CallbackScheduleImpl implements Callback {
         List<List<InlineKeyboardButton>> mainKeyboard = new ArrayList<>();
         List<InlineKeyboardButton> rowMain = new ArrayList<>();
         List<InlineKeyboardButton> rowSecond = new ArrayList<>();
-
-        activities.forEach(i -> {
-                    rowMain.add(InlineKeyboardButton.builder()
-                            .text(i.getName())
-                            .callbackData("SCHEDULE_ACTIVITY/" + i.getId())
-                            .build());
-                    if (rowMain.size() == 2) {
-                        List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);
-                        mainKeyboard.add(temporaryKeyboardRow);
-                        rowMain.clear();
-                    }
-                }
-        );
-
-        if (rowMain.size() == 1) {
-            mainKeyboard.add(rowMain);
-        }
-
+//
+//        activities.forEach(i -> {
+//                    rowMain.add(InlineKeyboardButton.builder()
+//                            .text(i.getName())
+//                            .callbackData("SCHEDULE_ACTIVITY/" + i.getId())
+//                            .build());
+//                    if (rowMain.size() == 2) {
+//                        List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);
+//                        mainKeyboard.add(temporaryKeyboardRow);
+//                        rowMain.clear();
+//                    }
+//                }
+//        );
+//
+//        if (rowMain.size() == 1) {
+//            mainKeyboard.add(rowMain);
+//        }
+//
+        WebAppInfo webAppInfo = WebAppInfo.builder()
+                .url("https://192.168.1.35:3000")
+                        .build();
         rowSecond.add(InlineKeyboardButton.builder()
                 .text(mainMessageProperties.getMenu())
-                .callbackData("MENU")
+                .webApp(webAppInfo)
                 .build());
 
         mainKeyboard.add(rowSecond);
