@@ -24,12 +24,10 @@ public class ActivityFormatServiceImpl implements ActivityFormatService {
 
     @Override
     public List<ActivityFormat> getAllActivityFormat() {
-
         List<ActivityFormat> activityFormats = new ArrayList<>(activityFormatRepository.findAll());
-        //TODO добавить проверку на наличие
 
         if (activityFormats.isEmpty()) {
-
+            throw new EntityNotFoundException("Activity format not found");
         }
 
         return activityFormats;
@@ -37,24 +35,20 @@ public class ActivityFormatServiceImpl implements ActivityFormatService {
 
     @Override
     public ActivityFormat getActivityFormatById(Long id) {
-        //TODO добавить проверку на наличие
-
         return activityFormatRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new EntityNotFoundException("Activity format with id[" + id + "] not found"));
     }
-
     @Override
     public ActivityFormat createActivityFormat(ActivityFormatCreateDto activityFormatCreateDto) {
         ActivityFormat activityFormat = activityFormatMapper.dtoToDomain(activityFormatCreateDto);
-        //TODO добавить проверку на уникальность
+        //TODO добавить проверку на уникальность (в entity прописать unque)
         return activityFormatRepository.save(activityFormat);
     }
 
     @Override
     public ActivityFormat updateActivityFormat(Long id, ActivityFormatCreateDto activityFormatCreateDto) {
         ActivityFormat activityFormat = activityFormatRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
-        //TODO добавить проверку на наличие
+                .orElseThrow(() -> new EntityNotFoundException("Activity format with id[" + id + "] not found"));
 
         activityFormat.setName(activityFormatCreateDto.getName());
 
@@ -64,8 +58,8 @@ public class ActivityFormatServiceImpl implements ActivityFormatService {
     @Override
     public void deleteActivityFormat(Long id) {
         ActivityFormat activityFormat = activityFormatRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
-        //TODO добавить проверку на наличие
+                .orElseThrow(() -> new EntityNotFoundException("Activity format with id[" + id + "] not found"));
+
         activityFormatRepository.delete(activityFormat);
     }
 }
