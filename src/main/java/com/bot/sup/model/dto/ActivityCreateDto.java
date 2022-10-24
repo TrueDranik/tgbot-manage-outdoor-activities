@@ -3,12 +3,10 @@ package com.bot.sup.model.dto;
 import com.bot.sup.model.entity.ActivityFormat;
 import com.bot.sup.model.entity.ActivityType;
 import com.bot.sup.model.entity.Route;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-public class ActivityDto {
+@Data
+public class ActivityCreateDto {
     private Long id;
     private String seasonality;
     private ActivityFormat activityFormat;

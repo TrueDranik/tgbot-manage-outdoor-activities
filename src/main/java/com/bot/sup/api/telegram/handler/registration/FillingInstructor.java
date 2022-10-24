@@ -5,7 +5,7 @@ import com.bot.sup.model.common.InstructorStateEnum;
 import com.bot.sup.model.common.properties.message.InstructorMessageProperties;
 import com.bot.sup.model.entity.Instructor;
 import com.bot.sup.repository.InstructorRepository;
-import com.bot.sup.service.InstructorService;
+import com.bot.sup.service.instructor.InstructorService;
 import com.bot.sup.service.MessageService;
 import com.bot.sup.validation.Validation;
 import lombok.RequiredArgsConstructor;

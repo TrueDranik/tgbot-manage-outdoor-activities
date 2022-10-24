@@ -46,7 +46,7 @@ public class CallbackActivityTypeImpl implements Callback {
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text("Список типов")
-                        .callbackData("LIST_ACTIVITY_FORMAT")
+                        .callbackData("LIST_ACTIVITY_TYPE")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
