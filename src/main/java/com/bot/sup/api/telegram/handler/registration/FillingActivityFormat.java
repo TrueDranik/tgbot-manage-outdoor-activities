@@ -54,7 +54,7 @@ public class FillingActivityFormat implements HandleRegistration {
 
             return replyToUser;
         } else if (activityCurrentState.equals(ActivityFormatStateEnum.REGISTERED_ACTIVITY_FORMAT)) {
-            if (activityFormatRepository.existsByName(userAnswer)) {
+            if (activityFormatRepository.existsByNameEqualsIgnoreCase(userAnswer)) {
                 replyToUser = messageService.buildReplyMessage(chatId, activityMessageProperties.getActivityNameAlreadyTaken());
                 activityFormatDataCache.setActivityFormatCurrentState(chatId, ActivityFormatStateEnum.REGISTERED_ACTIVITY_FORMAT);
 

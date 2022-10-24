@@ -54,7 +54,7 @@ public class FillingActivityType implements HandleRegistration{
 
             return replyToUser;
         } else if (activityTypeCurrentState.equals(ActivityTypeStateEnum.REGISTERED_ACTIVITY_TYPE)) {
-            if (activityTypeRepository.existsByName(userAnswer)){
+            if (activityTypeRepository.existsByNameEqualsIgnoreCase(userAnswer)){
                 replyToUser = messageService.buildReplyMessage(chatId, "Данный формат существует");
                 activityTypeDataCache.setActivityTypeCurrentState(chatId, ActivityTypeStateEnum.REGISTERED_ACTIVITY_TYPE);
 

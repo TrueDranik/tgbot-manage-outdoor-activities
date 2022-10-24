@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ActivityTypeRepository extends JpaRepository<ActivityType, Long> {
-    boolean existsByName(String userAnswer);
+    boolean existsByNameEqualsIgnoreCase(String userAnswer);
 }
