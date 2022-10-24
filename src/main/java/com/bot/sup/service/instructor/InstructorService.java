@@ -1,4 +1,4 @@
-package com.bot.sup.service;
+package com.bot.sup.service.instructor;
 
 import com.bot.sup.model.entity.Instructor;
 import com.bot.sup.repository.InstructorRepository;

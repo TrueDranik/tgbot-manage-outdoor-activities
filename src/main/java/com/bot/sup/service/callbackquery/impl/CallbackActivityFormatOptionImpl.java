@@ -1,9 +1,9 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.model.common.CallbackEnum;
-import com.bot.sup.model.common.properties.message.MenuMessageProperties;
-import com.bot.sup.model.entity.Activity;
-import com.bot.sup.repository.ActivityRepository;
+import com.bot.sup.model.common.properties.message.MainMessageProperties;
+import com.bot.sup.model.entity.ActivityFormat;
+import com.bot.sup.repository.ActivityFormatRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,27 +15,27 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.*;
 
-import static com.bot.sup.model.common.CallbackEnum.ACTIVITY_OPTION;
+import static com.bot.sup.model.common.CallbackEnum.ACTIVITY_FORMAT_OPTION;
 
 @RequiredArgsConstructor
 @Service
-public class CallbackActivityOptionImpl implements Callback {
-    private final MenuMessageProperties menuMessageProperties;
-    private final ActivityRepository activityRepository;
+public class CallbackActivityFormatOptionImpl implements Callback {
+    private final MainMessageProperties mainMessageProperties;
+    private final ActivityFormatRepository activityFormatRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ACTIVITY_OPTION);
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ACTIVITY_FORMAT_OPTION);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.getMessage().getChatId();
-        String activityId = callbackQuery.getData().split("/")[1];
-        Optional<Activity> activity = activityRepository.findById(Long.parseLong(activityId));
+        String activityFormatId = callbackQuery.getData().split("/")[1];
+        Optional<ActivityFormat> activityFormat = activityFormatRepository.findById(Long.parseLong(activityFormatId));
 
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text(activity.get().getName())
-                .replyMarkup(generateKeyboardWithActivity(activityId))
+                .text(activityFormat.get().getName())
+                .replyMarkup(generateKeyboardWithActivity(activityFormatId))
                 .build();
     }
 
@@ -45,19 +45,19 @@ public class CallbackActivityOptionImpl implements Callback {
 
         firstRow.add(
                 InlineKeyboardButton.builder()
-                        .text(menuMessageProperties.getChange())
-                        .callbackData("ACTIVITY_CHANGE")
+                        .text(mainMessageProperties.getChange())
+                        .callbackData("ACTIVITY_FORMAT_CHANGE")
                         .build());
         firstRow.add(
                 InlineKeyboardButton.builder()
-                        .text(menuMessageProperties.getDelete())
-                        .callbackData("DELETE_ACTIVITY/" + activityId)
+                        .text(mainMessageProperties.getDelete())
+                        .callbackData("DELETE_ACTIVITY_FORMAT/" + activityId)
                         .build());
 
         secondRow.add(
                 InlineKeyboardButton.builder()
-                        .text(menuMessageProperties.getBack())
-                        .callbackData("LIST_ACTIVITY")
+                        .text(mainMessageProperties.getBack())
+                        .callbackData("LIST_ACTIVITY_FORMAT")
                         .build());
 
         return InlineKeyboardMarkup.builder()

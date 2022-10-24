@@ -10,6 +10,7 @@ public class MessageService {
     public SendMessage buildReplyMessage(Long chatId, String text) {
         return SendMessage.builder()
                 .text(text)
+                .parseMode("Markdown")
                 .chatId(chatId.toString())
                 .build();
     }
