@@ -6,7 +6,7 @@ import com.bot.sup.model.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.model.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.ActivityFormat;
 import com.bot.sup.repository.ActivityFormatRepository;
-import com.bot.sup.service.ActivityFormatService;
+import com.bot.sup.service.activityFormat.impl.ActivityFormatServiceImpl;
 import com.bot.sup.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FillingActivityFormat implements HandleRegistration {
     private final MessageService messageService;
-    private final ActivityFormatService activityFormatService;
+    private final ActivityFormatServiceImpl activityFormatServiceImpl;
     private final ActivityFormatDataCache activityFormatDataCache;
     private final MainMessageProperties mainMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
@@ -66,7 +66,7 @@ public class FillingActivityFormat implements HandleRegistration {
                 return messageService.buildReplyMessage(chatId, activityMessageProperties.getInputActivityNameIsEmpty());
             }
 
-            activityFormatService.save(activityFormat);
+            activityFormatServiceImpl.save(activityFormat);
 
             replyToUser = messageService.getReplyMessageWithKeyboard(chatId, String
                             .format(activityMessageProperties.getRegisteredActivity(), activityFormat.getName()),
