@@ -2,7 +2,7 @@ package com.bot.sup.api.telegram.command;
 
 import com.bot.sup.api.telegram.handler.impl.HandleMainMenuImpl;
 import com.bot.sup.cache.MiddlewareDataCache;
-import com.bot.sup.model.common.properties.message.MainMessageProperties;
+import com.bot.sup.common.properties.message.MainMessageProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;

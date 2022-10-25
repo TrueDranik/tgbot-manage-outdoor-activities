@@ -1,6 +1,6 @@
 package com.bot.sup.cache;
 
-import com.bot.sup.model.common.InstructorStateEnum;
+import com.bot.sup.common.enums.InstructorStateEnum;
 import com.bot.sup.model.entity.Instructor;
 import org.springframework.stereotype.Component;
 
