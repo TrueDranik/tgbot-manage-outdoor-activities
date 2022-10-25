@@ -20,16 +20,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.bot.sup.common.enums.CallbackEnum.SCHEDULE;
+import static com.bot.sup.common.enums.CallbackEnum.LIST_SCHEDULE;
 
 @RequiredArgsConstructor
 @Service
-public class CallbackScheduleImpl implements Callback {
+public class CallbackListScheduleImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
     private final ScheduleMessageProperties scheduleMessageProperties;
     private final RouteRepository routeRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(SCHEDULE);
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(LIST_SCHEDULE);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -68,7 +68,7 @@ public class CallbackScheduleImpl implements Callback {
 //
         WebAppInfo webAppInfo = WebAppInfo.builder()
                 .url("https://192.168.1.35:3000")
-                        .build();
+                .build();
         rowSecond.add(InlineKeyboardButton.builder()
                 .text(mainMessageProperties.getMenu())
                 .webApp(webAppInfo)
