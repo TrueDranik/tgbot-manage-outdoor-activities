@@ -5,6 +5,7 @@ public enum CallbackEnum {
 
     // РАСПИСАНИЕ
     SCHEDULE,
+    LIST_SCHEDULE,
     SCHEDULE_ACTIVITY,
     SCHEDULE_OPTION,
 
