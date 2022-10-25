@@ -43,7 +43,7 @@ public class CallbackScheduleImpl implements Callback {
                 .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text("Добавить тур/составить расписание")
-                .callbackData("?")
+                .callbackData("SCHEDULE_WEBAPP")
                 .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text(mainMessageProperties.getMenu())
