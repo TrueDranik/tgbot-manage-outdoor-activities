@@ -6,7 +6,7 @@ import com.bot.sup.model.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.model.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.ActivityType;
 import com.bot.sup.repository.ActivityTypeRepository;
-import com.bot.sup.service.activity.type.ActivityTypeService;
+import com.bot.sup.service.activity.type.impl.ActivityTypeServiceImpl;
 import com.bot.sup.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FillingActivityType implements HandleRegistration{
     private final MessageService messageService;
-    private final ActivityTypeService activityTypeService;
+    private final ActivityTypeServiceImpl activityTypeServiceImpl;
     private final ActivityTypeDataCache activityTypeDataCache;
     private final MainMessageProperties mainMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
@@ -67,7 +67,7 @@ public class FillingActivityType implements HandleRegistration{
                 return messageService.buildReplyMessage(chatId, "Вы не ввели формат!");
             }
 
-            activityTypeService.save(activityType);
+            activityTypeServiceImpl.save(activityType);
             replyToUser = messageService.getReplyMessageWithKeyboard(chatId, "Формат зарегистрирован", keyboardMarkup());
         }
 

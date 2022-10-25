@@ -15,7 +15,6 @@ import javax.persistence.EntityNotFoundException;
 @ControllerAdvice
 @ResponseBody
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleException(Exception exception) {
         log.error(exception.getMessage(), exception);
