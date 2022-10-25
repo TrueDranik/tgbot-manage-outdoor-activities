@@ -2,9 +2,6 @@ package com.bot.sup.service.callbackquery.impl.schedule;
 
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
-import com.bot.sup.common.properties.message.ScheduleMessageProperties;
-import com.bot.sup.model.entity.Route;
-import com.bot.sup.repository.RouteRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,71 +10,48 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.bot.sup.common.enums.CallbackEnum.SCHEDULE;
-
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class CallbackScheduleImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
-    private final ScheduleMessageProperties scheduleMessageProperties;
-    private final RouteRepository routeRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(SCHEDULE);
+    private static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.SCHEDULE);
 
     @Override
-    public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
-        List<Route> activities = routeRepository.findAll();
-        Long chatId = callbackQuery.getMessage().getChatId();
-
+    public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
-                .chatId(chatId)
-                .text(scheduleMessageProperties.getSchedules())
-                .replyMarkup(generateKeyboardWithActivity(activities))
+                .chatId(callbackQuery.getMessage().getChatId())
+                .text("Меню расписания")
+                .replyMarkup(createInlineKeyboard())
                 .build();
     }
 
-    private InlineKeyboardMarkup generateKeyboardWithActivity(List<Route> activities) {
-        List<List<InlineKeyboardButton>> mainKeyboard = new ArrayList<>();
-        List<InlineKeyboardButton> rowMain = new ArrayList<>();
-        List<InlineKeyboardButton> rowSecond = new ArrayList<>();
-//
-//        activities.forEach(i -> {
-//                    rowMain.add(InlineKeyboardButton.builder()
-//                            .text(i.getName())
-//                            .callbackData("SCHEDULE_ACTIVITY/" + i.getId())
-//                            .build());
-//                    if (rowMain.size() == 2) {
-//                        List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);
-//                        mainKeyboard.add(temporaryKeyboardRow);
-//                        rowMain.clear();
-//                    }
-//                }
-//        );
-//
-//        if (rowMain.size() == 1) {
-//            mainKeyboard.add(rowMain);
-//        }
-//
-        WebAppInfo webAppInfo = WebAppInfo.builder()
-                .url("https://192.168.1.35:3000")
-                        .build();
-        rowSecond.add(InlineKeyboardButton.builder()
-                .text(mainMessageProperties.getMenu())
-                .webApp(webAppInfo)
-                .build());
+    private InlineKeyboardMarkup createInlineKeyboard() {
+        List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
-        mainKeyboard.add(rowSecond);
+        buttons.add(List.of(InlineKeyboardButton.builder()
+                .text("Список расписания для форматов")
+                .callbackData("LIST_SCHEDULE")
+                .build()));
+        buttons.add(List.of(InlineKeyboardButton.builder()
+                .text("Добавить тур/составить расписание")
+                .callbackData("?")
+                .build()));
+        buttons.add(List.of(InlineKeyboardButton.builder()
+                .text(mainMessageProperties.getMenu())
+                .callbackData("MENU")
+                .build()));
 
         return InlineKeyboardMarkup.builder()
-                .keyboard(mainKeyboard)
+                .keyboard(buttons)
                 .build();
     }
 
