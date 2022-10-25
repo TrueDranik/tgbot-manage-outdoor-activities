@@ -1,16 +1,20 @@
 package com.bot.sup.service.activity.type;
 
+import com.bot.sup.model.dto.ActivityTypeCreateDto;
 import com.bot.sup.model.entity.ActivityType;
-import com.bot.sup.repository.ActivityTypeRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Service
-@RequiredArgsConstructor
-public class ActivityTypeService {
-    private final ActivityTypeRepository activityTypeRepository;
+import java.util.List;
 
-    public void save(ActivityType activityType){
-        activityTypeRepository.save(activityType);
-    }
+@Service
+public interface ActivityTypeService {
+    List<ActivityType> getAllActivityType();
+
+    ActivityType getActivityTypeById(Long id);
+
+    ActivityType createActivityType(ActivityTypeCreateDto activityTypeCreateDto);
+
+    ActivityType updateActivityType(Long id, ActivityTypeCreateDto activityTypeCreateDto);
+
+    void deleteActivityType(Long id);
 }
