@@ -1,4 +1,4 @@
-package com.bot.sup.service.activityFormat;
+package com.bot.sup.service.activity.format;
 
 import com.bot.sup.model.dto.ActivityFormatCreateDto;
 import com.bot.sup.model.entity.ActivityFormat;

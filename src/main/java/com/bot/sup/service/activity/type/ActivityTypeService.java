@@ -1,4 +1,4 @@
-package com.bot.sup.service;
+package com.bot.sup.service.activity.type;
 
 import com.bot.sup.model.entity.ActivityType;
 import com.bot.sup.repository.ActivityTypeRepository;

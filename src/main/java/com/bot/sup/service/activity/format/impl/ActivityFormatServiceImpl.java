@@ -1,10 +1,10 @@
-package com.bot.sup.service.activityFormat.impl;
+package com.bot.sup.service.activity.format.impl;
 
 import com.bot.sup.mapper.ActivityFormatMapper;
 import com.bot.sup.model.dto.ActivityFormatCreateDto;
 import com.bot.sup.model.entity.ActivityFormat;
 import com.bot.sup.repository.ActivityFormatRepository;
-import com.bot.sup.service.activityFormat.ActivityFormatService;
+import com.bot.sup.service.activity.format.ActivityFormatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

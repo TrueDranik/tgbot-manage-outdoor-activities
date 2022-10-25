@@ -6,7 +6,7 @@ import com.bot.sup.model.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.model.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.ActivityType;
 import com.bot.sup.repository.ActivityTypeRepository;
-import com.bot.sup.service.ActivityTypeService;
+import com.bot.sup.service.activity.type.ActivityTypeService;
 import com.bot.sup.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
