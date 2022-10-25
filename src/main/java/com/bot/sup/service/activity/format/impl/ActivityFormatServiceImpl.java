@@ -38,10 +38,11 @@ public class ActivityFormatServiceImpl implements ActivityFormatService {
         return activityFormatRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Activity format with id[" + id + "] not found"));
     }
+
     @Override
     public ActivityFormat createActivityFormat(ActivityFormatCreateDto activityFormatCreateDto) {
         ActivityFormat activityFormat = activityFormatMapper.dtoToDomain(activityFormatCreateDto);
-        //TODO добавить проверку на уникальность (в entity прописать unque)
+
         return activityFormatRepository.save(activityFormat);
     }
 
