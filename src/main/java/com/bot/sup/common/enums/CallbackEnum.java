@@ -5,10 +5,11 @@ public enum CallbackEnum {
 
     // РАСПИСАНИЕ
     SCHEDULE,
-    LIST_SCHEDULE,
+    SCHEDULE_TO_ACTIVITYFORMAT,
+    DATE_TO_ROUTE,
     SCHEDULE_WEBAPP,
-    SCHEDULE_ACTIVITY,
-    SCHEDULE_OPTION,
+    ACTIVITYFORMAT_TO_DATE,
+    SCHEDULE_INFO,
 
     // ИНСТРУКТОРЫ
     INSTRUCTORS,
