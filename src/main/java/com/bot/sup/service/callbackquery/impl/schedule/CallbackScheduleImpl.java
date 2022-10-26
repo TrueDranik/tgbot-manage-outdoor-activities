@@ -38,16 +38,16 @@ public class CallbackScheduleImpl implements Callback {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
         buttons.add(List.of(InlineKeyboardButton.builder()
-                .text("Список расписания для форматов")
-                .callbackData("LIST_SCHEDULE")
+                .text("Список форматов")
+                .callbackData(CallbackEnum.SCHEDULE_TO_ACTIVITYFORMAT.toString())
                 .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text("Добавить тур/составить расписание")
-                .callbackData("SCHEDULE_WEBAPP")
+                .callbackData(CallbackEnum.SCHEDULE_WEBAPP.toString())
                 .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text(mainMessageProperties.getMenu())
-                .callbackData("MENU")
+                .callbackData(CallbackEnum.MENU.toString())
                 .build()));
 
         return InlineKeyboardMarkup.builder()
