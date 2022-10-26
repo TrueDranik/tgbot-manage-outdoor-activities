@@ -29,6 +29,7 @@ public class CallbackMenuImpl implements Callback {
                 .replyMarkup(handleMainMenu.createInlineKeyboard())
                 .chatId(callbackQuery.getMessage().getChatId().toString())
                 .text(mainMessageProperties.getUserChoose())
+                .parseMode("Markdown")
                 .build();
     }
 
