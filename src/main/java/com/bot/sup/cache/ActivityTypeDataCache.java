@@ -1,6 +1,6 @@
 package com.bot.sup.cache;
 
-import com.bot.sup.model.common.ActivityTypeStateEnum;
+import com.bot.sup.common.enums.ActivityTypeStateEnum;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;

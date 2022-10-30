@@ -1,6 +1,6 @@
 package com.bot.sup.service.callbackquery;
 
-import com.bot.sup.model.common.CallbackEnum;
+import com.bot.sup.common.enums.CallbackEnum;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;

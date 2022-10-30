@@ -1,12 +1,12 @@
 package com.bot.sup.api.telegram.handler.registration;
 
 import com.bot.sup.cache.ActivityFormatDataCache;
-import com.bot.sup.model.common.ActivityFormatStateEnum;
-import com.bot.sup.model.common.properties.message.ActivityMessageProperties;
-import com.bot.sup.model.common.properties.message.MainMessageProperties;
+import com.bot.sup.common.enums.ActivityFormatStateEnum;
+import com.bot.sup.common.properties.message.ActivityMessageProperties;
+import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.ActivityFormat;
 import com.bot.sup.repository.ActivityFormatRepository;
-import com.bot.sup.service.activityFormat.impl.ActivityFormatServiceImpl;
+import com.bot.sup.service.activity.format.impl.ActivityFormatServiceImpl;
 import com.bot.sup.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
