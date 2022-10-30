@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <changeSet id="create-table-booking" author="Ruslan">
+        <createTable tableName="booking">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="client_id" type="bigint"/>
+            <column name="invited_users" type="int"/>
+            <column name="payment_status" type="boolean"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="booking" baseColumnNames="client_id"
+                                 constraintName="fk_booking_client_id"
+                                 referencedTableName="client" referencedColumnNames="id"/>
+
+    </changeSet>
+    
+</databaseChangeLog>

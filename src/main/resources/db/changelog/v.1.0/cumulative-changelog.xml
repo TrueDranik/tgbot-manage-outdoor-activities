@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <changeSet id="add-tag-1.0" author="Ruslan">
+        <tagDatabase tag="v.1.0"/>
+    </changeSet>
+
+    <include file="create-table-activity.xml" relativeToChangelogFile="true"/>
+    <include file="create-table-activity-format.xml" relativeToChangelogFile="true"/>
+    <include file="create-table-activity-type.xml" relativeToChangelogFile="true"/>
+    <include file="create-table-booking.xml" relativeToChangelogFile="true"/>
+    <include file="create-table-client.xml" relativeToChangelogFile="true"/>
+    <include file="create-table-instructor.xml" relativeToChangelogFile="true"/>
+    <include file="create-table-route.xml" relativeToChangelogFile="true"/>
+    <include file="create-table-schedule.xml" relativeToChangelogFile="true"/>
+    <include file="create-table-schedule-to-client.xml" relativeToChangelogFile="true"/>
+    <include file="create-table-schedule-to-instructor.xml" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>
