@@ -8,10 +8,10 @@
     <changeSet id="create-table-schedule-to-instructor" author="Ruslan">
         <createTable tableName="schedule_instructor">
             <column name="schedule_id" type="bigint">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_schedule"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_schedule_instructor"/>
             </column>
             <column name="instructor_id" type="bigint">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_instructor"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_instructor_schedule"/>
             </column>
         </createTable>
 
