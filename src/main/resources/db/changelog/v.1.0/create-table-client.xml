@@ -12,7 +12,7 @@
             </column>
             <column name="first_name" type="varchar(30)"/>
             <column name="last_name" type="varchar(30)"/>
-            <column name="birth_date" type="datetime"/>
+            <column name="birth_date" type="date"/>
             <column name="telegram_id" type="bigint">
                 <constraints unique="true"/>
             </column>
