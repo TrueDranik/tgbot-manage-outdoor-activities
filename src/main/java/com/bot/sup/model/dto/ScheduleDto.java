@@ -8,7 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -18,6 +18,6 @@ public class ScheduleDto {
     private LocalDate eventDate;
     private LocalTime eventTime;
     private Integer participants;
-    private List<Client> client;
-    private List<Instructor> instructor;
+    private Set<Client> client;
+    private Set<Instructor> instructor;
 }

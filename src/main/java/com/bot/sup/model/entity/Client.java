@@ -33,8 +33,4 @@ public class Client {
 
     @Column(name = "phone_number")
     private String phoneNumber;
-
-    @ManyToMany
-    @JoinColumn(name = "schedule_id")
-    private List<Schedule> schedules;
 }

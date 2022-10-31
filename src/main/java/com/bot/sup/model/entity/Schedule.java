@@ -6,7 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "schedule")
@@ -31,10 +31,18 @@ public class Schedule {
     private Integer participants;
 
     @ManyToMany
-    @JoinColumn(name = "client_id")
-    private List<Client> client;
+    @JoinTable(
+            name = "schedule_client",
+            joinColumns = @JoinColumn(name = "schedule_id"),
+            inverseJoinColumns = @JoinColumn(name = "client_id")
+    )
+    private Set<Client> client;
 
     @ManyToMany
-    @JoinColumn(name = "instructor_id")
-    private List<Instructor> instructor;
+    @JoinTable(
+            name = "schedule_instructor",
+            joinColumns = @JoinColumn(name = "schedule_id"),
+            inverseJoinColumns = @JoinColumn(name = "instructor_id")
+    )
+    private Set<Instructor> instructor;
 }
