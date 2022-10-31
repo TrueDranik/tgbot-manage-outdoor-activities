@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 public class ActivityCreateDto {
     private Long id;
+    private String name;
     private String seasonality;
     private ActivityFormat activityFormat;
     private ActivityType activityType;

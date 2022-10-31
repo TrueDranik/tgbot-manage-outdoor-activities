@@ -10,6 +10,7 @@ import lombok.Setter;
 @Setter
 public class ActivityDto {
     private Long id;
+    private String name;
     private String seasonality;
     private ActivityFormat activityFormat;
     private ActivityType activityType;
