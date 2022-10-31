@@ -8,12 +8,19 @@
     <changeSet id="create-table-schedule-to-instructor" author="Ruslan">
         <createTable tableName="schedule_instructor">
             <column name="schedule_id" type="bigint">
-                <constraints nullable="false" primaryKey="true"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_schedule"/>
             </column>
             <column name="instructor_id" type="bigint">
-                <constraints nullable="false" primaryKey="true"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_instructor"/>
             </column>
         </createTable>
+
+        <addForeignKeyConstraint baseTableName="schedule_instructor" baseColumnNames="schedule_id"
+                                 constraintName="fk_schedule_instructor"
+                                 referencedTableName="schedule" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="schedule_instructor" baseColumnNames="instructor_id"
+                                 constraintName="fk_instructor_schedule"
+                                 referencedTableName="instructor" referencedColumnNames="id"/>
     </changeSet>
 
 </databaseChangeLog>

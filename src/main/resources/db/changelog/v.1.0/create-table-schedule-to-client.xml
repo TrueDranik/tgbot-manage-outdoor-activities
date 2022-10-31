@@ -8,12 +8,19 @@
     <changeSet id="create-table-schedule-to-client" author="Ruslan">
         <createTable tableName="schedule_client">
             <column name="schedule_id" type="bigint">
-                <constraints nullable="false" primaryKey="true"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_schedule"/>
             </column>
             <column name="client_id" type="bigint">
-                <constraints nullable="false" primaryKey="true"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_client"/>
             </column>
         </createTable>
+        
+        <addForeignKeyConstraint baseTableName="schedule_client" baseColumnNames="schedule_id"
+                                 constraintName="fk_schedule_client"
+                                 referencedTableName="schedule" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="schedule_client" baseColumnNames="client_id"
+                                 constraintName="fk_client_schedule"
+                                 referencedTableName="client" referencedColumnNames="id"/>
     </changeSet>
     
 </databaseChangeLog>
