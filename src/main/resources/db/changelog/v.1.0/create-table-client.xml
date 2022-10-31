@@ -13,7 +13,9 @@
             <column name="first_name" type="varchar(30)"/>
             <column name="last_name" type="varchar(30)"/>
             <column name="birth_date" type="datetime"/>
-            <column name="telegram_id" type="bigint"/>
+            <column name="telegram_id" type="bigint">
+                <constraints unique="true"/>
+            </column>
             <column name="username" type="varchar(30)"/>
             <column name="phone_number" type="varchar"/>
         </createTable>
