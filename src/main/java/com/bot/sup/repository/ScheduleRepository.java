@@ -9,16 +9,19 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
+    List<Schedule> findByEventDate(LocalDate eventDate);
+
     @Modifying
     @Query("SELECT s FROM Schedule s WHERE s.activity.activityFormat.id = ?1")
-    public List<Schedule> selectScheduleByActivityFormatId(/*@Param("id")*/ Long id);
+    List<Schedule> selectScheduleByActivityFormatId(Long id);
 
-    @Query("SELECT s FROM Schedule s WHERE s.activity.route.name = ?1")
-    public Optional<Schedule> selectOneScheduleByActivityFormatId(Long id);
-
-    public List<Schedule> findByEventDate(LocalDate eventDate);
+    @Modifying
+    @Query("SELECT s FROM Schedule s " +
+            "INNER JOIN Activity a on s.activity.id = a.id " +
+            "INNER JOIN Route r on a.route.id = r.id " +
+            "WHERE a.activityFormat.id = ?1 and s.eventDate = ?2")
+    List<Schedule> selectScheduleByActivityFormatIdAndEventDate(Long id, LocalDate eventDate);
 }

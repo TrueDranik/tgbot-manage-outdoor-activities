@@ -65,15 +65,15 @@ public class CallbackActivityFormatToDateImpl implements Callback {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
-        Set<LocalDate> localDateTimes = new HashSet<>();
+        Set<LocalDate> localDates = new HashSet<>();
         for (int indexSchedule = 0; indexSchedule < eventDate.size(); indexSchedule++) {
-            localDateTimes.add(eventDate.get(indexSchedule).getEventDate());
+            localDates.add(eventDate.get(indexSchedule).getEventDate());
         }
 
-        localDateTimes.forEach(i -> {
+        localDates.forEach(i -> {
             rowMain.add(InlineKeyboardButton.builder()
-                    .text(i.format(formatter) + " " +
-                            i.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru")))
+                    .text(i.format(formatter) + " (" +
+                            i.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru")) + ")")
                     .callbackData(CallbackEnum.DATE_TO_ROUTE + "/" + activityFormatId + "/" + i)
                     .build());
             if (rowMain.size() == 2) {

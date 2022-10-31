@@ -18,6 +18,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
@@ -36,51 +37,54 @@ public class CallbackScheduleInfoImpl implements Callback {
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
         String activityFormatId = callbackQuery.getData().split("/")[1];
-        String scheduleId = callbackQuery.getData().split("/")[2];
-        String routeId = callbackQuery.getData().split("/")[3];
+        String eventDate = callbackQuery.getData().split("/")[2];
+        String scheduleId = callbackQuery.getData().split("/")[3];
 
         Optional<Schedule> schedule = scheduleRepository.findById(Long.parseLong(scheduleId));
 
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text("Дата и время старта: " + schedule.get().getEventDate().format(DateTimeFormatter.ofPattern("dd.MM HH:mm"))
-                        + "(" + schedule.get().getEventDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru")) + ")\n"
+                .text("Дата и время старта: " + schedule.get().getEventTime().format(DateTimeFormatter.ofPattern("HH:mm"))
+                        + " " + LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern("dd.MM.yy")) + " ("
+                        + schedule.get().getEventDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru"))
+                        + ")\n"
                         + "Формат активности: " + schedule.get().getActivity().getActivityFormat().getName() + "\n"
                         + "Тип активности: " + schedule.get().getActivity().getActivityType().getName() + "\n"
                         + "Название маршрута: " + schedule.get().getActivity().getRoute().getName() + "\n"
                         + "Точка старта: " + schedule.get().getActivity().getRoute().getStartPointName())
                 .parseMode("Markdown")
-                .replyMarkup(createInlineKeyboard(activityFormatId, scheduleId, routeId))
+                .replyMarkup(createInlineKeyboard(activityFormatId, eventDate, scheduleId))
                 .build();
     }
 
-    private InlineKeyboardMarkup createInlineKeyboard(String activityFormatId, String scheduleId, String routeId) {
+    private InlineKeyboardMarkup createInlineKeyboard(String activityFormatId, String eventDate, String scheduleId) {
         List<InlineKeyboardButton> firstRow = new ArrayList<>();
         List<InlineKeyboardButton> secondRow = new ArrayList<>();
         List<InlineKeyboardButton> thirdRow = new ArrayList<>();
 
         firstRow.add(InlineKeyboardButton.builder()
-                .text("Отменить")
+                .text("Информация о клиентах")
                 .callbackData("TEST")
                 .build());
         firstRow.add(InlineKeyboardButton.builder()
+                .text("Полное описание")
+                .callbackData("TEST")
+                .build());
+
+        secondRow.add(InlineKeyboardButton.builder()
                 .text("Изменить")
                 .callbackData("TEST")
                 .build());
+        secondRow.add(InlineKeyboardButton.builder()
+                .text("Отменить")
+                .callbackData("TEST")
+                .build());
 
-        secondRow.add(InlineKeyboardButton.builder()
-                .text("Клиенты")
-                .callbackData("TEST")
-                .build());
-        secondRow.add(InlineKeyboardButton.builder()
-                .text("Описание")
-                .callbackData("TEST")
-                .build());
 
         thirdRow.add(InlineKeyboardButton.builder()
                 .text(mainMessageProperties.getBack())
-                .callbackData(CallbackEnum.DATE_TO_ROUTE + "/" + activityFormatId + "/" + scheduleId + "/" + routeId)
+                .callbackData(CallbackEnum.DATE_TO_ROUTE + "/" + activityFormatId + "/" + eventDate + "/" + scheduleId)
                 .build());
 
         return InlineKeyboardMarkup.builder()
