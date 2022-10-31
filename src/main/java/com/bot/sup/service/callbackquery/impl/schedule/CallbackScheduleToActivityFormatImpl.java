@@ -65,7 +65,6 @@ public class CallbackScheduleToActivityFormatImpl implements Callback {
             mainKeyboard.add(rowMain);
         }
 
-
         rowSecond.add(InlineKeyboardButton.builder()
                 .text(mainMessageProperties.getBack())
                 .callbackData(CallbackEnum.SCHEDULE.toString())
