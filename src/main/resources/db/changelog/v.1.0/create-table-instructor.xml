@@ -15,12 +15,7 @@
             <column name="telegram_id" type="bigint"/>
             <column name="username" type="varchar(30)"/>
             <column name="phone_number" type="varchar"/>
-            <column name="schedule_id" type="bigint"/>
         </createTable>
-
-        <addForeignKeyConstraint baseTableName="instructor" baseColumnNames="schedule_id"
-                                 constraintName="fk_instructor_schedule_id"
-                                 referencedTableName="schedule" referencedColumnNames="id"/>
     </changeSet>
 
 </databaseChangeLog>
