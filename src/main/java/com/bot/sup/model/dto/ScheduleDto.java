@@ -6,11 +6,8 @@ import com.bot.sup.model.entity.Instructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -18,8 +15,9 @@ import java.util.List;
 public class ScheduleDto {
     private Long id;
     private Activity activity;
-    private LocalDateTime eventDate;
+    private LocalDate eventDate;
+    private LocalTime eventTime;
     private Integer participants;
-    private List<Instructor> instructor;
     private List<Client> client;
+    private List<Instructor> instructor;
 }
