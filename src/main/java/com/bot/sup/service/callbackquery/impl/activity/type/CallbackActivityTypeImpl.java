@@ -1,9 +1,8 @@
-package com.bot.sup.service.callbackquery.impl.activity;
+package com.bot.sup.service.callbackquery.impl.activity.type;
 
 import com.bot.sup.common.enums.CallbackEnum;
+import com.bot.sup.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.common.properties.message.MainMessageProperties;
-import com.bot.sup.model.entity.ActivityType;
-import com.bot.sup.repository.ActivityTypeRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,56 +13,54 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
-import static com.bot.sup.common.enums.CallbackEnum.ACTIVITY_TYPE_OPTION;
+import static com.bot.sup.common.enums.CallbackEnum.SUP_ACTIVITY_TYPE;
 
 @Service
 @RequiredArgsConstructor
-public class CallbackActivityTypeOptionImpl implements Callback {
-    private final ActivityTypeRepository activityTypeRepository;
+public class CallbackActivityTypeImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
+    private final ActivityMessageProperties activityMessageProperties;
 
-    private static final Set<CallbackEnum> ACTIVITIES = Set.of(ACTIVITY_TYPE_OPTION);
+    private static final Set<CallbackEnum> ACTIVITIES = Set.of(SUP_ACTIVITY_TYPE);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
-        String activityTypeId = callbackQuery.getData().split("/")[1];
-        Optional<ActivityType> activityType = activityTypeRepository.findById(Long.parseLong(activityTypeId));
 
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text(activityType.get().getName())
-                .replyMarkup(setUpKeyboard(activityTypeId))
+                .text("Тип активности")
+                .replyMarkup(setUpKeyboard())
                 .build();
     }
 
-    private InlineKeyboardMarkup setUpKeyboard(String activityTypeId) {
-        List<InlineKeyboardButton> firstRow = new ArrayList<>();
-        List<InlineKeyboardButton> secondRow = new ArrayList<>();
+    private InlineKeyboardMarkup setUpKeyboard(){
+        List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
-        firstRow.add(
+        buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text(mainMessageProperties.getChange())
-                        .callbackData("ACTIVITY_TYPE_CHANGE")
-                        .build());
-        firstRow.add(
+                        .text("Список типов")
+                        .callbackData("LIST_ACTIVITY_TYPE")
+                        .build()));
+        buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text(mainMessageProperties.getDelete())
-                        .callbackData("DELETE_ACTIVITY_TYPE/" + activityTypeId)
-                        .build());
-
-        secondRow.add(
+                        .text("Добавить тип")
+                        .callbackData("ADD_ACTIVITY_TYPE")
+                        .build()));
+        buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getBack())
-                        .callbackData("LIST_ACTIVITY_TYPE")
-                        .build());
+                        .callbackData("SUP_ACTIVITIES")
+                        .build()));
 
         return InlineKeyboardMarkup.builder()
-                .keyboardRow(firstRow)
-                .keyboardRow(secondRow)
+                .keyboard(buttons)
                 .build();
     }
 

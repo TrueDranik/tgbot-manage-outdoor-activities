@@ -1,10 +1,10 @@
-package com.bot.sup.service.callbackquery.impl.activity;
+package com.bot.sup.service.callbackquery.impl.activity.type;
 
 import com.bot.sup.api.telegram.handler.StateContext;
+import com.bot.sup.cache.ActivityTypeDataCache;
 import com.bot.sup.cache.MiddlewareDataCache;
-import com.bot.sup.cache.ActivityFormatDataCache;
+import com.bot.sup.common.enums.ActivityTypeStateEnum;
 import com.bot.sup.common.enums.CallbackEnum;
-import com.bot.sup.common.enums.ActivityFormatStateEnum;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,23 +15,23 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.Collection;
 import java.util.Set;
 
-import static com.bot.sup.common.enums.CallbackEnum.ADD_ACTIVITY_FORMAT;
+import static com.bot.sup.common.enums.CallbackEnum.ADD_ACTIVITY_TYPE;
 
 @Service
 @RequiredArgsConstructor
-public class CallbackAddActivityFormatImpl implements Callback {
+public class CallbackAddActivityTypeImpl implements Callback {
     private final StateContext stateContext;
-    private final ActivityFormatDataCache activityFormatDataCache;
+    private final ActivityTypeDataCache activityTypeDataCache;
     private final MiddlewareDataCache middlewareDataCache;
-    
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ADD_ACTIVITY_FORMAT);
+
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ADD_ACTIVITY_TYPE);
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
 
-        ActivityFormatStateEnum botStateEnum = ActivityFormatStateEnum.FILLING_ACTIVITY_FORMAT;
-        activityFormatDataCache.setActivityFormatCurrentState(chatId, botStateEnum);
+        ActivityTypeStateEnum botStateEnum = ActivityTypeStateEnum.FILLING_ACTIVITY_TYPE;
+        activityTypeDataCache.setActivityTypeCurrentState(chatId, botStateEnum);
         middlewareDataCache.setValidCurrentState(chatId, botStateEnum);
 
         return stateContext.processInputMessage(botStateEnum, callbackQuery.getMessage());

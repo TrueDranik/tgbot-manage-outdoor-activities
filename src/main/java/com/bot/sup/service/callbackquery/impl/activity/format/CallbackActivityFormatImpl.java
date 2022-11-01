@@ -1,9 +1,8 @@
-package com.bot.sup.service.callbackquery.impl.activity;
+package com.bot.sup.service.callbackquery.impl.activity.format;
 
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.common.properties.message.MainMessageProperties;
-import com.bot.sup.repository.ActivityTypeRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,51 +11,56 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
-import static com.bot.sup.common.enums.CallbackEnum.DELETE_ACTIVITY_TYPE;
+import static com.bot.sup.common.enums.CallbackEnum.SUP_ACTIVITY_FORMAT;
 
 @Service
 @RequiredArgsConstructor
-public class CallbackDeleteActivityTypeImpl implements Callback {
+public class CallbackActivityFormatImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
-    private final ActivityTypeRepository activityTypeRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(DELETE_ACTIVITY_TYPE);
+    public static final Set<CallbackEnum> ACTIVITIES = Set.of(SUP_ACTIVITY_FORMAT);
 
     @Override
-    public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
+    public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.getMessage().getChatId();
-        String activityId = callbackQuery.getData().split("/")[1];
-        deleteActivity(Long.parseLong(activityId));
 
-        return EditMessageText.builder().messageId(callbackQuery.getMessage().getMessageId())
-                .text(activityMessageProperties.getDeleteActivity())
+        return EditMessageText.builder()
+                .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .replyMarkup(createKeyboardForDeleteActivity())
+                .text(activityMessageProperties.getMenuActivities())
+                .replyMarkup(setUpKeyboard())
                 .build();
     }
 
-    private InlineKeyboardMarkup createKeyboardForDeleteActivity() {
+    private InlineKeyboardMarkup setUpKeyboard() {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
-        buttons.add(Collections.singletonList(
+        buttons.add(List.of(
+                InlineKeyboardButton.builder()
+                        .text(activityMessageProperties.getListActivityFormat())
+                        .callbackData("LIST_ACTIVITY_FORMAT")
+                        .build()));
+        buttons.add(List.of(
+                InlineKeyboardButton.builder()
+                        .text(activityMessageProperties.getAddActivityFormat())
+                        .callbackData("ADD_ACTIVITY_FORMAT")
+                        .build()));
+        buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getBack())
-                        .callbackData("SUP_ACTIVITY_TYPE")
+                        .callbackData("SUP_ACTIVITIES")
                         .build()));
 
         return InlineKeyboardMarkup.builder()
                 .keyboard(buttons)
                 .build();
     }
-
-    private void deleteActivity(Long chatId) {
-        activityTypeRepository.deleteById(chatId);
-    }
-
 
     @Override
     public Collection<CallbackEnum> getSupportedActivities() {

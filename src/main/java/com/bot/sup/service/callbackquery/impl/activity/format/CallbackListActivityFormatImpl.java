@@ -1,4 +1,4 @@
-package com.bot.sup.service.callbackquery.impl.activity;
+package com.bot.sup.service.callbackquery.impl.activity.format;
 
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.ActivityMessageProperties;
