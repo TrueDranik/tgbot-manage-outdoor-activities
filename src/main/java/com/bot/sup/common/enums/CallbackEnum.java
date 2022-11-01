@@ -12,6 +12,9 @@ public enum CallbackEnum {
     SCHEDULE_INFO,
     SCHEDULE_DESCRIPTION,
 
+    SCHEDULE_CANCEL,
+    SCHEDULE_CANCEL_NO,
+    SCHEDULE_CANCEL_YES,
     // ИНСТРУКТОРЫ
     INSTRUCTORS,
     LIST_INSTRUCTORS,
