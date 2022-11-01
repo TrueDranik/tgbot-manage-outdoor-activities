@@ -61,7 +61,7 @@ public class CallbackScheduleDescriptionImpl implements Callback {
         Activity activity = schedule.get().getActivity();
         Route route = schedule.get().getActivity().getRoute();
 
-        List<String> descriptions = new LinkedList<>();
+        List<String> descriptions = new ArrayList<>();
         descriptions.add("Дата и время старта: "
                 + schedule.get().getEventTime().format(DateTimeFormatter.ofPattern("HH:mm")) + " "
                 + schedule.get().getEventDate().format(DateTimeFormatter.ofPattern("dd.MM.yy")) + " ("
