@@ -2,8 +2,6 @@ package com.bot.sup.service.callbackquery.impl.schedule;
 
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
-import com.bot.sup.model.entity.Activity;
-import com.bot.sup.model.entity.Route;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.repository.RouteRepository;
@@ -69,7 +67,7 @@ public class CallbackScheduleInfoImpl implements Callback {
                 .build());
         firstRow.add(InlineKeyboardButton.builder()
                 .text("Полное описание")
-                .callbackData("TEST")
+                .callbackData(CallbackEnum.SCHEDULE_DESCRIPTION + "/" + activityFormatId + "/" + eventDate + "/" + scheduleId)
                 .build());
 
         secondRow.add(InlineKeyboardButton.builder()
