@@ -76,7 +76,7 @@ public class CallbackScheduleInfoImpl implements Callback {
                 .build());
         secondRow.add(InlineKeyboardButton.builder()
                 .text("Отменить")
-                .callbackData(CallbackEnum.SCHEDULE_CANCEL + "/" + activityFormatId + "/" + eventDate + "/" + scheduleId)
+                .callbackData(CallbackEnum.SCHEDULE_CANCEL + "/" + scheduleId)
                 .build());
 
         thirdRow.add(InlineKeyboardButton.builder()

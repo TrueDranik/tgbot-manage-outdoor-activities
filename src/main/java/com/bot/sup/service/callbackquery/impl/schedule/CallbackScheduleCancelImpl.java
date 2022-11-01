@@ -24,21 +24,19 @@ public class CallbackScheduleCancelImpl implements Callback {
 
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
-        String activityFormatId = callbackQuery.getData().split("/")[1];
-        String eventDate = callbackQuery.getData().split("/")[2];
-        String scheduleId = callbackQuery.getData().split("/")[3];
+        String scheduleId = callbackQuery.getData().split("/")[1];
 
         Optional<Schedule> schedule = scheduleRepository.findById(Long.parseLong(scheduleId));
 
         return SendMessage.builder()
                 .chatId(callbackQuery.getMessage().getChatId())
-                .text("Вы уверены, что хотите отменить собитыие *" + schedule.get().getActivity().getName() + "*?")
+                .text("Вы уверены, что хотите отменить событие\n*" + schedule.get().getActivity().getName() + "*?")
                 .parseMode("Markdown")
-                .replyMarkup(createInlineKeyboard(activityFormatId, eventDate, scheduleId))
+                .replyMarkup(createInlineKeyboard(scheduleId))
                 .build();
     }
 
-    private InlineKeyboardMarkup createInlineKeyboard(String activityFormatId, String eventDate, String scheduleId) {
+    private InlineKeyboardMarkup createInlineKeyboard(String scheduleId) {
         List<InlineKeyboardButton> firstRow = new ArrayList<>();
 
         firstRow.add(InlineKeyboardButton.builder()

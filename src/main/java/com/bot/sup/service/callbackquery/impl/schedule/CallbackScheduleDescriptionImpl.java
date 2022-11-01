@@ -60,31 +60,30 @@ public class CallbackScheduleDescriptionImpl implements Callback {
         Optional<Schedule> schedule = scheduleRepository.findById(Long.parseLong(scheduleId));
         Activity activity = schedule.get().getActivity();
         Route route = schedule.get().getActivity().getRoute();
-        String enter = "\n";
 
-        String eventDateTime = "Дата и время старта: "
+        List<String> descriptions = new LinkedList<>();
+        descriptions.add("Дата и время старта: "
                 + schedule.get().getEventTime().format(DateTimeFormatter.ofPattern("HH:mm")) + " "
                 + schedule.get().getEventDate().format(DateTimeFormatter.ofPattern("dd.MM.yy")) + " ("
                 + schedule.get().getEventDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru"))
-                + ")" + enter;
-        String name = "Имя активности: " + activity.getName() + enter;
-        String seasonality = "Сезонность: " + activity.getSeasonality() + enter;
-        String activityFormat = "Формат активности: " + activity.getActivityFormat().getName() + enter;
-        String activityType = "Тип активности: " + activity.getActivityType().getName() + enter;
-        String description = "Описание: " + activity.getDescription() + enter;
-        String routeName = "Название маршрута: " + route.getName() + enter;
-        String routeStartPointName = "Точка старта: " + route.getStartPointName() + enter;
-        String routeFinishPointName = "Точка финиша: " + route.getFinishPointName() + enter;
-        String routeLink = "Ссылка на карту: " + route.getMapLink() + enter;
-        String routeLength = "Длина маршрута: " + route.getLength() + enter;
-        String duration = "Продолжительность: " + activity.getDuration() + enter;
-        String age = "Возрастное ограничение: " + activity.getAge() + enter;
-        String complexity = "Сложность: " + activity.getComplexity() + enter;
-        String price = "Стоимость: " + activity.getPrice() + enter;
-        String participants = "Количество мест: " + schedule.get().getParticipants() + enter;
+                + ")");
+        descriptions.add("Имя активности: " + activity.getName());
+        descriptions.add("Сезонность: " + activity.getSeasonality());
+        descriptions.add("Формат активности: " + activity.getActivityFormat().getName());
+        descriptions.add("Тип активности: " + activity.getActivityType().getName());
+        descriptions.add("Описание: " + activity.getDescription());
+        descriptions.add("Название маршрута: " + route.getName());
+        descriptions.add("Точка старта: " + route.getStartPointName());
+        descriptions.add("Точка финиша: " + route.getFinishPointName());
+        descriptions.add("Ссылка на карту: " + route.getMapLink());
+        descriptions.add("Длина маршрута: " + route.getLength());
+        descriptions.add("Продолжительность: " + activity.getDuration());
+        descriptions.add("Возрастное ограничение: " + activity.getAge());
+        descriptions.add("Сложность: " + activity.getComplexity());
+        descriptions.add("Стоимость: " + activity.getPrice());
+        descriptions.add("Количество мест: " + schedule.get().getParticipants());
 
-        return eventDateTime + name + seasonality + activityFormat + activityType + description + routeName + routeStartPointName
-                + routeFinishPointName + routeLink + routeLength + duration + age + complexity + price + participants;
+        return String.join("\n", descriptions);
     }
 
     @Override
