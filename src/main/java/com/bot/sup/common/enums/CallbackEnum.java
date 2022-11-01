@@ -10,6 +10,7 @@ public enum CallbackEnum {
     SCHEDULE_WEBAPP,
     ACTIVITYFORMAT_TO_DATE,
     SCHEDULE_INFO,
+    SCHEDULE_DESCRIPTION,
 
     // ИНСТРУКТОРЫ
     INSTRUCTORS,
