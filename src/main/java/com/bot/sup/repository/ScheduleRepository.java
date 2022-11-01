@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @Repository
@@ -24,4 +23,8 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             "INNER JOIN Route r on a.route.id = r.id " +
             "WHERE a.activityFormat.id = ?1 and s.eventDate = ?2")
     List<Schedule> selectScheduleByActivityFormatIdAndEventDate(Long id, LocalDate eventDate);
+
+    @Modifying
+    @Query("DELETE FROM Schedule s WHERE s.id = ?1")
+    void deleteScheduleByIdQuery(Long id);
 }
