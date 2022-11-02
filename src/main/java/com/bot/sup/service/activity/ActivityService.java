@@ -12,9 +12,9 @@ public interface ActivityService {
 
     Activity getActivityById(Long id);
 
-    void createActivity(ActivityCreateDto createDto);
+    Activity createActivity(ActivityCreateDto createDto);
 
-    Activity updateActivity(Long id, Activity activity);
+    Activity updateActivity(Long id, ActivityCreateDto activityCreateDto);
 
     void deleteActivity(Long id);
 }
