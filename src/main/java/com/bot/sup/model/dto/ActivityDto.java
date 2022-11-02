@@ -6,6 +6,8 @@ import com.bot.sup.model.entity.Route;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 public class ActivityDto {
@@ -19,5 +21,5 @@ public class ActivityDto {
     private String duration;
     private String age;
     private String complexity;
-    private String price;
+    private BigDecimal price;
 }
