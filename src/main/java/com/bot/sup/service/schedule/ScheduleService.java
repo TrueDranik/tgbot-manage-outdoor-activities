@@ -12,9 +12,9 @@ public interface ScheduleService {
 
     Schedule getScheduleById(Long id);
 
-    void createSchedule(ScheduleCreateDto createDto);
+    Schedule createSchedule(ScheduleCreateDto createDto);
 
-    Schedule updateSchedule(Long id, Schedule schedule);
+    Schedule updateSchedule(Long id, ScheduleCreateDto scheduleCreateDto);
 
     void deleteSchedule(Long id);
 }

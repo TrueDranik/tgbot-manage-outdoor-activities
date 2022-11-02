@@ -1,12 +1,14 @@
 package com.bot.sup.model.dto;
 
-import com.bot.sup.model.entity.Activity;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
 public class ScheduleCreateDto {
-    private Activity activity;
-    private LocalDateTime eventDate;
+    private Long activityId;
+    private LocalDate eventDate;
+    private LocalTime eventTime;
+    private Integer participants;
 }
