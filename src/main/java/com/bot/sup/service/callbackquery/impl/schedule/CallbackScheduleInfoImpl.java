@@ -3,8 +3,6 @@ package com.bot.sup.service.callbackquery.impl.schedule;
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.Schedule;
-import com.bot.sup.repository.ActivityRepository;
-import com.bot.sup.repository.RouteRepository;
 import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +12,7 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.time.LocalDate;
@@ -24,8 +23,6 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class CallbackScheduleInfoImpl implements Callback {
-    private final ActivityRepository activityRepository;
-    private final RouteRepository routeRepository;
     private final ScheduleRepository scheduleRepository;
     private final MainMessageProperties mainMessageProperties;
 
@@ -63,7 +60,7 @@ public class CallbackScheduleInfoImpl implements Callback {
 
         firstRow.add(InlineKeyboardButton.builder()
                 .text("Информация о клиентах")
-                .callbackData("TEST")
+                .callbackData(CallbackEnum.SCHEDULE_ALL_CLIENT_INFO + "/" + activityFormatId + "/" + eventDate + "/" + scheduleId)
                 .build());
         firstRow.add(InlineKeyboardButton.builder()
                 .text("Полное описание")
@@ -72,7 +69,7 @@ public class CallbackScheduleInfoImpl implements Callback {
 
         secondRow.add(InlineKeyboardButton.builder()
                 .text("Изменить")
-                .callbackData("TEST")
+                .webApp(new WebAppInfo("https://telegram.org/"))
                 .build());
         secondRow.add(InlineKeyboardButton.builder()
                 .text("Отменить")

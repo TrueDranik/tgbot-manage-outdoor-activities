@@ -2,12 +2,10 @@ package com.bot.sup.service;
 
 import com.bot.sup.api.telegram.command.BaseCommand;
 import com.bot.sup.api.telegram.handler.StateContext;
-import com.bot.sup.cache.ActivityTypeDataCache;
-import com.bot.sup.cache.InstructorDataCache;
-import com.bot.sup.cache.MiddlewareDataCache;
-import com.bot.sup.cache.ActivityFormatDataCache;
+import com.bot.sup.cache.*;
 import com.bot.sup.common.enums.ActivityTypeStateEnum;
 import com.bot.sup.common.CallbackMap;
+import com.bot.sup.common.enums.ClientRecordStateEnum;
 import com.bot.sup.common.enums.InstructorStateEnum;
 import com.bot.sup.common.enums.ActivityFormatStateEnum;
 import com.bot.sup.common.properties.TelegramProperties;
@@ -39,6 +37,7 @@ public class Bot extends TelegramLongPollingBot {
     private final InstructorDataCache instructorDataCache;
     private final ActivityFormatDataCache activityFormatDataCache;
     private final ActivityTypeDataCache activityTypeDataCache;
+    private final ClientRecordDataCache clientRecordDataCache;
     private final StateContext stateContext;
     private final List<BaseCommand> commands;
     private BotApiMethod<?> replyMessage;
@@ -51,6 +50,7 @@ public class Bot extends TelegramLongPollingBot {
         InstructorStateEnum instructorStateEnum;
         ActivityFormatStateEnum activityFormatStateEnum;
         ActivityTypeStateEnum activityTypeStateEnum;
+        ClientRecordStateEnum clientRecordStateEnum;
 
         if (update.hasCallbackQuery()) {
             Callback callback = callbackMap.getCallback(update.getCallbackQuery().getData().split("/")[0]);
@@ -88,6 +88,13 @@ public class Bot extends TelegramLongPollingBot {
                 log.info("state = " + activityTypeStateEnum);
 
                 replyMessage = stateContext.processInputMessage(activityTypeStateEnum, message);
+                execute(replyMessage);
+            } else if (middlewareDataCache.getCurrentData(chatId) instanceof ClientRecordStateEnum){
+                clientRecordStateEnum = clientRecordDataCache.getClientRecordCurrentState(chatId);
+
+                log.info("state = " + clientRecordStateEnum);
+
+                replyMessage = stateContext.processInputMessage(clientRecordStateEnum, message);
                 execute(replyMessage);
             }
         }
