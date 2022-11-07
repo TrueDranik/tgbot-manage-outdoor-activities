@@ -5,7 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "client")
@@ -33,4 +33,12 @@ public class Client {
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @ManyToMany
+    @JoinTable(
+            name = "schedule_client",
+            joinColumns = @JoinColumn(name = "client_id"),
+            inverseJoinColumns = @JoinColumn(name = "schedule_id")
+    )
+    private Set<Schedule> schedule;
 }
