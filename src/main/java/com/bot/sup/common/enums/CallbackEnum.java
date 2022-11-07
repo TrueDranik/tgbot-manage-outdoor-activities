@@ -19,6 +19,7 @@ public enum CallbackEnum {
     SCHEDULE_CLIENT_CANCEL,
     CLIENT_CANCEL_YES,
     CLIENT_CANCEL_NO,
+    CLIENT_RECORD,
     // ИНСТРУКТОРЫ
     INSTRUCTORS,
     LIST_INSTRUCTORS,
