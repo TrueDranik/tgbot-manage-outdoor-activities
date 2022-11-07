@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "instructor")
@@ -22,6 +23,9 @@ public class Instructor {
 
     @Column(name = "telegram_id", unique = true, length = 30)
     private Long telegramId;
+
+    @Column(name = "username")
+    private String username;
 
     @Column(name = "phone_number")
     private String phoneNumber;

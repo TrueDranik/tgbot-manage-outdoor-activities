@@ -7,12 +7,9 @@ import lombok.Setter;
 @Setter
 public class InstructorDto {
     private Long id;
-
     private String firstName;
-
     private String lastName;
-
     private Long telegramId;
-
+    private String username;
     private String phoneNumber;
 }

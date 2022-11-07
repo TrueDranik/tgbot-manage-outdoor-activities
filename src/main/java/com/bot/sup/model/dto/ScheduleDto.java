@@ -1,17 +1,23 @@
 package com.bot.sup.model.dto;
 
 import com.bot.sup.model.entity.Activity;
+import com.bot.sup.model.entity.Client;
+import com.bot.sup.model.entity.Instructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Set;
 
 @Getter
 @Setter
 public class ScheduleDto {
     private Long id;
-
-    private ActivityDto activityDto;
-
-    private LocalDateTime eventDate;
+    private Activity activity;
+    private LocalDate eventDate;
+    private LocalTime eventTime;
+    private Integer participants;
+    private Set<Client> client;
+    private Set<Instructor> instructor;
 }

@@ -9,14 +9,10 @@ import java.time.LocalDate;
 @Setter
 public class ClientDto {
     private Long id;
-
     private String firstName;
-
     private String lastName;
-
     private LocalDate birthDate;
-
     private Long telegramId;
-
+    private String username;
     private String phoneNumber;
 }

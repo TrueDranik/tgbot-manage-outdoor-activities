@@ -1,11 +1,11 @@
 package com.bot.sup.api.telegram.handler.registration;
 
 import com.bot.sup.cache.InstructorDataCache;
-import com.bot.sup.model.common.InstructorStateEnum;
-import com.bot.sup.model.common.properties.message.InstructorMessageProperties;
+import com.bot.sup.common.enums.InstructorStateEnum;
+import com.bot.sup.common.properties.message.InstructorMessageProperties;
 import com.bot.sup.model.entity.Instructor;
 import com.bot.sup.repository.InstructorRepository;
-import com.bot.sup.service.InstructorService;
+import com.bot.sup.service.instructor.InstructorService;
 import com.bot.sup.service.MessageService;
 import com.bot.sup.validation.Validation;
 import lombok.RequiredArgsConstructor;
@@ -124,12 +124,20 @@ public class FillingInstructor implements HandleRegistration {
             }
 
             instructor.setTelegramId(inputMessage.getForwardFrom().getId());
+            if (inputMessage.getForwardFrom().getUserName() != null){
+                instructor.setUsername(inputMessage.getForwardFrom().getUserName());
+            }
+
+            log.info("instructor TelegramId = " + inputMessage.getForwardFrom().getId());
+            log.info("User name = " + inputMessage.getForwardFrom().getUserName());
 
             if (forUpdate) {
                 instructorDataCache.removeInstructorForUpdate(chatId);
             } else {
                 instructorService.save(instructor);
             }
+
+            //instructorDataCache.removeInstructorCurrentState(chatId);
 
             replyToUser = messageService.getReplyMessageWithKeyboard(chatId, instructorMessageProperties.getRegistrationDone() +
                     instructorInfo(instructor), keyboardMenu());
@@ -147,7 +155,7 @@ public class FillingInstructor implements HandleRegistration {
     private String instructorInfo(Instructor instructor) {
         return "ФИ: " + instructor.getFirstName() + " " + instructor.getLastName()
                 + "\nНомер телефона: " + instructor.getPhoneNumber()
-                + "\nTelegramId: " + instructor.getTelegramId();
+                + "\nИмя пользователя: " +instructor.getUsername();
     }
 
     private InlineKeyboardMarkup keyboardMenu() {

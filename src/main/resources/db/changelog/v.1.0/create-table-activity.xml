@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="create-table-activity" author="Ruslan">
+        <createTable tableName="activity">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="seasonality" type="varchar"/>
+            <column name="activity_format_id" type="bigint"/>
+            <column name="activity_type_id" type="bigint"/>
+            <column name="description" type="varchar(3000)"/>
+            <column name="route_id" type="bigint"/>
+            <column name="duration" type="varchar(30)"/>
+            <column name="age" type="varchar(10)"/>
+            <column name="complexity" type="varchar(30)"/>
+            <column name="price" type="decimal"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="activity" baseColumnNames="activity_format_id"
+                                 constraintName="fk_activity_activity_format_id"
+                                 referencedTableName="activity_format" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="activity" baseColumnNames="activity_type_id"
+                                 constraintName="fk_activity_activity_type_id"
+                                 referencedTableName="activity_type" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="activity" baseColumnNames="route_id"
+                                 constraintName="fk_activity_route_id"
+                                 referencedTableName="route" referencedColumnNames="id"/>
+        
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,6 +1,6 @@
 package com.bot.sup.cache;
 
-import com.bot.sup.model.common.InstructorStateEnum;
+import com.bot.sup.common.enums.InstructorStateEnum;
 import com.bot.sup.model.entity.Instructor;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +19,10 @@ public class InstructorDataCache {
 
     public InstructorStateEnum getInstructorCurrentState(Long chatId) {
         return instructorState.getOrDefault(chatId, InstructorStateEnum.FILLING_INSTRUCTOR);
+    }
+
+    public void removeInstructorCurrentState(Long chatId){
+        instructorState.remove(chatId);
     }
 
     public Instructor getInstructorProfileData(Long chatId) {

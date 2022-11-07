@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <changeSet id="create-table-schedule-to-instructor" author="Ruslan">
+        <createTable tableName="schedule_instructor">
+            <column name="schedule_id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_schedule_instructor"/>
+            </column>
+            <column name="instructor_id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_instructor_schedule"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="schedule_instructor" baseColumnNames="schedule_id"
+                                 constraintName="fk_schedule_instructor"
+                                 referencedTableName="schedule" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="schedule_instructor" baseColumnNames="instructor_id"
+                                 constraintName="fk_instructor_schedule"
+                                 referencedTableName="instructor" referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
