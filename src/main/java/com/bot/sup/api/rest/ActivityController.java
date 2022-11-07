@@ -35,7 +35,7 @@ public class ActivityController {
 
     @PostMapping
     public ResponseEntity<Activity> createActivity(@RequestBody ActivityCreateDto createDto){
-        return new ResponseEntity<>(activityService.createActivity(createDto), HttpStatus.OK);
+        return new ResponseEntity<>(activityService.createActivity(createDto), HttpStatus.OK); //TODO изменить статусы на 201
     }
 
     @PutMapping("{id}")
