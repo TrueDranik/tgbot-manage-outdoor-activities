@@ -16,4 +16,6 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     @Modifying
     @Query(nativeQuery = true, value = "DELETE FROM schedule_client sc WHERE sc.client_id = ?1")
     void deleteClientFromSchedule(Long id);
+
+    boolean existsByTelegramId(Long chatId);
 }
