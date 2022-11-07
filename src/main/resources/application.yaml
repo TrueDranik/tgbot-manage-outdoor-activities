@@ -22,7 +22,6 @@ spring:
           query:
             timeout: '0'
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    ### lock  ###
   datasource:
     password: postgres
     driver-class-name: org.postgresql.Driver
@@ -30,7 +29,6 @@ spring:
       maximum-pool-size: '5'
     username: postgres
     url: jdbc:postgresql://10.120.10.6:5433/postgres_sub
-    ### end  ###
   jackson:
     serialization:
       FAIL_ON_EMPTY_BEANS: 'false'
