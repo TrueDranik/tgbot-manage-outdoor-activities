@@ -72,7 +72,7 @@ public class CallbackScheduleAllClientInfoImpl implements Callback {
 
         secondRow.add(InlineKeyboardButton.builder()
                 .text("Записать клиента")
-                .callbackData("TEST")
+                .callbackData(CallbackEnum.CLIENT_RECORD.toString())
                 .build());
         secondRow.add(InlineKeyboardButton.builder()
                 .text(mainMessageProperties.getBack())
