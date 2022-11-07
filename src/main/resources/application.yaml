@@ -1,8 +1,8 @@
 telegram:
   #      url:
   #        webapp: https://192.168.110.84:3000/
-  nameBot: '@SupAdminTest_bot'
-  tokenBot: 5655610927:AAG58hHGVMC9OdMkS2lfRYa5DbzxgvXBOa4
+  nameBot: '@sup31_bot'
+  tokenBot: 5617783598:AAEVI_edk9ptSp6aFrjRjZ8XeMMdn9m3PEc
 
 spring:
   liquibase:
@@ -29,7 +29,7 @@ spring:
     hikari:
       maximum-pool-size: '5'
     username: postgres
-    url: jdbc:postgresql://localhost:5432/SupBotAdmin
+    url: jdbc:postgresql://10.120.10.6:5433/postgres_sub
     ### end  ###
   jackson:
     serialization:
