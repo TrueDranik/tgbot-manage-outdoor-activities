@@ -35,15 +35,14 @@ public class CallbackClientInfoImpl implements Callback {
         String clientId = callbackQuery.getData().split("/")[4];
 
         Optional<Client> client = clientRepository.findById(Long.valueOf(clientId));
-        Optional<Booking> invitedUsers = bookingRepository.invitedUsers(Long.valueOf(clientId));
+        Optional<Booking> invitedUsers = bookingRepository.findBookingByClient_Id(Long.valueOf(clientId));
 
-        String userId = String.format("<a href=\"tg://user?id=%d\">%s %s</a>", client.get().getTelegramId(),
-                client.get().getFirstName(), client.get().getLastName());
+        String userId = String.format("<a href=\"tg://user?id=%s\"> (профиль)</a>", client.get().getTelegramId().toString());
 
         return EditMessageText.builder()
                 .chatId(callbackQuery.getMessage().getChatId())
                 .messageId(callbackQuery.getMessage().getMessageId())
-                .text(userId + "\n"
+                .text(client.get().getFirstName() + client.get().getLastName() + userId + "\n"
                         + client.get().getPhoneNumber() + "\n"
                         + "Взял с собой друзей: " + invitedUsers.get().getInvitedUsers())
                 .parseMode("HTML")

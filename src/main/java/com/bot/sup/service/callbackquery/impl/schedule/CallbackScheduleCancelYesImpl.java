@@ -32,7 +32,7 @@ public class CallbackScheduleCancelYesImpl implements Callback {
 
         Optional<Schedule> schedule = scheduleRepository.findById(Long.parseLong(scheduleId));
 
-        scheduleRepository.deleteScheduleByIdQuery(Long.parseLong(scheduleId));
+        scheduleRepository.deleteScheduleById(Long.parseLong(scheduleId));
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(callbackQuery.getMessage().getChatId())
