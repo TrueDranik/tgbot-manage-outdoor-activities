@@ -1,5 +1,6 @@
 package com.bot.sup.api.rest;
 
+import com.bot.sup.model.ActivityRequestParams;
 import com.bot.sup.model.dto.ActivityCreateDto;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.service.activity.ActivityService;
@@ -26,19 +27,16 @@ public class ActivityController {
 
     @GetMapping
     @ApiOperation("Получить все активности")
-    public ResponseEntity<List<Activity>> getAllActivity() {
-        return new ResponseEntity<>(activityService.getAllActivity(), HttpStatus.OK);
+    public ResponseEntity<List<Activity>> getAllActivity(ActivityRequestParams params) {
+        return new ResponseEntity<>(activityService.getAllActivity(params), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Activity> getActivityById(@PathVariable(name = "id") Long id) {
         Optional<Activity> activity = Optional.ofNullable(activityService.getActivityById(id));
 
-        if (activity.isPresent()) {
-            return new ResponseEntity<>(activity.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+        return activity.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
     @PostMapping
