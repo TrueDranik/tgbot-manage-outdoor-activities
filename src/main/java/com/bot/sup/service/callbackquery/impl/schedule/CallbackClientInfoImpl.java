@@ -44,7 +44,7 @@ public class CallbackClientInfoImpl implements Callback {
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .text(client.get().getFirstName() + client.get().getLastName() + userId + "\n"
                         + client.get().getPhoneNumber() + "\n"
-                        + "Взял с собой друзей: " + invitedUsers.get().getInvitedUsers())
+                        + (invitedUsers.map(booking -> "Взял с собой друзей: " + booking.getInvitedUsers()).orElse("")))
                 .parseMode("HTML")
                 .replyMarkup(createInlineKeyboard(client, activityFormatId, eventDate, scheduleId))
                 .build();

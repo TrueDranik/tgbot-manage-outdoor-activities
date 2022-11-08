@@ -27,8 +27,10 @@ public class CallbackClientRecordImpl implements Callback {
     @Override
     public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
+        String scheduleId = callbackQuery.getData().split("/")[1];
         ClientRecordStateEnum botStateEnum = ClientRecordStateEnum.FILLING_CLIENT;
 
+        clientRecordDataCache.setScheduleState(chatId, Long.valueOf(scheduleId));
         clientRecordDataCache.setClientRecrodCurrentState(chatId, botStateEnum);
         middlewareDataCache.setValidCurrentState(chatId, botStateEnum);
 
