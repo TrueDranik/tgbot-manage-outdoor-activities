@@ -37,7 +37,7 @@ public class CallbackActivityFormatToDateImpl implements Callback {
         String activityFormatId = callbackQuery.getData().split("/")[1];
 
         Optional<ActivityFormat> activityFormat = activityFormatRepository.findById(Long.parseLong(activityFormatId));
-        List<Schedule> eventDate = scheduleRepository.selectScheduleByActivityFormatId(Long.valueOf(activityFormatId));
+        List<Schedule> eventDate = scheduleRepository.getSchedulesByActivity_ActivityFormat_Id(Long.valueOf(activityFormatId));
 
         if (generateKeyboardWithSchedule(eventDate, activityFormatId).getKeyboard().size() <= 1) {
             return EditMessageText.builder()

@@ -11,11 +11,7 @@ import java.util.List;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    List<Schedule> findByEventDate(LocalDate eventDate);
-
-    @Modifying
-    @Query("SELECT s FROM Schedule s WHERE s.activity.activityFormat.id = ?1")
-    List<Schedule> selectScheduleByActivityFormatId(Long id);
+    List<Schedule> getSchedulesByActivity_ActivityFormat_Id(Long id);
 
     @Modifying
     @Query("SELECT s FROM Schedule s " +
@@ -24,7 +20,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             "WHERE a.activityFormat.id = ?1 and s.eventDate = ?2")
     List<Schedule> selectScheduleByActivityFormatIdAndEventDate(Long id, LocalDate eventDate);
 
-    @Modifying
-    @Query("DELETE FROM Schedule s WHERE s.id = ?1")
-    void deleteScheduleByIdQuery(Long id);
+    void deleteScheduleById(Long id);
 }
