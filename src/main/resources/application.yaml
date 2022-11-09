@@ -43,7 +43,7 @@ springfox:
 
 #server:
 #  servlet:
-#    context-path: "/app-name"
+#    context-path: "/**"
 #server:
 #  ssl:
 #    key-store-type: PKCS12

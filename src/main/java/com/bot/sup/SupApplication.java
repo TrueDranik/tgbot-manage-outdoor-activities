@@ -13,7 +13,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 @SpringBootApplication
 @EnableConfigurationProperties({TelegramProperties.class, ScheduleMessageProperties.class,
         InstructorMessageProperties.class, ActivityMessageProperties.class, MainMessageProperties.class})
-public class SupApplication extends SpringBootServletInitializer {
+public class SupApplication /*extends SpringBootServletInitializer*/ {
     public static void main(String[] args) {
         SpringApplication.run(SupApplication.class, args);
     }
