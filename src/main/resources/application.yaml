@@ -36,10 +36,10 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
-springfox:
-  documentation:
-    swagger-ui:
-      base-url: tgsupbot.reliab.tech/
+#springfox:
+#  documentation:
+#    swagger-ui:
+#      base-url: tgsupbot.reliab.tech/
 
 #server:
 #  servlet:
