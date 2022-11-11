@@ -1,9 +1,11 @@
 package com.bot.sup.service.activity.impl;
 
 import com.bot.sup.mapper.ActivityMapper;
+import com.bot.sup.model.ActivityRequestParams;
 import com.bot.sup.model.dto.ActivityCreateDto;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.repository.ActivityRepository;
+import com.bot.sup.repository.specification.ActivitySpecification;
 import com.bot.sup.service.activity.ActivityService;
 import com.bot.sup.service.activity.format.ActivityFormatService;
 import com.bot.sup.service.activity.type.ActivityTypeService;
@@ -28,14 +30,8 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public List<Activity> getAllActivity() {
-        List<Activity> activities = activityRepository.findAll();
-
-        if (activities.isEmpty()) {
-            throw new EntityNotFoundException("Activities not found");
-        }
-
-        return activities;
+    public List<Activity> getAllActivity(ActivityRequestParams params) {
+        return activityRepository.findAll(new ActivitySpecification(params));
     }
 
     @Override

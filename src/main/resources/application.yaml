@@ -36,17 +36,13 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
-#springfox:
-#  documentation:
-#    swagger-ui:
-#      base-url: tgsupbot.reliab.tech/
+springdoc:
+  swagger-ui:
+    enabled: true
 
-#server:
-#  servlet:
-#    context-path: "/**"
-#server:
-#  ssl:
-#    key-store-type: PKCS12
-#    key-store-password: changeit
-#    enabled: true
-#    key-store: classpath:java_ssl.p12
+server:
+  ssl:
+    key-store-type: PKCS12
+    key-store-password: changeit
+    enabled: true
+    key-store: classpath:java_ssl.p12
