@@ -36,6 +36,11 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
+springdoc:
+  swagger-ui:
+    enabled: true
+#    path: /swagger-ui.html
+
 server:
   ssl:
     key-store-type: PKCS12
