@@ -44,7 +44,7 @@ springdoc:
     path: /swagger-ui.html
     csrf:
       enabled: false
-    config-url: /v3/api-docs/swagger-config
+#    config-url: /v3/api-docs/swagger-config
 
 server:
   error:
