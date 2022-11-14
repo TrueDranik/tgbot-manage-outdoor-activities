@@ -39,7 +39,7 @@ spring:
 springdoc:
   swagger-ui:
     enabled: true
-#    path: /swagger-ui.html
+    path: admin/api/swagger-ui.html
 
 server:
   ssl:
