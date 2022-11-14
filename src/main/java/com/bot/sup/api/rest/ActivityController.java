@@ -20,7 +20,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RequiredArgsConstructor
 @RestController("activityController")
-@RequestMapping(value = "/admin/api/activity")
+@RequestMapping(value = "/activity")
 @Tag(name = "Активности", description = "Работа с активностями")
 public class ActivityController {
     private final ActivityService activityService;
