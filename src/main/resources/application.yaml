@@ -37,11 +37,11 @@ spring:
       matching-strategy: ant_path_matcher
 
 springdoc:
-  api-docs:
-    path: /v3/open-api
+#  api-docs:
+#    path: /v3/open-api
   swagger-ui:
     enabled: true
-    path: /swagger-ui.html
+    path: admin/api/swagger-ui.html
     csrf:
       enabled: false
 
@@ -50,8 +50,9 @@ server:
     whitelabel:
       enabled: false
   forward-headers-strategy: framework
-  servlet:
-    context-path: /admin/api
+#  servlet:
+#    context-path: /admin/api
+
 
 #server:
 #  ssl:
