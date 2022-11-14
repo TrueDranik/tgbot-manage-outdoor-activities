@@ -37,13 +37,14 @@ spring:
       matching-strategy: ant_path_matcher
 
 springdoc:
-#  api-docs:
-#    path: /v3/open-api
+  api-docs:
+    path: admin/api/v3/api-docs
   swagger-ui:
     enabled: true
     path: admin/api/swagger-ui.html
     csrf:
       enabled: false
+    config-url: admin/api/v3/api-docs/swagger-config
 
 server:
   error:
