@@ -44,6 +44,9 @@ springdoc:
     path: admin/api/swagger-ui.html
 
 server:
+  error:
+    whitelabel:
+      enabled: false
   forward-headers-strategy: framework
 
 #server:
