@@ -38,10 +38,10 @@ spring:
 
 springdoc:
   api-docs:
-    path: /v3/open-api
+    path: admin/api/v3/open-api
   swagger-ui:
     enabled: true
-    path: /swagger-ui.html
+    path: admin/api/swagger-ui.html
 
 server:
   error:
