@@ -39,25 +39,25 @@ public class CallbackActivityFormatOptionImpl implements Callback {
                 .build();
     }
 
-    private InlineKeyboardMarkup generateKeyboardWithActivity(String activityId) {
+    private InlineKeyboardMarkup generateKeyboardWithActivity(String activityFormatId) {
         List<InlineKeyboardButton> firstRow = new ArrayList<>();
         List<InlineKeyboardButton> secondRow = new ArrayList<>();
 
         firstRow.add(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getChange())
-                        .callbackData("ACTIVITY_FORMAT_CHANGE")
+                        .callbackData(CallbackEnum.ACTIVITY_FORMAT_CHANGE + "/" + activityFormatId)
                         .build());
         firstRow.add(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getDelete())
-                        .callbackData("DELETE_ACTIVITY_FORMAT/" + activityId)
+                        .callbackData(CallbackEnum.DELETE_ACTIVITY_FORMAT + "/" + activityFormatId)
                         .build());
 
         secondRow.add(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getBack())
-                        .callbackData("LIST_ACTIVITY_FORMAT")
+                        .callbackData(CallbackEnum.LIST_ACTIVITY_FORMAT.toString())
                         .build());
 
         return InlineKeyboardMarkup.builder()
