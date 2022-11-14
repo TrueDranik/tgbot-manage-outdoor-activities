@@ -38,12 +38,12 @@ spring:
 
 springdoc:
   api-docs:
-    path: admin/api/v3/open-api
+    path: /v3/open-api
   swagger-ui:
     enabled: true
-    path: admin/api/swagger-ui.html
+    path: swagger-ui.html
     csrf:
-      enabled: true
+      enabled: false
 
 server:
   error:
