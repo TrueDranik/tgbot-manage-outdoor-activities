@@ -1,5 +1,6 @@
 package com.bot.sup.api.rest;
 
+import com.bot.sup.config.DocumentedOperation;
 import com.bot.sup.model.ActivityRequestParams;
 import com.bot.sup.model.dto.ActivityCreateDto;
 import com.bot.sup.model.entity.Activity;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+
 @RequiredArgsConstructor
 @RestController("activityController")
 @RequestMapping(value = "/activity")
@@ -24,6 +27,7 @@ public class ActivityController {
 
     @GetMapping
     @Operation(summary = "Получить все активности")
+    @DocumentedOperation(desc = "Get page with Activities", errors = {BAD_REQUEST})
     public ResponseEntity<List<Activity>> getAllActivity(ActivityRequestParams params) {
         return new ResponseEntity<>(activityService.getAllActivity(params), HttpStatus.OK);
     }
