@@ -17,6 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,18 +34,31 @@ public class FillingActivityFormat implements HandleRegistration {
 
     @Override
     public BotApiMethod<?> getMessage(Message message) {
+        ActivityFormat activityFormat;
         Long chatId = message.getChatId();
+        Long activityFormatForUpdateId = activityFormatDataCache.getActivityFormatForUpdate(chatId);
+        boolean forUpdate = activityFormatForUpdateId != null;
+
+        if (forUpdate) {
+            activityFormat = activityFormatRepository.findById(activityFormatForUpdateId)
+                    .orElseThrow(EntityNotFoundException::new);
+
+            log.info("Found activity form with Id - {} and name - {}", activityFormat.getId(), activityFormat.getName());
+        } else {
+            activityFormat = activityFormatDataCache.getActivityFormatProfileData(chatId);
+        }
+
 
         if (activityFormatDataCache.getActivityFormatCurrentState(chatId).equals(ActivityFormatStateEnum.FILLING_ACTIVITY_FORMAT))
             activityFormatDataCache.setActivityFormatCurrentState(chatId, ActivityFormatStateEnum.ASK_ACTIVITY_FORMAT_NAME);
 
-        return processInputMessage(message, chatId);
+        return processInputMessage(message, chatId, activityFormat, forUpdate);
     }
 
     @Transactional
-    public BotApiMethod<?> processInputMessage(Message inputMessage, Long chatId) {
+    public BotApiMethod<?> processInputMessage(Message inputMessage, Long chatId, ActivityFormat activityFormat, boolean forUpdate) {
         BotApiMethod<?> replyToUser = null;
-        ActivityFormat activityFormat = new ActivityFormat();
+//        ActivityFormat activityFormat = new ActivityFormat();
         String userAnswer = inputMessage.getText();
         ActivityFormatStateEnum activityCurrentState = activityFormatDataCache.getActivityFormatCurrentState(chatId);
 
@@ -66,11 +80,22 @@ public class FillingActivityFormat implements HandleRegistration {
                 return messageService.buildReplyMessage(chatId, activityMessageProperties.getInputActivityNameIsEmpty());
             }
 
-            activityFormatServiceImpl.save(activityFormat);
+            if (forUpdate) {
+                activityFormatDataCache.removeActivityFormatForUpdate(chatId);
+            }else {
+                activityFormatServiceImpl.save(activityFormat);
+            }
+
 
             replyToUser = messageService.getReplyMessageWithKeyboard(chatId, String
                             .format(activityMessageProperties.getRegisteredActivity(), activityFormat.getName()),
                     keyboardMenu());
+        }
+
+        if (forUpdate) {
+            activityFormatServiceImpl.save(activityFormat);
+        } else {
+            activityFormatDataCache.saveActivityFormatProfileData(chatId, activityFormat);
         }
 
         return replyToUser;
