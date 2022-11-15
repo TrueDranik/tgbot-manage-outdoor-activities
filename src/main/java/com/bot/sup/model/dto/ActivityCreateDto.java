@@ -8,8 +8,6 @@ import java.math.BigDecimal;
 @Data
 @Schema(description = "Информация об активности")
 public class ActivityCreateDto {
-    @Schema(description = "Id activity")
-    private Long id;
     @Schema(description = "Name activity")
     private String name;
     private String seasonality;
