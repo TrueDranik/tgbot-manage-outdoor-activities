@@ -45,7 +45,6 @@ public class ActivityServiceImpl implements ActivityService {
 
         activity.setActivityFormat(activityFormatService.getActivityFormatById(createDto.getActivityFormatId()));
         activity.setActivityType(activityTypeService.getActivityTypeById(createDto.getActivityTypeId()));
-        //activity.setRoute(routeService.getRouteById(createDto.getRouteId()));
 
         return activityRepository.save(activity);
     }
@@ -53,6 +52,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public Activity updateActivity(Long id, ActivityCreateDto activityCreateDto) {
         Activity activityById = findActivityById(id);
+
         activityById.setName(activityCreateDto.getName());
         activityById.setSeasonality(activityCreateDto.getSeasonality());
         activityById.setActivityFormat(activityFormatService.getActivityFormatById(activityCreateDto.getActivityFormatId()));
