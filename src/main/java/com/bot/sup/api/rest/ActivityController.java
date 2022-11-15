@@ -18,7 +18,7 @@ import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
-@CrossOrigin("*")
+@CrossOrigin("https://tgsupbot.reliab.tech/admin/api/")
 @RequiredArgsConstructor
 @RestController("activityController")
 @RequestMapping(value = "/activity")
