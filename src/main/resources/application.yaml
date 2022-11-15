@@ -37,8 +37,8 @@ spring:
       matching-strategy: ant_path_matcher
 
 springdoc:
-  api-docs:
-    path: admin/api/v3/open-api
+#  api-docs:
+#    path: admin/api/v3/open-api
   swagger-ui:
     enabled: true
     path: admin/api/swagger-ui.html
