@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,13 +19,7 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public List<Route> getAllRoute() {
-        List<Route> routes = new ArrayList<>(routeRepository.findAll());
-
-        if (routes.isEmpty()){
-            throw new EntityNotFoundException("Routes not found");
-        }
-
-        return routes;
+        return routeRepository.findAll();
     }
 
     @Override
@@ -61,7 +54,7 @@ public class RouteServiceImpl implements RouteService {
         routeRepository.delete(findRouteById(id));
     }
 
-    private Route findRouteById(Long id){
+    private Route findRouteById(Long id) {
         return routeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Route with id[" + id + "] not found"));
     }
