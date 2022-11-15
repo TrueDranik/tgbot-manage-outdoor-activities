@@ -1,12 +1,12 @@
 telegram:
   #      url:
   #        webapp: https://192.168.110.84:3000/
-  nameBot: '@sup31_bot'
-  tokenBot: 5617783598:AAEVI_edk9ptSp6aFrjRjZ8XeMMdn9m3PEc
+  nameBot: '@SupAdminTest_bot'
+  tokenBot: 5655610927:AAG58hHGVMC9OdMkS2lfRYa5DbzxgvXBOa4
 
 spring:
   liquibase:
-    enabled: false
+    enabled: true
     change-log: classpath:db/changelog/db.changelog-master.xml
   main:
     allow-circular-references: 'true'
@@ -15,20 +15,20 @@ spring:
     hibernate:
       ddl-auto: none
     properties:
-#      hibernate:
-#        enable_lazy_load_no_trans: 'true'
+      #      hibernate:
+      #        enable_lazy_load_no_trans: 'true'
       javax:
         persistence:
           query:
             timeout: '0'
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   datasource:
-    password: postgres_sub
+    password: postgres
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: '5'
-    username: postgres_sub
-    url: jdbc:postgresql://10.120.10.6:5433/postgres_sub
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/SupBotAdmin
   jackson:
     serialization:
       FAIL_ON_EMPTY_BEANS: 'false'
@@ -37,27 +37,15 @@ spring:
       matching-strategy: ant_path_matcher
 
 springdoc:
-  api-docs:
-    path: /v3/api-docs
+  #  api-docs:
+  #    path: admin/api/v3/open-api
   swagger-ui:
     enabled: true
-    path: /swagger-ui.html
-    csrf:
-      enabled: false
-#    config-url: /v3/api-docs/swagger-config
+    path: admin/api/swagger-ui.html
 
 server:
-  error:
-    whitelabel:
-      enabled: false
-  forward-headers-strategy: framework
-  servlet:
-    context-path: /admin/api
-
-
-#server:
-#  ssl:
-#    key-store-type: PKCS12
-#    key-store-password: changeit
-#    enabled: true
-#    key-store: classpath:java_ssl.p12
+  ssl:
+    key-store-type: PKCS12
+    key-store-password: changeit
+    enabled: true
+    key-store: classpath:java_ssl.p12
