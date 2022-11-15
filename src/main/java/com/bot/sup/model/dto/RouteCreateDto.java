@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class RouteCreateDto {
-    private Long id;
     private String name;
     private String startPointCoordinates;
     private String startPointName;
