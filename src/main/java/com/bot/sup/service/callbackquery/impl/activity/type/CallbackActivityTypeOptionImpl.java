@@ -47,18 +47,18 @@ public class CallbackActivityTypeOptionImpl implements Callback {
         firstRow.add(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getChange())
-                        .callbackData("ACTIVITY_TYPE_CHANGE")
+                        .callbackData(CallbackEnum.ACTIVITY_TYPE_CHANGE + "/" + activityTypeId)
                         .build());
         firstRow.add(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getDelete())
-                        .callbackData("DELETE_ACTIVITY_TYPE/" + activityTypeId)
+                        .callbackData(CallbackEnum.DELETE_ACTIVITY_TYPE + "/" + activityTypeId)
                         .build());
 
         secondRow.add(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getBack())
-                        .callbackData("LIST_ACTIVITY_TYPE")
+                        .callbackData(CallbackEnum.LIST_ACTIVITY_TYPE.toString())
                         .build());
 
         return InlineKeyboardMarkup.builder()
