@@ -3,6 +3,7 @@ package com.bot.sup.service.activity.impl;
 import com.bot.sup.mapper.ActivityMapper;
 import com.bot.sup.model.ActivityRequestParams;
 import com.bot.sup.model.dto.ActivityCreateDto;
+import com.bot.sup.model.dto.ActivityCreateDtoWithoutRoute;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.repository.specification.ActivitySpecification;
@@ -40,11 +41,23 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public Activity createActivity(ActivityCreateDto createDto) {
-        Activity activity = activityMapper.dtoToDomain(createDto);
+    public Activity createActivity(ActivityCreateDtoWithoutRoute activityCreateDto) {
+        if ( activityCreateDto == null ) {
+            return null;
+        }
 
-        activity.setActivityFormat(activityFormatService.getActivityFormatById(createDto.getActivityFormatId()));
-        activity.setActivityType(activityTypeService.getActivityTypeById(createDto.getActivityTypeId()));
+        Activity activity = new Activity();
+
+        activity.setName( activityCreateDto.getName() );
+        activity.setSeasonality( activityCreateDto.getSeasonality() );
+        activity.setDescription( activityCreateDto.getDescription() );
+        activity.setDuration( activityCreateDto.getDuration() );
+        activity.setAge( activityCreateDto.getAge() );
+        activity.setComplexity( activityCreateDto.getComplexity() );
+        activity.setPrice( activityCreateDto.getPrice() );
+
+        activity.setActivityFormat(activityFormatService.getActivityFormatById(activityCreateDto.getActivityFormatId()));
+        activity.setActivityType(activityTypeService.getActivityTypeById(activityCreateDto.getActivityTypeId()));
 
         return activityRepository.save(activity);
     }
