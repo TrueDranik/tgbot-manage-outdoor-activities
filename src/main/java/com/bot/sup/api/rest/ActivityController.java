@@ -2,6 +2,7 @@ package com.bot.sup.api.rest;
 
 import com.bot.sup.model.ActivityRequestParams;
 import com.bot.sup.model.dto.ActivityCreateDto;
+import com.bot.sup.model.dto.ActivityCreateDtoWithoutRoute;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.service.activity.ActivityService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,7 +41,7 @@ public class ActivityController {
 
     @PostMapping
     @Operation(summary = "Создать новую активность")
-    public ResponseEntity<Activity> createActivity(@RequestBody ActivityCreateDto createDto) {
+    public ResponseEntity<Activity> createActivity(@RequestBody ActivityCreateDtoWithoutRoute createDto) {
         return new ResponseEntity<>(activityService.createActivity(createDto), HttpStatus.OK);
     }
 
