@@ -45,7 +45,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         activity.setActivityFormat(activityFormatService.getActivityFormatById(createDto.getActivityFormatId()));
         activity.setActivityType(activityTypeService.getActivityTypeById(createDto.getActivityTypeId()));
-        activity.setRoute(routeService.getRouteById(createDto.getRouteId()));
+        //activity.setRoute(routeService.getRouteById(createDto.getRouteId()));
 
         return activityRepository.save(activity);
     }
