@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
+@CrossOrigin("*")
 @RequiredArgsConstructor
 @RestController("activityController")
 @RequestMapping(value = "/activity")
