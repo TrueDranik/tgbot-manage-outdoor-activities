@@ -5,7 +5,9 @@ import com.bot.sup.model.ActivityRequestParams;
 import com.bot.sup.model.dto.ActivityCreateDto;
 import com.bot.sup.model.dto.ActivityCreateDtoWithoutRoute;
 import com.bot.sup.model.entity.Activity;
+import com.bot.sup.repository.ActivityFormatRepository;
 import com.bot.sup.repository.ActivityRepository;
+import com.bot.sup.repository.ActivityTypeRepository;
 import com.bot.sup.repository.specification.ActivitySpecification;
 import com.bot.sup.service.activity.ActivityService;
 import com.bot.sup.service.activity.format.ActivityFormatService;
@@ -22,6 +24,8 @@ import java.util.List;
 public class ActivityServiceImpl implements ActivityService {
     private final ActivityRepository activityRepository;
     private final ActivityMapper activityMapper;
+    private final ActivityTypeRepository activityTypeRepository;
+    private final ActivityFormatRepository activityFormatRepository;
     private final RouteService routeService;
     private final ActivityFormatService activityFormatService;
     private final ActivityTypeService activityTypeService;
@@ -56,8 +60,12 @@ public class ActivityServiceImpl implements ActivityService {
         activity.setComplexity( activityCreateDto.getComplexity() );
         activity.setPrice( activityCreateDto.getPrice() );
 
-        activity.setActivityFormat(activityFormatService.getActivityFormatById(activityCreateDto.getActivityFormatId()));
-        activity.setActivityType(activityTypeService.getActivityTypeById(activityCreateDto.getActivityTypeId()));
+//        activity.setActivityFormat(activityFormatService.getActivityFormatById(activityCreateDto.getActivityFormatId()));
+//        activity.setActivityType(activityTypeService.getActivityTypeById(activityCreateDto.getActivityTypeId()));
+        activity.setActivityType(activityTypeRepository.findById(activityCreateDto.getActivityTypeId())
+                .orElseThrow(() -> new EntityNotFoundException("Activity type not found")));
+        activity.setActivityFormat(activityFormatRepository.findById(activityCreateDto.getActivityFormatId())
+                .orElseThrow(() -> new EntityNotFoundException("Activity format not found")));
 
         return activityRepository.save(activity);
     }
