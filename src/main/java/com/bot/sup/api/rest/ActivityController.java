@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-//@CrossOrigin("*")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 @RestController("activityController")
 @RequestMapping(value = "/activity")
-@Tag(name = "Активность", description = "Работа с активностями")
+@Tag(name = "Активность")
 public class ActivityController {
     private final ActivityService activityService;
 
@@ -43,7 +43,7 @@ public class ActivityController {
     @PostMapping
     @Operation(summary = "Создать новую активность")
     public ResponseEntity<Activity> createActivity(@RequestBody ActivityCreateDtoWithoutRoute createDto) {
-        return new ResponseEntity<>(activityService.createActivity(createDto), HttpStatus.OK);
+        return new ResponseEntity<>(activityService.createActivity(createDto), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
