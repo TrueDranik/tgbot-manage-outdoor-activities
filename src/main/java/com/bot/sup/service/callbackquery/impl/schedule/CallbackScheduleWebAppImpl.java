@@ -37,26 +37,26 @@ public class CallbackScheduleWebAppImpl implements Callback {
 
     private InlineKeyboardMarkup createInlineKeyboard() {
         WebAppInfo webAppInfo = WebAppInfo.builder()
-                .url("https://192.168.1.35:3000")
+                .url("https://tgsupbot.reliab.tech/admin")
                 .build();
 
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text("Добавить новый маршрут")
-                .webApp(new WebAppInfo("https://192.168.1.35:3000/make"))
+                .webApp(new WebAppInfo("https://tgsupbot.reliab.tech/admin/route"))
                 .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text("Составить расписание в конструкторе")
-                .webApp(webAppInfo)
+                .webApp(new WebAppInfo("https://tgsupbot.reliab.tech/admin/constructor"))
                 .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text("Создать новую активность")
-                .webApp(webAppInfo)
+                .webApp(new WebAppInfo("https://tgsupbot.reliab.tech/admin/activity"))
                 .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text("Изменить существующую активность")
-                .webApp(webAppInfo)
+                .webApp(new WebAppInfo("https://tgsupbot.reliab.tech/admin/updateActivity"))
                 .build()));
 
         buttons.add(List.of(InlineKeyboardButton.builder()
