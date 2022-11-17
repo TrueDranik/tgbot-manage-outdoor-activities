@@ -44,19 +44,19 @@ public class CallbackScheduleWebAppImpl implements Callback {
 
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text("Добавить новый маршрут")
-                .webApp(new WebAppInfo("https://tgsupbot.reliab.tech/admin/route"))
+                .webApp(new WebAppInfo("https://tgsupbot.reliab.tech/admin/#/route"))
                 .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text("Составить расписание в конструкторе")
-                .webApp(new WebAppInfo("https://tgsupbot.reliab.tech/admin/constructor"))
+                .webApp(new WebAppInfo("https://tgsupbot.reliab.tech/#/admin/constructor"))
                 .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text("Создать новую активность")
-                .webApp(new WebAppInfo("https://tgsupbot.reliab.tech/admin/activity"))
+                .webApp(new WebAppInfo("https://tgsupbot.reliab.tech/#/admin/activity"))
                 .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text("Изменить существующую активность")
-                .webApp(new WebAppInfo("https://tgsupbot.reliab.tech/admin/updateActivity"))
+                .webApp(new WebAppInfo("https://tgsupbot.reliab.tech/#/admin/updateActivity"))
                 .build()));
 
         buttons.add(List.of(InlineKeyboardButton.builder()
