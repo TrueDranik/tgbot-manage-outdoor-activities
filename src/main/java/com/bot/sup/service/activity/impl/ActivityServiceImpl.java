@@ -71,7 +71,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public Activity updateActivity(Long id, ActivityCreateDto activityCreateDto) {
+    public Activity updateActivity(Long id, ActivityCreateDtoWithoutRoute activityCreateDto) {
         Activity activityById = findActivityById(id);
 
         activityById.setName(activityCreateDto.getName());
@@ -79,7 +79,7 @@ public class ActivityServiceImpl implements ActivityService {
         activityById.setActivityFormat(activityFormatService.getActivityFormatById(activityCreateDto.getActivityFormatId()));
         activityById.setActivityType(activityTypeService.getActivityTypeById(activityCreateDto.getActivityTypeId()));
         activityById.setDescription(activityCreateDto.getDescription());
-        activityById.setRoute(routeService.getRouteById(activityCreateDto.getRouteId()));
+        //activityById.setRoute(routeService.getRouteById(activityCreateDto.getRouteId()));
         activityById.setDuration(activityCreateDto.getDuration());
         activityById.setAge(activityCreateDto.getAge());
         activityById.setComplexity(activityCreateDto.getComplexity());
