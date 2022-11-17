@@ -49,7 +49,7 @@ public class ActivityController {
     @PutMapping("{id}")
     @Operation(summary = "Изменить существующую активность")
     public ResponseEntity<Activity> updateActivity(@PathVariable(name = "id") Long id,
-                                                   @RequestBody ActivityCreateDto createDto) {
+                                                   @RequestBody ActivityCreateDtoWithoutRoute createDto) {
         return new ResponseEntity<>(activityService.updateActivity(id, createDto), HttpStatus.OK);
     }
 
