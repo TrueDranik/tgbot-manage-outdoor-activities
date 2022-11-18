@@ -6,4 +6,5 @@ import lombok.Data;
 public class ActivityRequestParams {
     private Long activityFormatId;
     private Long activityTypeId;
+    private Long routeId;
 }
