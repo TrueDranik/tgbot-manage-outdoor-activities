@@ -14,9 +14,9 @@ public interface ActivityService {
 
     Activity getActivityById(Long id);
 
-    Activity createActivity(ActivityCreateDtoWithoutRoute createDto);
+    Activity createActivity(ActivityCreateDtoWithoutRoute activityCreateDto);
 
-    Activity updateActivity(Long id, ActivityCreateDto activityCreateDto);
+    Activity updateActivity(Long id, ActivityCreateDtoWithoutRoute activityCreateDto);
 
     void deleteActivity(Long id);
 }

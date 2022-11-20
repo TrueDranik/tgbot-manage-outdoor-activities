@@ -39,7 +39,7 @@ public class Activity {
     @Column(name = "duration")
     private String duration;
 
-    @Column(name = "age", length = 10)
+    @Column(name = "age", length = 5)
     private String age;
 
     @Column(name = "complexity", length = 30)
