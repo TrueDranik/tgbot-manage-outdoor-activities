@@ -1,11 +1,13 @@
 package com.bot.sup.service.schedule.impl;
 
 import com.bot.sup.mapper.ScheduleMapper;
+import com.bot.sup.model.ScheduleRequestParams;
 import com.bot.sup.model.dto.ScheduleCreateDto;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.repository.ScheduleRepository;
+import com.bot.sup.repository.specification.ScheduleSpecification;
 import com.bot.sup.service.activity.impl.ActivityServiceImpl;
 import com.bot.sup.service.schedule.ScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -25,14 +27,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleMapper scheduleMapper;
 
     @Override
-    public List<Schedule> getAllSchedule() {
-        List<Schedule> schedules = new ArrayList<>(scheduleRepository.findAll());
-
-        if (schedules.isEmpty()) {
-            throw new EntityNotFoundException("Schedule not found");
-        }
-
-        return schedules;
+    public List<Schedule> getAllSchedule(ScheduleRequestParams params) {
+        return scheduleRepository.findAll(new ScheduleSpecification(params));
     }
 
     @Override

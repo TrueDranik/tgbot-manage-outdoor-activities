@@ -1,12 +1,14 @@
 package com.bot.sup.api.rest;
 
 import com.bot.sup.mapper.ScheduleMapper;
+import com.bot.sup.model.ScheduleRequestParams;
 import com.bot.sup.model.dto.ScheduleCreateDto;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.activity.ActivityService;
 import com.bot.sup.service.schedule.ScheduleService;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +26,8 @@ public class ScheduleController {
     private final ScheduleRepository scheduleRepository;
 
     @GetMapping
-    public ResponseEntity<List<Schedule>> getAllSchedule() {
-        return new ResponseEntity<>(scheduleService.getAllSchedule(), HttpStatus.OK);
+    public ResponseEntity<List<Schedule>> getAllSchedule(@ParameterObject ScheduleRequestParams params) {
+        return new ResponseEntity<>(scheduleService.getAllSchedule(params), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
