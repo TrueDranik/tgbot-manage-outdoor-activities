@@ -69,7 +69,7 @@ public class CallbackScheduleInfoImpl implements Callback {
 
         secondRow.add(InlineKeyboardButton.builder()
                 .text("Изменить")
-                .webApp(new WebAppInfo("https://tgsupbot.reliab.tech/admin/#/updateRoute"))
+                .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/#/updateRoute"))
                 .build());
         secondRow.add(InlineKeyboardButton.builder()
                 .text("Отменить")
