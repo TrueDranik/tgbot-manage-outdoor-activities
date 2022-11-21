@@ -3,9 +3,7 @@ package com.bot.sup.service.schedule.impl;
 import com.bot.sup.mapper.ScheduleMapper;
 import com.bot.sup.model.ScheduleRequestParams;
 import com.bot.sup.model.dto.ScheduleCreateDto;
-import com.bot.sup.model.entity.Activity;
 import com.bot.sup.model.entity.Schedule;
-import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.repository.specification.ScheduleSpecification;
 import com.bot.sup.service.activity.impl.ActivityServiceImpl;
@@ -14,15 +12,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
-    private final ActivityRepository activityRepository;
     private final ActivityServiceImpl activityService;
     private final ScheduleMapper scheduleMapper;
 
@@ -46,7 +41,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public Schedule updateSchedule(Long id, ScheduleCreateDto scheduleCreateDto) {
         Schedule scheduleById = findScheduleById(id);
-        //TODO добавить set
+
         scheduleById.setActivity(activityService.getActivityById(scheduleCreateDto.getActivityId()));
         scheduleById.setEventDate(scheduleCreateDto.getEventDate());
         scheduleById.setEventTime(scheduleCreateDto.getEventTime());
