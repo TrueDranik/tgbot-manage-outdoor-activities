@@ -23,7 +23,7 @@ public class RouteController {
 
     @GetMapping
     @Operation(summary = "Получить список всех маршрутов")
-    public ResponseEntity<List<Route>> getAllRoute(@RequestParam(required = false) Long id) {
+    public ResponseEntity<List<Route>> getAllRoute() {
         return new ResponseEntity<>(routeService.getAllRoute(), HttpStatus.OK);
     }
 
