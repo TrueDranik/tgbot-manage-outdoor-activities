@@ -24,13 +24,7 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
 
     @Override
     public List<ActivityType> getAllActivityType() {
-        List<ActivityType> activityTypes = new ArrayList<>(activityTypeRepository.findAll());
-
-        if (activityTypes.isEmpty()) {
-            throw new EntityNotFoundException("Activity types not found");
-        }
-
-        return activityTypes;
+        return new ArrayList<>(activityTypeRepository.findAll());
     }
 
     @Override
@@ -50,6 +44,7 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
         ActivityType activityTypeById = findActivityTypeById(id);
 
         activityTypeById.setName(activityTypeCreateDto.getName());
+        activityTypeById.setDescription(activityTypeCreateDto.getDescription());
 
         return activityTypeRepository.save(activityTypeById);
     }
