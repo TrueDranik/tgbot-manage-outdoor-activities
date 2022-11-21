@@ -1,5 +1,6 @@
 package com.bot.sup.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,5 +41,6 @@ public class Client {
             joinColumns = @JoinColumn(name = "client_id"),
             inverseJoinColumns = @JoinColumn(name = "schedule_id")
     )
+    @JsonBackReference
     private Set<Schedule> schedule;
 }
