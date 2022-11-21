@@ -1,5 +1,7 @@
 package com.bot.sup.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,6 +38,7 @@ public class Schedule {
             joinColumns = @JoinColumn(name = "schedule_id"),
             inverseJoinColumns = @JoinColumn(name = "client_id")
     )
+    @JsonManagedReference
     private Set<Client> client;
 
     @ManyToMany
