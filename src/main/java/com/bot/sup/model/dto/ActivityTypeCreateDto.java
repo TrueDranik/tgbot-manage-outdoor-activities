@@ -6,8 +6,8 @@ import lombok.Data;
 @Data
 @Schema(title = "Тип активности")
 public class ActivityTypeCreateDto {
-    @Schema(title = "Имя активности", defaultValue = "Type")
+    @Schema(title = "Именование типа", defaultValue = "Type")
     private String name;
-    @Schema(title = "Описание для типа активности", nullable = true, defaultValue = " ")
+    @Schema(title = "Доп. информация для типа", nullable = true, defaultValue = " ")
     private String description;
 }
