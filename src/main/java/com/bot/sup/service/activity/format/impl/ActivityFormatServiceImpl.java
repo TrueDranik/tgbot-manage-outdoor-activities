@@ -24,19 +24,12 @@ public class ActivityFormatServiceImpl implements ActivityFormatService {
 
     @Override
     public List<ActivityFormat> getAllActivityFormat() {
-        List<ActivityFormat> activityFormats = new ArrayList<>(activityFormatRepository.findAll());
-
-        if (activityFormats.isEmpty()) {
-            throw new EntityNotFoundException("Activity format not found");
-        }
-
-        return activityFormats;
+        return new ArrayList<>(activityFormatRepository.findAll());
     }
 
     @Override
     public ActivityFormat getActivityFormatById(Long id) {
-        return activityFormatRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Activity format with id[" + id + "] not found"));
+        return findActivityFormatById(id);
     }
 
     @Override
@@ -48,19 +41,23 @@ public class ActivityFormatServiceImpl implements ActivityFormatService {
 
     @Override
     public ActivityFormat updateActivityFormat(Long id, ActivityFormatCreateDto activityFormatCreateDto) {
-        ActivityFormat activityFormat = activityFormatRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Activity format with id[" + id + "] not found"));
+        ActivityFormat activityFormat = findActivityFormatById(id);
 
         activityFormat.setName(activityFormatCreateDto.getName());
+        activityFormat.setDescription(activityFormatCreateDto.getDescription());
 
         return activityFormatRepository.save(activityFormat);
     }
 
     @Override
     public void deleteActivityFormat(Long id) {
-        ActivityFormat activityFormat = activityFormatRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Activity format with id[" + id + "] not found"));
+        ActivityFormat activityFormat = findActivityFormatById(id);
 
         activityFormatRepository.delete(activityFormat);
+    }
+
+    private ActivityFormat findActivityFormatById(Long id) {
+        return activityFormatRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Activity format with id[" + id + "] not found"));
     }
 }
