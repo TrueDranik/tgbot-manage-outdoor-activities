@@ -1,6 +1,5 @@
 package com.bot.sup.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,6 +30,10 @@ public class Schedule {
 
     @Column(name = "participants")
     private Integer participants;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "route_id")
+    private Route route;
 
     @ManyToMany
     @JoinTable(

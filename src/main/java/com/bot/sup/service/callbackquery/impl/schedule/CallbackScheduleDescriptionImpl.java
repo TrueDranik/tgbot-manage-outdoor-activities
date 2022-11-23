@@ -59,7 +59,7 @@ public class CallbackScheduleDescriptionImpl implements Callback {
     private String description(String scheduleId) {
         Optional<Schedule> schedule = scheduleRepository.findById(Long.parseLong(scheduleId));
         Activity activity = schedule.get().getActivity();
-        Route route = schedule.get().getActivity().getRoute();
+        Route route = schedule.get().getRoute();
 
         List<String> descriptions = new ArrayList<>();
         descriptions.add("Дата и время старта: "

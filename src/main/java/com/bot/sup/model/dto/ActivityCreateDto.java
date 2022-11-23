@@ -16,7 +16,6 @@ public class ActivityCreateDto {
     private Long activityFormatId;
     private Long activityTypeId;
     private String description;
-    private Long routeId;
     private String duration;
     private String age;
     private String complexity;

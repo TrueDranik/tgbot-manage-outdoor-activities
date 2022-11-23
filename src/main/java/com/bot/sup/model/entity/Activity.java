@@ -32,10 +32,6 @@ public class Activity {
     @Column(name = "description", length = 3000)
     private String description;
 
-    @OneToOne
-    @JoinColumn(name = "route_id")
-    private Route route;
-
     @Column(name = "duration")
     private String duration;
 

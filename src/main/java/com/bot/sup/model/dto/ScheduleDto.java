@@ -3,6 +3,7 @@ package com.bot.sup.model.dto;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.model.entity.Client;
 import com.bot.sup.model.entity.Instructor;
+import com.bot.sup.model.entity.Route;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ public class ScheduleDto {
     private LocalDate eventDate;
     private LocalTime eventTime;
     private Integer participants;
+    private Route route;
     private Set<Client> client;
     private Set<Instructor> instructor;
 }
