@@ -2,7 +2,6 @@ package com.bot.sup.service.activity;
 
 import com.bot.sup.model.ActivityRequestParams;
 import com.bot.sup.model.dto.ActivityCreateDto;
-import com.bot.sup.model.dto.ActivityCreateDtoWithoutRoute;
 import com.bot.sup.model.entity.Activity;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +13,9 @@ public interface ActivityService {
 
     Activity getActivityById(Long id);
 
-    Activity createActivity(ActivityCreateDtoWithoutRoute activityCreateDto);
+    Activity createActivity(ActivityCreateDto activityCreateDto);
 
-    Activity updateActivity(Long id, ActivityCreateDtoWithoutRoute activityCreateDto);
+    Activity updateActivity(Long id, ActivityCreateDto activityCreateDto);
 
     void deleteActivity(Long id);
 }

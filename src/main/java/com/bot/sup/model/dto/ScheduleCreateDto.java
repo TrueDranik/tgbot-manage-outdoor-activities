@@ -17,4 +17,6 @@ public class ScheduleCreateDto {
     private LocalTime eventTime;
     @Schema(title = "Количество мест", defaultValue = "0", nullable = true)
     private Integer participants;
+    @Schema(title = "id маршрута", defaultValue = "1")
+    private Long routeId;
 }

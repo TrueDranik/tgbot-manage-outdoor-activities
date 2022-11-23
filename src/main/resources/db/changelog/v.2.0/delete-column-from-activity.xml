@@ -5,7 +5,10 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
 
-    <include file="v.1.0/cumulative-changelog.xml" relativeToChangelogFile="true"/>
-    <include file="v.2.0/cumulative_changelog.xml" relativeToChangelogFile="true"/>
+    <changeSet id="delete-column-from-activity" author="Ruslan">
+        <dropColumn columnName="route_id"
+                    tableName="activity">
+        </dropColumn>
+    </changeSet>
 
 </databaseChangeLog>

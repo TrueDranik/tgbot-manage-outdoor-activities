@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "booking")
@@ -26,4 +26,10 @@ public class Booking {
     @BooleanFlag
     @Column(name = "payment_status")
     private Boolean paymentStatus;
+
+    @Column(name = "ins_time")
+    private LocalDate insTime;
+
+    @Column(name = "modif_time")
+    private LocalDate modifTime;
 }
