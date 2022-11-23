@@ -46,8 +46,8 @@ public class CallbackScheduleInfoImpl implements Callback {
                         + ")\n"
                         + "Формат активности: " + schedule.get().getActivity().getActivityFormat().getName() + "\n"
                         + "Тип активности: " + schedule.get().getActivity().getActivityType().getName() + "\n"
-                        + "Название маршрута: " + schedule.get().getActivity().getRoute().getName() + "\n"
-                        + "Точка старта: " + schedule.get().getActivity().getRoute().getStartPointName())
+                        + "Название маршрута: " + schedule.get().getRoute().getName() + "\n"
+                        + "Точка старта: " + schedule.get().getRoute().getStartPointName())
                 .parseMode("Markdown")
                 .replyMarkup(createInlineKeyboard(activityFormatId, eventDate, scheduleId))
                 .build();
