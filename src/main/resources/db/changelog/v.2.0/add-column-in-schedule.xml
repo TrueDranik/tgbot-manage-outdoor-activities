@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <changeSet id="add_column_in_schedule" author="Ruslan">
+        <addColumn tableName="schedule">
+            <column name="route_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="schedule" baseColumnNames="route_id"
+                                 constraintName="fk_schedule_route_id"
+                                 referencedTableName="route" referencedColumnNames="id"/>
+
+    </changeSet>
+
+</databaseChangeLog>
