@@ -4,6 +4,7 @@ import com.bot.sup.mapper.ScheduleMapper;
 import com.bot.sup.model.ScheduleRequestParams;
 import com.bot.sup.model.dto.ScheduleCreateDto;
 import com.bot.sup.model.entity.Schedule;
+import com.bot.sup.repository.RouteRepository;
 import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.repository.specification.ScheduleSpecification;
 import com.bot.sup.service.activity.impl.ActivityServiceImpl;
@@ -20,6 +21,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final ActivityServiceImpl activityService;
     private final ScheduleMapper scheduleMapper;
+    private final RouteRepository routeRepository;
 
     @Override
     public List<Schedule> getAllSchedule(ScheduleRequestParams params) {
@@ -46,6 +48,8 @@ public class ScheduleServiceImpl implements ScheduleService {
         scheduleById.setEventDate(scheduleCreateDto.getEventDate());
         scheduleById.setEventTime(scheduleCreateDto.getEventTime());
         scheduleById.setParticipants(scheduleCreateDto.getParticipants());
+        scheduleById.setRoute(routeRepository.findById(scheduleCreateDto.getRouteId())
+                .orElseThrow(() -> new EntityNotFoundException("Route not found")));
 
         return scheduleRepository.save(scheduleById);
     }
