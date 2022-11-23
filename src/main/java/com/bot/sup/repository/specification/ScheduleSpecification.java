@@ -26,9 +26,8 @@ public class ScheduleSpecification implements Specification<Schedule> {
             );
         }
         if (params.getRouteId() != null){
-            Join<Schedule, Route> join = root.join("route");
             predicates.add(
-                    builder.equal(join.get("id"), "id")
+                    builder.equal(root.get("route"), params.getRouteId())
             );
         }
 
