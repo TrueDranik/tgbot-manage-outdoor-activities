@@ -1,9 +1,7 @@
 package com.bot.sup.service.activity.impl;
 
-import com.bot.sup.mapper.ActivityMapper;
 import com.bot.sup.model.ActivityRequestParams;
 import com.bot.sup.model.dto.ActivityCreateDto;
-import com.bot.sup.model.dto.ActivityCreateDtoWithoutRoute;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.repository.ActivityFormatRepository;
 import com.bot.sup.repository.ActivityRepository;
@@ -12,7 +10,6 @@ import com.bot.sup.repository.specification.ActivitySpecification;
 import com.bot.sup.service.activity.ActivityService;
 import com.bot.sup.service.activity.format.ActivityFormatService;
 import com.bot.sup.service.activity.type.ActivityTypeService;
-import com.bot.sup.service.route.RouteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,10 +20,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ActivityServiceImpl implements ActivityService {
     private final ActivityRepository activityRepository;
-    private final ActivityMapper activityMapper;
     private final ActivityTypeRepository activityTypeRepository;
     private final ActivityFormatRepository activityFormatRepository;
-    private final RouteService routeService;
     private final ActivityFormatService activityFormatService;
     private final ActivityTypeService activityTypeService;
 
@@ -45,23 +40,21 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public Activity createActivity(ActivityCreateDtoWithoutRoute activityCreateDto) {
-        if ( activityCreateDto == null ) {
+    public Activity createActivity(ActivityCreateDto activityCreateDto) {
+        if (activityCreateDto == null) {
             return null;
         }
 
         Activity activity = new Activity();
 
-        activity.setName( activityCreateDto.getName() );
-        activity.setSeasonality( activityCreateDto.getSeasonality() );
-        activity.setDescription( activityCreateDto.getDescription() );
-        activity.setDuration( activityCreateDto.getDuration() );
-        activity.setAge( activityCreateDto.getAge() );
-        activity.setComplexity( activityCreateDto.getComplexity() );
-        activity.setPrice( activityCreateDto.getPrice() );
+        activity.setName(activityCreateDto.getName());
+        activity.setSeasonality(activityCreateDto.getSeasonality());
+        activity.setDescription(activityCreateDto.getDescription());
+        activity.setDuration(activityCreateDto.getDuration());
+        activity.setAge(activityCreateDto.getAge());
+        activity.setComplexity(activityCreateDto.getComplexity());
+        activity.setPrice(activityCreateDto.getPrice());
 
-//        activity.setActivityFormat(activityFormatService.getActivityFormatById(activityCreateDto.getActivityFormatId()));
-//        activity.setActivityType(activityTypeService.getActivityTypeById(activityCreateDto.getActivityTypeId()));
         activity.setActivityType(activityTypeRepository.findById(activityCreateDto.getActivityTypeId())
                 .orElseThrow(() -> new EntityNotFoundException("Activity type not found")));
         activity.setActivityFormat(activityFormatRepository.findById(activityCreateDto.getActivityFormatId())
@@ -71,7 +64,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public Activity updateActivity(Long id, ActivityCreateDtoWithoutRoute activityCreateDto) {
+    public Activity updateActivity(Long id, ActivityCreateDto activityCreateDto) {
         Activity activityById = findActivityById(id);
 
         activityById.setName(activityCreateDto.getName());
@@ -79,7 +72,6 @@ public class ActivityServiceImpl implements ActivityService {
         activityById.setActivityFormat(activityFormatService.getActivityFormatById(activityCreateDto.getActivityFormatId()));
         activityById.setActivityType(activityTypeService.getActivityTypeById(activityCreateDto.getActivityTypeId()));
         activityById.setDescription(activityCreateDto.getDescription());
-        //activityById.setRoute(routeService.getRouteById(activityCreateDto.getRouteId()));
         activityById.setDuration(activityCreateDto.getDuration());
         activityById.setAge(activityCreateDto.getAge());
         activityById.setComplexity(activityCreateDto.getComplexity());
