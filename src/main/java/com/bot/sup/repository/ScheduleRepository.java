@@ -17,7 +17,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>, JpaSp
     @Modifying
     @Query("SELECT s FROM Schedule s " +
             "INNER JOIN Activity a on s.activity.id = a.id " +
-            "INNER JOIN Route r on a.route.id = r.id " +
+            "INNER JOIN Route r on s.route.id = r.id " +
             "WHERE a.activityFormat.id = ?1 and s.eventDate = ?2")
     List<Schedule> selectScheduleByActivityFormatIdAndEventDate(Long id, LocalDate eventDate);
 
