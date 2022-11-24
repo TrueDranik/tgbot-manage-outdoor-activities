@@ -36,7 +36,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public Schedule createSchedule(ScheduleCreateDto createDto) {
         Schedule schedule = scheduleMapper.dtoToDomain(createDto);
+
         schedule.setActivity(activityService.getActivityById(createDto.getActivityId()));
+        schedule.setRoute(routeRepository.findById(createDto.getRouteId())
+                .orElseThrow(() -> new EntityNotFoundException("Route not found")));
+
         return scheduleRepository.save(schedule);
     }
 
