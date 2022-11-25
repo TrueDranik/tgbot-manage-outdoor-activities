@@ -13,7 +13,7 @@ public interface ScheduleService {
 
     Schedule getScheduleById(Long id);
 
-    Schedule createSchedule(ScheduleCreateDto createDto);
+    List<Schedule> createSchedule(List<ScheduleCreateDto> createDto);
 
     Schedule updateSchedule(Long id, ScheduleCreateDto scheduleCreateDto);
 
