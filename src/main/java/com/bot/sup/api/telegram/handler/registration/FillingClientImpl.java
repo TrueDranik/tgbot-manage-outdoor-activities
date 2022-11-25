@@ -4,6 +4,7 @@ import com.bot.sup.cache.ClientRecordDataCache;
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.enums.ClientRecordStateEnum;
 import com.bot.sup.model.entity.Client;
+import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.ClientRepository;
 import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.MessageService;
@@ -19,15 +20,18 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import javax.persistence.EntityNotFoundException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@Component
 @Slf4j
+@Component
 @RequiredArgsConstructor
-public class FillingRecordClient implements HandleRegistration {
+public class FillingClientImpl implements HandleRegistration {
     private final MessageService messageService;
     private final ClientRecordDataCache clientRecordDataCache;
     private final ClientRepository clientRepository;
@@ -36,10 +40,9 @@ public class FillingRecordClient implements HandleRegistration {
     @Override
     public BotApiMethod<?> getMessage(Message message) {
         Long chatId = message.getChatId();
-        Client client = clientRecordDataCache.getClientProfileData(chatId);
 
         if (clientRecordDataCache.getClientRecordCurrentState(chatId).equals(ClientRecordStateEnum.FILLING_CLIENT)) {
-            clientRecordDataCache.setClientRecrodCurrentState(chatId, ClientRecordStateEnum.ASK_FULL_NAME);
+            clientRecordDataCache.setClientRecrodCurrentState(chatId, ClientRecordStateEnum.ASK_TELEGRAM_ID);
         }
 
         return processInputMessage(message, chatId);
@@ -48,17 +51,37 @@ public class FillingRecordClient implements HandleRegistration {
     @Transactional
     public BotApiMethod<?> processInputMessage(Message message, Long chatId) {
         BotApiMethod<?> replyToUser = null;
-        //Long chatId = message.getChatId();
         String userAnswer = message.getText();
         Client client = clientRecordDataCache.getClientProfileData(chatId);
         ClientRecordStateEnum clientRecordCurrentState = clientRecordDataCache.getClientRecordCurrentState(chatId);
         Long scheduleId = clientRecordDataCache.getScheduleState(chatId);
 
-        if (clientRecordCurrentState.equals(ClientRecordStateEnum.ASK_FULL_NAME)) {
-            replyToUser = messageService.buildReplyMessage(chatId, "Введите ФИ клиента");
-            clientRecordDataCache.setClientRecrodCurrentState(chatId, ClientRecordStateEnum.ASK_PHONE_NUMBER);
+        if (clientRecordCurrentState.equals(ClientRecordStateEnum.ASK_TELEGRAM_ID)) {
+            replyToUser = messageService.buildReplyMessage(chatId, "Перешлите любое сообщение клиента");
+            clientRecordDataCache.setClientRecrodCurrentState(chatId, ClientRecordStateEnum.ASK_FULL_NAME);
 
             return replyToUser;
+        } else if (clientRecordCurrentState.equals(ClientRecordStateEnum.ASK_FULL_NAME)) {
+            Optional<User> forwardFrom = Optional.ofNullable(message.getForwardFrom());
+            Optional<Client> clientByTelegramId = clientRepository.findByTelegramId(forwardFrom.get().getId());
+
+            if (clientRepository.existsByTelegramId(forwardFrom.get().getId()) && clientByTelegramId.isPresent()) {
+                clientByTelegramId = clientRepository.findByTelegramId(forwardFrom.get().getId());
+                Client clientChoice = clientByTelegramId.get();
+
+                clientChoice.getSchedule().add(scheduleRepository.findById(scheduleId)
+                        .orElseThrow(() -> new EntityNotFoundException("Schedule not found")));
+
+                clientRepository.save(clientChoice);
+                replyToUser = messageService.getReplyMessageWithKeyboard(chatId, "Найден клиент: " + clientByTelegramId.get().getFirstName()
+                        + " " + clientByTelegramId.get().getLastName(), keyboardMarkup());
+            } else {
+                client.setTelegramId(message.getForwardFrom().getId());
+                client.setUsername(message.getForwardFrom().getUserName());
+
+                replyToUser = messageService.buildReplyMessage(chatId, "Введите ФИ клиента.");
+                clientRecordDataCache.setClientRecrodCurrentState(chatId, ClientRecordStateEnum.ASK_PHONE_NUMBER);
+            }
         } else if (clientRecordCurrentState.equals(ClientRecordStateEnum.ASK_PHONE_NUMBER)) {
             if (Validation.isValidText(userAnswer)) {
                 try {
@@ -79,21 +102,21 @@ public class FillingRecordClient implements HandleRegistration {
 
                 replyToUser = messageService.buildReplyMessage(chatId, "Введите номер телефона формата +79123456789");
 
-                clientRecordDataCache.setClientRecrodCurrentState(chatId, ClientRecordStateEnum.ASK_TELEGRAM_ID);
+                clientRecordDataCache.setClientRecrodCurrentState(chatId, ClientRecordStateEnum.ASK_BIRTHDAY);
             } else {
                 replyToUser = messageService.buildReplyMessage(chatId, "💢 Допустимы только *кириллица* и *английский*!");
                 clientRecordDataCache.setClientRecrodCurrentState(chatId, ClientRecordStateEnum.ASK_PHONE_NUMBER);
 
                 return replyToUser;
             }
-        } else if (clientRecordCurrentState.equals(ClientRecordStateEnum.ASK_TELEGRAM_ID)) {
+        } else if (clientRecordCurrentState.equals(ClientRecordStateEnum.ASK_BIRTHDAY)) {
             if (Validation.isValidPhoneNumber(userAnswer)) {
                 client.setPhoneNumber(userAnswer);
 
                 log.info("client phone number = " + userAnswer);
 
                 replyToUser = messageService.buildReplyMessage(chatId,
-                        "Перешлите сообщения для получения TelegramId");
+                        "Введите дату рождения в формате дд.мм.гггг");
 
                 clientRecordDataCache.setClientRecrodCurrentState(chatId, ClientRecordStateEnum.REGISTERED_CLIENT);
             } else {
@@ -103,37 +126,36 @@ public class FillingRecordClient implements HandleRegistration {
                 return replyToUser;
             }
         } else if (clientRecordCurrentState.equals(ClientRecordStateEnum.REGISTERED_CLIENT)) {
-            Optional<User> forwardFrom = Optional.ofNullable(message.getForwardFrom());
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                LocalDate birthday = LocalDate.from(formatter.parse(userAnswer));
 
-            if (forwardFrom.isPresent() && clientRepository.existsByTelegramId(forwardFrom.get().getId())) {
-                replyToUser = messageService.buildReplyMessage(chatId, "Клиент с таким telegramId уже существует!");
+                client.setBirthDate(birthday);
+                client.setSchedule(Collections.singleton(scheduleRepository.findById(scheduleId)
+                        .orElseThrow(() -> new EntityNotFoundException("Schedule not found"))));
+
+                clientRepository.save(client);
+                replyToUser = messageService.getReplyMessageWithKeyboard(chatId, "Клиент записан!", keyboardMarkup());
+            } catch (EntityNotFoundException e) {
                 clientRecordDataCache.setClientRecrodCurrentState(chatId, ClientRecordStateEnum.REGISTERED_CLIENT);
-
-                return replyToUser;
             }
-
-            client.setTelegramId(message.getForwardFrom().getId());
-            client.setUsername(message.getForwardFrom().getUserName());
-            client.setSchedule(Collections.singleton(scheduleRepository.findById(scheduleId)
-                    .orElseThrow(() -> new EntityNotFoundException("Schedule not found"))));
-            replyToUser = messageService.getReplyMessageWithKeyboard(message.getChatId(), "Клиент записан!", keyboardMarkup());
-            clientRepository.save(client);
         }
+
         clientRecordDataCache.saveClientProfile(chatId, client);
 
         return replyToUser;
     }
 
     private InlineKeyboardMarkup keyboardMarkup() {
-        List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
+        List<InlineKeyboardButton> buttons = new ArrayList<>();
 
-        buttons.add(List.of(
+        buttons.add(
                 InlineKeyboardButton.builder()
-                        .callbackData(CallbackEnum.MENU.toString())
+                        .callbackData(CallbackEnum.SCHEDULE_TO_ACTIVITYFORMAT.toString())
                         .text("Зарегистрировано")
-                        .build()));
+                        .build());
         return InlineKeyboardMarkup.builder()
-                .keyboard(buttons)
+                .keyboardRow(buttons)
                 .build();
     }
 
