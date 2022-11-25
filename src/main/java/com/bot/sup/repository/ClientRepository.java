@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
@@ -18,4 +19,6 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     void deleteClientFromSchedule(Long id);
 
     boolean existsByTelegramId(Long chatId);
+
+    Optional<Client> findByTelegramId(Long telegramId);
 }
