@@ -2,7 +2,7 @@ package com.bot.sup.service.callbackquery.impl.schedule;
 
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
-import com.bot.sup.model.entity.Schedule;
+import com.bot.sup.model.entity.*;
 import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -35,19 +36,26 @@ public class CallbackScheduleInfoImpl implements Callback {
         String eventDate = callbackQuery.getData().split("/")[2];
         String scheduleId = callbackQuery.getData().split("/")[3];
 
-        Optional<Schedule> schedule = scheduleRepository.findById(Long.parseLong(scheduleId));
+        Schedule schedule = scheduleRepository.findById(Long.parseLong(scheduleId))
+                .orElseThrow(() -> new EntityNotFoundException("Schedule with id [" + scheduleId + "] not found"));
+
+        Optional<Activity> optionalActivity = Optional.ofNullable(schedule.getActivity());
+        Optional<Route> optionalRoute = Optional.ofNullable(schedule.getRoute());
 
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text("Дата и время старта: " + schedule.get().getEventTime().format(DateTimeFormatter.ofPattern("HH:mm"))
+                .text("Дата и время старта: " + schedule.getEventTime().format(DateTimeFormatter.ofPattern("HH:mm"))
                         + " " + LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern("dd.MM.yy")) + " ("
-                        + schedule.get().getEventDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru"))
+                        + schedule.getEventDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru"))
                         + ")\n"
-                        + "Формат активности: " + schedule.get().getActivity().getActivityFormat().getName() + "\n"
-                        + "Тип активности: " + schedule.get().getActivity().getActivityType().getName() + "\n"
-                        + "Название маршрута: " + schedule.get().getRoute().getName() + "\n"
-                        + "Точка старта: " + schedule.get().getRoute().getStartPointName())
+                        + "Формат активности: " + optionalActivity.map(Activity::getActivityFormat)
+                        .filter(format -> format.getName() != null).map(ActivityFormat::getName).orElse("Не найдено!") + "\n"
+                        + "Тип активности: " + optionalActivity.map(Activity::getActivityType)
+                        .filter(type -> type.getName() != null).map(ActivityType::getName).orElse("Не найдено!") + "\n"
+                        + "Название маршрута: " +optionalRoute.map(Route::getName).orElse("Не найдено!") + "\n"
+                        + "Точка старта: " + optionalRoute.map(Route::getStartPointName).orElse("Не найдено!") + "\n"
+                        + "Координаты старта: " + optionalRoute.map(Route::getStartPointCoordinates).orElse("Не найдено!"))
                 .parseMode("Markdown")
                 .replyMarkup(createInlineKeyboard(activityFormatId, eventDate, scheduleId))
                 .build();

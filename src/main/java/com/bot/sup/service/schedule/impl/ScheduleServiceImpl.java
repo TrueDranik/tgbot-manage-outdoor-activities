@@ -11,8 +11,10 @@ import com.bot.sup.service.activity.impl.ActivityServiceImpl;
 import com.bot.sup.service.schedule.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,15 +35,29 @@ public class ScheduleServiceImpl implements ScheduleService {
         return findScheduleById(id);
     }
 
+    @Transactional
     @Override
-    public Schedule createSchedule(ScheduleCreateDto createDto) {
-        Schedule schedule = scheduleMapper.dtoToDomain(createDto);
+    public List<Schedule> createSchedule(List<ScheduleCreateDto> createDto) {
+        if (createDto == null) {
+            return null;
+        }
 
-        schedule.setActivity(activityService.getActivityById(createDto.getActivityId()));
-        schedule.setRoute(routeRepository.findById(createDto.getRouteId())
-                .orElseThrow(() -> new EntityNotFoundException("Route not found")));
+        List<Schedule> schedules = new ArrayList<>();
 
-        return scheduleRepository.save(schedule);
+        for (int i = 0; i <= createDto.size() - 1; i++) {
+            Schedule schedule = new Schedule();
+            schedule.setEventDate(createDto.get(i).getEventDate());
+            schedule.setEventTime(createDto.get(i).getEventTime());
+            schedule.setParticipants(createDto.get(i).getParticipants());
+
+            schedule.setActivity(activityService.getActivityById(createDto.get(i).getActivityId()));
+            schedule.setRoute(routeRepository.findById(createDto.get(i).getRouteId())
+                    .orElseThrow(() -> new EntityNotFoundException("Route not found")));
+
+            schedules.add(schedule);
+        }
+
+        return scheduleRepository.saveAll(schedules);
     }
 
     @Override
