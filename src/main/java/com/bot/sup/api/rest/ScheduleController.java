@@ -40,7 +40,7 @@ public class ScheduleController {
 
     @PostMapping
     @Operation(summary = "Создать новое расписание")
-    public ResponseEntity<Schedule> createSchedule(@RequestBody ScheduleCreateDto scheduleCreateDto) {
+    public ResponseEntity<List<Schedule>> createSchedule(@RequestBody List<ScheduleCreateDto> scheduleCreateDto) {
         return new ResponseEntity<>(scheduleService.createSchedule(scheduleCreateDto), HttpStatus.CREATED);
     }
 
