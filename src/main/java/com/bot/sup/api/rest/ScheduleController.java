@@ -53,7 +53,7 @@ public class ScheduleController {
 
     @DeleteMapping("{id}")
     @Operation(summary = "Удалить существующее расписание")
-    public ResponseEntity<Schedule> deleteSchedule(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<ScheduleCreateDto> deleteSchedule(@PathVariable(name = "id") Long id) {
         scheduleService.deleteSchedule(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
