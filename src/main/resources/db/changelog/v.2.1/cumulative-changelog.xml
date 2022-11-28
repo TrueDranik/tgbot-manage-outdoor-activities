@@ -5,8 +5,10 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
 
-    <include file="v.1.0/cumulative-changelog.xml" relativeToChangelogFile="true"/>
-    <include file="v.2.0/cumulative_changelog.xml" relativeToChangelogFile="true"/>
-    <include file="v.2.1/cumulative-changelog.xml" relativeToChangelogFile="true"/>
+    <changeSet id="add-tag-2.1" author="Ruslan">
+        <tagDatabase tag="v.2.1"/>
+    </changeSet>
+
+    <include file="create-table-selected-schedule.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
