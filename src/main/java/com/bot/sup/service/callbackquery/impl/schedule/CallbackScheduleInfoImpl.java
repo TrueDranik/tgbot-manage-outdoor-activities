@@ -4,6 +4,7 @@ import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.*;
 import com.bot.sup.repository.ScheduleRepository;
+import com.bot.sup.repository.SelectedScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class CallbackScheduleInfoImpl implements Callback {
     private final ScheduleRepository scheduleRepository;
+    private final SelectedScheduleRepository selectedScheduleRepository;
     private final MainMessageProperties mainMessageProperties;
 
     public static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.SCHEDULE_INFO);
@@ -35,6 +37,11 @@ public class CallbackScheduleInfoImpl implements Callback {
         String activityFormatId = callbackQuery.getData().split("/")[1];
         String eventDate = callbackQuery.getData().split("/")[2];
         String scheduleId = callbackQuery.getData().split("/")[3];
+
+        SelectedSchedule selectedSchedule = new SelectedSchedule();
+        selectedSchedule.setTelegramId(chatId);
+        selectedSchedule.setScheduleId(Long.valueOf(scheduleId));
+        selectedScheduleRepository.save(selectedSchedule);
 
         Schedule schedule = scheduleRepository.findById(Long.parseLong(scheduleId))
                 .orElseThrow(() -> new EntityNotFoundException("Schedule with id [" + scheduleId + "] not found"));
@@ -53,7 +60,7 @@ public class CallbackScheduleInfoImpl implements Callback {
                         .filter(format -> format.getName() != null).map(ActivityFormat::getName).orElse("Не найдено!") + "\n"
                         + "Тип активности: " + optionalActivity.map(Activity::getActivityType)
                         .filter(type -> type.getName() != null).map(ActivityType::getName).orElse("Не найдено!") + "\n"
-                        + "Название маршрута: " +optionalRoute.map(Route::getName).orElse("Не найдено!") + "\n"
+                        + "Название маршрута: " + optionalRoute.map(Route::getName).orElse("Не найдено!") + "\n"
                         + "Точка старта: " + optionalRoute.map(Route::getStartPointName).orElse("Не найдено!") + "\n"
                         + "Координаты старта: " + optionalRoute.map(Route::getStartPointCoordinates).orElse("Не найдено!"))
                 .parseMode("Markdown")
