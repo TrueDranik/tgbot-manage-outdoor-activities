@@ -73,6 +73,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleRepository.save(scheduleById);
     }
 
+    @Transactional
     @Override
     public void deleteSchedule(Long id) {
         scheduleRepository.removeScheduleById(id);
