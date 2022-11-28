@@ -1,11 +1,12 @@
 package com.bot.sup.service.schedule.impl;
 
-import com.bot.sup.mapper.ScheduleMapper;
 import com.bot.sup.model.ScheduleRequestParams;
 import com.bot.sup.model.dto.ScheduleCreateDto;
 import com.bot.sup.model.entity.Schedule;
+import com.bot.sup.model.entity.SelectedSchedule;
 import com.bot.sup.repository.RouteRepository;
 import com.bot.sup.repository.ScheduleRepository;
+import com.bot.sup.repository.SelectedScheduleRepository;
 import com.bot.sup.repository.specification.ScheduleSpecification;
 import com.bot.sup.service.activity.impl.ActivityServiceImpl;
 import com.bot.sup.service.schedule.ScheduleService;
@@ -16,14 +17,25 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
+    private final SelectedScheduleRepository selectedScheduleRepository;
     private final ActivityServiceImpl activityService;
-    private final ScheduleMapper scheduleMapper;
     private final RouteRepository routeRepository;
+
+    @Override
+    public Schedule getScheduleByTelegramId(Long telegramId) {
+        Optional<SelectedSchedule> byTelegramId = Optional.ofNullable(selectedScheduleRepository.findByTelegramId(telegramId)
+                .orElseThrow(() -> new EntityNotFoundException("User with Telegram id[" + telegramId + "] not found")));
+        Long scheduleId = byTelegramId.get().getScheduleId();
+
+        return scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new EntityNotFoundException("Schedule with id[" + scheduleId + "not found"));
+    }
 
     @Override
     public List<Schedule> getAllSchedule(ScheduleRequestParams params) {

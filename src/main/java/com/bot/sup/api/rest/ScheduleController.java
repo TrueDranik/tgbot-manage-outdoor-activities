@@ -23,6 +23,15 @@ import java.util.Optional;
 public class ScheduleController {
     private final ScheduleService scheduleService;
 
+    @GetMapping("/telegramId/{telegramId}")
+    @Operation(summary = "Получить расписание, выбранное пользователем")
+    public ResponseEntity<Schedule> getScheduleByTelegramId(@PathVariable("telegramId") Long telegramId) {
+        Optional<Schedule> schedule = Optional.ofNullable(scheduleService.getScheduleByTelegramId(telegramId));
+
+        return schedule.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+    }
+
     @GetMapping
     @Operation(summary = "Получить список всех расписаний")
     public ResponseEntity<List<Schedule>> getAllSchedule(@ParameterObject ScheduleRequestParams params) {
