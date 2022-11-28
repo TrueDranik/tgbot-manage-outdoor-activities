@@ -22,4 +22,10 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>, JpaSp
     List<Schedule> selectScheduleByActivityFormatIdAndEventDate(Long id, LocalDate eventDate);
 
     void deleteScheduleById(Long id);
+
+    void deleteById(Long id);
+
+    @Modifying
+    @Query("DELETE FROM Schedule s WHERE s.id = ?1")
+    void removeScheduleById(Long id);
 }

@@ -1,6 +1,5 @@
 package com.bot.sup.service.schedule.impl;
 
-import com.bot.sup.mapper.ScheduleMapper;
 import com.bot.sup.model.ScheduleRequestParams;
 import com.bot.sup.model.dto.ScheduleCreateDto;
 import com.bot.sup.model.entity.Schedule;
@@ -15,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -22,7 +22,6 @@ import java.util.List;
 public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final ActivityServiceImpl activityService;
-    private final ScheduleMapper scheduleMapper;
     private final RouteRepository routeRepository;
 
     @Override
@@ -39,7 +38,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public List<Schedule> createSchedule(List<ScheduleCreateDto> createDto) {
         if (createDto == null) {
-            return null;
+            return Collections.emptyList();
         }
 
         List<Schedule> schedules = new ArrayList<>();
@@ -76,7 +75,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public void deleteSchedule(Long id) {
-        scheduleRepository.delete(findScheduleById(id));
+        scheduleRepository.removeScheduleById(id);
     }
 
     private Schedule findScheduleById(Long id) {
