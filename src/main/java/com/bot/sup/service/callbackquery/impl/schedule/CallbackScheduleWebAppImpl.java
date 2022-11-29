@@ -43,6 +43,10 @@ public class CallbackScheduleWebAppImpl implements Callback {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
         buttons.add(List.of(InlineKeyboardButton.builder()
+                .text("Изменить/удалить маршрут")
+                .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/#/updateRoute"))
+                .build()));
+        buttons.add(List.of(InlineKeyboardButton.builder()
                 .text("Добавить новый маршрут")
                 .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/#/route"))
                 .build()));
@@ -61,7 +65,7 @@ public class CallbackScheduleWebAppImpl implements Callback {
 
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text(mainMessageProperties.getBack())
-                .callbackData("SCHEDULE")
+                .callbackData(CallbackEnum.SCHEDULE.toString())
                 .build()));
 
         return InlineKeyboardMarkup.builder()
