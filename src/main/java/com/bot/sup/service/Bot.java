@@ -54,9 +54,9 @@ public class Bot extends TelegramLongPollingBot {
         ClientRecordStateEnum clientRecordStateEnum;
 
         String data = update.getMessage().getWebAppData().getData();
-        execute(SendMessage.builder()
-                .text(data)
-                .build());
+//        execute(SendMessage.builder()
+//                .text(data)
+//                .build());
 
         log.info("get webApp data = " + data);
 
