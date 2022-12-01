@@ -53,12 +53,10 @@ public class Bot extends TelegramLongPollingBot {
         ActivityTypeStateEnum activityTypeStateEnum;
         ClientRecordStateEnum clientRecordStateEnum;
 
-        String data = update.getMessage().getWebAppData().getData();
 //        execute(SendMessage.builder()
 //                .text(data)
 //                .build());
 
-        log.info("get webApp data = " + data);
 
         if (update.hasCallbackQuery()) {
             Callback callback = callbackMap.getCallback(update.getCallbackQuery().getData().split("/")[0]);
@@ -68,6 +66,9 @@ public class Bot extends TelegramLongPollingBot {
             execute(callback.getCallbackQuery(update.getCallbackQuery()));
         } else if (update.hasMessage()) {
             Long chatId = message.getChatId();
+
+            String data = update.getMessage().getWebAppData().getData();
+            log.info("get webApp data = " + data);
 
             log.info("chatId from message = " + chatId);
             if (message.isCommand()) {
