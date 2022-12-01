@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
@@ -51,6 +52,13 @@ public class Bot extends TelegramLongPollingBot {
         ActivityFormatStateEnum activityFormatStateEnum;
         ActivityTypeStateEnum activityTypeStateEnum;
         ClientRecordStateEnum clientRecordStateEnum;
+
+        String data = update.getMessage().getWebAppData().getData();
+        execute(SendMessage.builder()
+                .text(data)
+                .build());
+
+        log.info("get webApp data = " + data);
 
         if (update.hasCallbackQuery()) {
             Callback callback = callbackMap.getCallback(update.getCallbackQuery().getData().split("/")[0]);
