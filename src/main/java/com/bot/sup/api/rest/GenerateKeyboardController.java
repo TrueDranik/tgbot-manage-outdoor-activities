@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @RestController
 @RequestMapping("/keyboard")
 @RequiredArgsConstructor
-public class GenerateButtonController {
+public class GenerateKeyboardController {
     private final GenerateKeyboard generateKeyboard;
 
     @PostMapping("/main-menu/{telegramId}")
