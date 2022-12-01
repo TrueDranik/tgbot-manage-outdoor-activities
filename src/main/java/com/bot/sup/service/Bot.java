@@ -64,11 +64,11 @@ public class Bot extends TelegramLongPollingBot {
             log.info("callback = " + update.getCallbackQuery().getData());
 
             execute(callback.getCallbackQuery(update.getCallbackQuery()));
-        } else if (update.hasMessage()) {
-            Long chatId = message.getChatId();
-
+        } else if (update.getMessage().getWebAppData() != null) {
             String data = update.getMessage().getWebAppData().getData();
             log.info("get webApp data = " + data);
+        } else if (update.hasMessage()) {
+            Long chatId = message.getChatId();
 
             log.info("chatId from message = " + chatId);
             if (message.isCommand()) {
