@@ -53,20 +53,25 @@ public class Bot extends TelegramLongPollingBot {
         ActivityTypeStateEnum activityTypeStateEnum;
         ClientRecordStateEnum clientRecordStateEnum;
 
-//        execute(SendMessage.builder()
-//                .text(data)
-//                .build());
-
-
         if (update.hasCallbackQuery()) {
             Callback callback = callbackMap.getCallback(update.getCallbackQuery().getData().split("/")[0]);
 
             log.info("callback = " + update.getCallbackQuery().getData());
 
             execute(callback.getCallbackQuery(update.getCallbackQuery()));
-        } else if (update.getMessage().getWebAppData() != null) {
+        } else if (update.getMessage().getWebAppData() != null || update.getEditedChannelPost().getWebAppData() != null
+        || update.getChannelPost().getWebAppData() != null || update.getEditedMessage().getWebAppData() != null) {
             String data = update.getMessage().getWebAppData().getData();
             log.info("get webApp data = " + data);
+
+            String data1 = update.getEditedChannelPost().getWebAppData().getData();
+            log.info("get webapp data1 = " + data1);
+
+            String data2 = update.getChannelPost().getWebAppData().getData();
+            log.info("get webapp data2 = " + data2);
+
+            String data3 = update.getEditedMessage().getWebAppData().getData();
+            log.info("get webapp data3 = " + data3);
         } else if (update.hasMessage()) {
             Long chatId = message.getChatId();
 
