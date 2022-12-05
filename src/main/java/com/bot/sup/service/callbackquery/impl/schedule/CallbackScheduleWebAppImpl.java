@@ -2,6 +2,7 @@ package com.bot.sup.service.callbackquery.impl.schedule;
 
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
+import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class CallbackScheduleWebAppImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
+    private final ScheduleMessageProperties scheduleMessageProperties;
 
     private static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.SCHEDULE_WEBAPP);
 
@@ -30,7 +32,7 @@ public class CallbackScheduleWebAppImpl implements Callback {
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(callbackQuery.getMessage().getChatId())
-                .text("Добавить тур/составить расписание")
+                .text(scheduleMessageProperties.getTourEditor())
                 .replyMarkup(createInlineKeyboard())
                 .build();
     }
@@ -43,23 +45,23 @@ public class CallbackScheduleWebAppImpl implements Callback {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
         buttons.add(List.of(InlineKeyboardButton.builder()
-                .text("Изменить/удалить маршрут")
+                .text(scheduleMessageProperties.getChangeDeleteRoute())
                 .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/#/updateRoute"))
                 .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()
-                .text("Добавить новый маршрут")
+                .text(scheduleMessageProperties.getAddNewRoute())
                 .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/#/route"))
                 .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()
-                .text("Составить расписание в конструкторе")
+                .text(scheduleMessageProperties.getMakeSchedule())
                 .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/#/constructor"))
                 .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()
-                .text("Создать новую активность")
+                .text(scheduleMessageProperties.getCreateActivity())
                 .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/#/activity"))
                 .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()
-                .text("Изменить существующую активность")
+                .text(scheduleMessageProperties.getChangeActivity())
                 .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/#/updateActivity"))
                 .build()));
 

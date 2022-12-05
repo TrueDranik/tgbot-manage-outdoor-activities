@@ -1,7 +1,9 @@
 package com.bot.sup.service.callbackquery.impl.schedule;
 
 import com.bot.sup.common.enums.CallbackEnum;
+import com.bot.sup.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.common.properties.message.MainMessageProperties;
+import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,8 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class CallbackScheduleImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
+    private final ScheduleMessageProperties scheduleMessageProperties;
+    private final ActivityMessageProperties activityMessageProperties;
 
     private static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.SCHEDULE);
 
@@ -29,7 +33,7 @@ public class CallbackScheduleImpl implements Callback {
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(callbackQuery.getMessage().getChatId())
-                .text("Меню расписания")
+                .text(scheduleMessageProperties.getMenuSchedules())
                 .replyMarkup(createInlineKeyboard())
                 .build();
     }
@@ -38,11 +42,11 @@ public class CallbackScheduleImpl implements Callback {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
         buttons.add(List.of(InlineKeyboardButton.builder()
-                .text("Список форматов")
+                .text(activityMessageProperties.getListActivityFormat())
                 .callbackData(CallbackEnum.SCHEDULE_TO_ACTIVITYFORMAT.toString())
                 .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()
-                .text("Добавить тур/составить расписание")
+                .text(scheduleMessageProperties.getTourEditor())
                 .callbackData(CallbackEnum.SCHEDULE_WEBAPP.toString())
                 .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()

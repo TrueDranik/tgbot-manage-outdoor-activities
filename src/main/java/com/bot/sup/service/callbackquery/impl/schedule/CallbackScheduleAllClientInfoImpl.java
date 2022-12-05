@@ -2,6 +2,7 @@ package com.bot.sup.service.callbackquery.impl.schedule;
 
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
+import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.Client;
 import com.bot.sup.repository.ClientRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -24,6 +25,7 @@ import java.util.Set;
 public class CallbackScheduleAllClientInfoImpl implements Callback {
     private final ClientRepository clientRepository;
     private final MainMessageProperties mainMessageProperties;
+    private final ScheduleMessageProperties scheduleMessageProperties;
 
     private static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.SCHEDULE_ALL_CLIENT_INFO);
 
@@ -40,7 +42,7 @@ public class CallbackScheduleAllClientInfoImpl implements Callback {
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(callbackQuery.getMessage().getChatId())
-                .text("Клиентов записалось: *" + numberClients + "*")
+                .text(String.format(scheduleMessageProperties.getClientsRecorded(), numberClients))
                 .parseMode("Markdown")
                 .replyMarkup(createInlineKeyboard(clientByScheduleId, activityFormatId, eventDate, scheduleId))
                 .build();
@@ -71,7 +73,7 @@ public class CallbackScheduleAllClientInfoImpl implements Callback {
         }
 
         secondRow.add(InlineKeyboardButton.builder()
-                .text("Записать клиента")
+                .text(scheduleMessageProperties.getRecordClient())
                 .callbackData(CallbackEnum.CLIENT_RECORD + "/" + scheduleId)
                 .build());
         secondRow.add(InlineKeyboardButton.builder()

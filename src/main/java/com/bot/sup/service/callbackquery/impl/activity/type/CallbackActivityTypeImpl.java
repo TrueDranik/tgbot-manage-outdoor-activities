@@ -35,7 +35,7 @@ public class CallbackActivityTypeImpl implements Callback {
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text("Тип активности")
+                .text(activityMessageProperties.getActivityType())
                 .replyMarkup(setUpKeyboard())
                 .build();
     }
@@ -45,12 +45,12 @@ public class CallbackActivityTypeImpl implements Callback {
 
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("Список типов")
+                        .text(activityMessageProperties.getListActivityType())
                         .callbackData("LIST_ACTIVITY_TYPE")
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("Добавить тип")
+                        .text(activityMessageProperties.getAddActivityType())
                         .callbackData("ADD_ACTIVITY_TYPE")
                         .build()));
         buttons.add(List.of(

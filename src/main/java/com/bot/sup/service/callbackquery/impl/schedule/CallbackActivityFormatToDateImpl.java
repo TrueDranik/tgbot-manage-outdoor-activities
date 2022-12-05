@@ -2,6 +2,7 @@ package com.bot.sup.service.callbackquery.impl.schedule;
 
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
+import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.ActivityFormat;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.ActivityFormatRepository;
@@ -26,6 +27,7 @@ import static com.bot.sup.common.enums.CallbackEnum.ACTIVITYFORMAT_TO_DATE;
 @RequiredArgsConstructor
 public class CallbackActivityFormatToDateImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
+    private final ScheduleMessageProperties scheduleMessageProperties;
     private final ScheduleRepository scheduleRepository;
     private final ActivityFormatRepository activityFormatRepository;
 
@@ -43,16 +45,15 @@ public class CallbackActivityFormatToDateImpl implements Callback {
             return EditMessageText.builder()
                     .messageId(callbackQuery.getMessage().getMessageId())
                     .chatId(chatId)
-                    .text("❌ Расписание для формата *" + activityFormat.get().getName() + "* отсутствует.\nВернитесь назад.")
+                    .text(String.format(scheduleMessageProperties.getNotFoundFormat(), activityFormat.get().getName()))
                     .parseMode("Markdown")
                     .replyMarkup(generateKeyboardWithSchedule(eventDate, activityFormatId))
                     .build();
         }
-
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text("Выберите дату для *" + activityFormat.get().getName() + "*")
+                .text(String.format(scheduleMessageProperties.getDateChoice(), activityFormat.get().getName()))
                 .parseMode("Markdown")
                 .replyMarkup(generateKeyboardWithSchedule(eventDate, activityFormatId))
                 .build();
