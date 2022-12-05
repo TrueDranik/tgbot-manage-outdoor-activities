@@ -8,7 +8,8 @@ import com.bot.sup.model.entity.*;
 import com.bot.sup.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import javax.persistence.EntityNotFoundException;
@@ -28,25 +29,36 @@ public class GenerateKeyboard {
     private final HandleScheduleInfoImpl handleScheduleInfo;
     private final ScheduleRepository scheduleRepository;
 
-    public void mainMenu(Long chatId) throws TelegramApiException {
+    public Integer getMessageId(Long chatId) {
+        Update update = bot.getUpdate();
+        if (update.getCallbackQuery().getMessage().getChatId().equals(chatId)) {
+            return update.getCallbackQuery().getMessage().getMessageId();
+        }
+
+        return null;
+    }
+
+    public void mainMenu(Long chatId, Integer messageId) throws TelegramApiException {
         bot.execute(
-                SendMessage.builder()
+                EditMessageText.builder()
                         .chatId(chatId)
+                        .messageId(messageId)
                         .text(mainMessageProperties.getUserChoose())
                         .replyMarkup(handleMainMenu.createInlineKeyboard())
                         .build());
     }
 
-    public void scheduleMenu(Long chatId) throws TelegramApiException {
+    public void scheduleMenu(Long chatId, Integer messageId) throws TelegramApiException {
         bot.execute(
-                SendMessage.builder()
+                EditMessageText.builder()
                         .chatId(chatId)
+                        .messageId(messageId)
                         .text("Меню расписания")
                         .replyMarkup(handleScheduleMenu.createInlineKeyboard())
                         .build());
     }
 
-    public void scheduleInfo(Long chatId, String activityFormatId, String eventDate, String scheduleId) throws TelegramApiException {
+    public void scheduleInfo(Long chatId, Integer messageId, String activityFormatId, String eventDate, String scheduleId) throws TelegramApiException {
         Schedule schedule = scheduleRepository.findById(Long.parseLong(scheduleId))
                 .orElseThrow(() -> new EntityNotFoundException("Schedule with id [" + scheduleId + "] not found"));
 
@@ -54,8 +66,9 @@ public class GenerateKeyboard {
         Optional<Route> optionalRoute = Optional.ofNullable(schedule.getRoute());
 
         bot.execute(
-                SendMessage.builder()
+                EditMessageText.builder()
                         .chatId(chatId)
+                        .messageId(messageId)
                         .text("Дата и время старта: " + schedule.getEventTime().format(DateTimeFormatter.ofPattern("HH:mm"))
                                 + " " + LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern("dd.MM.yy")) + " ("
                                 + schedule.getEventDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru"))
