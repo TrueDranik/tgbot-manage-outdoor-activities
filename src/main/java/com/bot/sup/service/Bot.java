@@ -42,6 +42,7 @@ public class Bot extends TelegramLongPollingBot {
     private final List<BaseCommand> commands;
     private BotApiMethod<?> replyMessage;
     final TelegramProperties config;
+    private Update userUpdate;
 
     @SneakyThrows
     @Override
@@ -51,6 +52,8 @@ public class Bot extends TelegramLongPollingBot {
         ActivityFormatStateEnum activityFormatStateEnum;
         ActivityTypeStateEnum activityTypeStateEnum;
         ClientRecordStateEnum clientRecordStateEnum;
+
+        setUpdate(update);
 
         if (update.hasCallbackQuery()) {
             Callback callback = callbackMap.getCallback(update.getCallbackQuery().getData().split("/")[0]);
@@ -113,6 +116,14 @@ public class Bot extends TelegramLongPollingBot {
                 .commands(botCommands)
                 .build();
         execute(myCommands);
+    }
+
+    public void setUpdate(Update userUpdate){
+        this.userUpdate = userUpdate;
+    }
+
+    public Update getUpdate(){
+        return userUpdate;
     }
 
     @Override
