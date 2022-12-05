@@ -3,6 +3,7 @@ package com.bot.sup.api.telegram.handler.impl;
 import com.bot.sup.api.telegram.handler.Handle;
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
+import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.*;
 import com.bot.sup.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ import java.util.Optional;
 public class HandleScheduleInfoImpl {
     private final ScheduleRepository scheduleRepository;
     private final MainMessageProperties mainMessageProperties;
+    private final ScheduleMessageProperties scheduleMessageProperties;
 
     public BotApiMethod<?> getMessage(Update update) {
         val callbackQuery = update.getCallbackQuery();
@@ -68,20 +70,20 @@ public class HandleScheduleInfoImpl {
         List<InlineKeyboardButton> thirdRow = new ArrayList<>();
 
         firstRow.add(InlineKeyboardButton.builder()
-                .text("Информация о клиентах")
+                .text(scheduleMessageProperties.getClientInformation())
                 .callbackData(CallbackEnum.SCHEDULE_ALL_CLIENT_INFO + "/" + activityFormatId + "/" + eventDate + "/" + scheduleId)
                 .build());
         firstRow.add(InlineKeyboardButton.builder()
-                .text("Полное описание")
+                .text(scheduleMessageProperties.getFullDescription())
                 .callbackData(CallbackEnum.SCHEDULE_DESCRIPTION + "/" + activityFormatId + "/" + eventDate + "/" + scheduleId)
                 .build());
 
         secondRow.add(InlineKeyboardButton.builder()
-                .text("Изменить (в работе)")
+                .text(scheduleMessageProperties.getChangeSchedule())
                 .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/"))
                 .build());
         secondRow.add(InlineKeyboardButton.builder()
-                .text("Отменить")
+                .text(scheduleMessageProperties.getCancelSchedule())
                 .callbackData(CallbackEnum.SCHEDULE_CANCEL + "/" + scheduleId)
                 .build());
 

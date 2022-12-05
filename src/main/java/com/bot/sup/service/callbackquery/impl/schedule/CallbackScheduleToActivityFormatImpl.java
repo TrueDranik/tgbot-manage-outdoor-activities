@@ -1,6 +1,7 @@
 package com.bot.sup.service.callbackquery.impl.schedule;
 
 import com.bot.sup.common.enums.CallbackEnum;
+import com.bot.sup.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.ActivityFormat;
@@ -26,6 +27,7 @@ import static com.bot.sup.common.enums.CallbackEnum.SCHEDULE_TO_ACTIVITYFORMAT;
 public class CallbackScheduleToActivityFormatImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
     private final ScheduleMessageProperties scheduleMessageProperties;
+    private final ActivityMessageProperties activityMessageProperties;
     private final ActivityFormatRepository activityFormatRepository;
 
     public static final Set<CallbackEnum> ACTIVITIES = Set.of(SCHEDULE_TO_ACTIVITYFORMAT);
@@ -38,7 +40,7 @@ public class CallbackScheduleToActivityFormatImpl implements Callback {
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text("Список форматов")
+                .text(activityMessageProperties.getListActivityFormat())
                 .replyMarkup(generateKeyboardWithActivity(activityFormats))
                 .build();
     }

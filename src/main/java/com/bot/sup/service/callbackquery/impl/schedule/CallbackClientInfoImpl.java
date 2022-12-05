@@ -2,6 +2,7 @@ package com.bot.sup.service.callbackquery.impl.schedule;
 
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
+import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.Booking;
 import com.bot.sup.model.entity.Client;
 import com.bot.sup.repository.BookingRepository;
@@ -24,6 +25,7 @@ public class CallbackClientInfoImpl implements Callback {
     private final ClientRepository clientRepository;
     private final BookingRepository bookingRepository;
     private final MainMessageProperties mainMessageProperties;
+    private final ScheduleMessageProperties scheduleMessageProperties;
 
     private static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.CLIENT_INFO);
 
@@ -44,7 +46,7 @@ public class CallbackClientInfoImpl implements Callback {
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .text(client.get().getFirstName() + client.get().getLastName() + userId + "\n"
                         + client.get().getPhoneNumber() + "\n"
-                        + (invitedUsers.map(booking -> "Взял с собой друзей: " + booking.getInvitedUsers()).orElse("")))
+                        + (invitedUsers.map(booking -> scheduleMessageProperties.getInvitedFriends() + booking.getInvitedUsers()).orElse("")))
                 .parseMode("HTML")
                 .replyMarkup(createInlineKeyboard(client, activityFormatId, eventDate, scheduleId))
                 .build();
@@ -55,11 +57,11 @@ public class CallbackClientInfoImpl implements Callback {
         List<InlineKeyboardButton> secondRow = new ArrayList<>();
 
         firstRow.add(InlineKeyboardButton.builder()
-                .text("Связаться")
+                .text(scheduleMessageProperties.getConnect())
                 .url("https://t.me/" + client.get().getUsername())
                 .build());
         firstRow.add(InlineKeyboardButton.builder()
-                .text("Отменить бронь")
+                .text(scheduleMessageProperties.getCancelReservation())
                 .callbackData(CallbackEnum.SCHEDULE_CLIENT_CANCEL + "/" + activityFormatId + "/" + eventDate + "/"
                         + scheduleId + "/" + client.get().getId())
                 .build());

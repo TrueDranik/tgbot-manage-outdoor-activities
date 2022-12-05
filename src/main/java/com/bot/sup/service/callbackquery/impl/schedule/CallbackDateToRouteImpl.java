@@ -2,6 +2,7 @@ package com.bot.sup.service.callbackquery.impl.schedule;
 
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
+import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -24,6 +25,7 @@ import java.util.*;
 public class CallbackDateToRouteImpl implements Callback {
     private final ScheduleRepository scheduleRepository;
     private final MainMessageProperties mainMessageProperties;
+    private final ScheduleMessageProperties scheduleMessageProperties;
 
     private static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.DATE_TO_ROUTE);
 
@@ -40,9 +42,8 @@ public class CallbackDateToRouteImpl implements Callback {
             return EditMessageText.builder()
                     .messageId(callbackQuery.getMessage().getMessageId())
                     .chatId(chatId)
-                    .text("❌ Расписание на *" +
-                            LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) +
-                            "* отсутствуют.\nВернитесь назад.")
+                    .text(String.format(scheduleMessageProperties.getNotFoundDate(),
+                            LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))))
                     .parseMode("Markdown")
                     .replyMarkup(createInlineKeyboard(schedules, activityFormatId, eventDate))
                     .build();
@@ -51,10 +52,9 @@ public class CallbackDateToRouteImpl implements Callback {
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text("Выберите маршрут для даты *" + LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + "*"
-                        + " ("
-                        + LocalDate.parse(eventDate).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru"))
-                        + ")\n")
+                .text(String.format(scheduleMessageProperties.getChooseRouteForDate(),
+                        LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                        LocalDate.parse(eventDate).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru"))))
                 .parseMode("Markdown")
                 .replyMarkup(createInlineKeyboard(schedules, activityFormatId, eventDate))
                 .build();
