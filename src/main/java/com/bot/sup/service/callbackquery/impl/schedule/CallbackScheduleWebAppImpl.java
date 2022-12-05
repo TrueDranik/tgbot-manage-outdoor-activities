@@ -45,14 +45,6 @@ public class CallbackScheduleWebAppImpl implements Callback {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
         buttons.add(List.of(InlineKeyboardButton.builder()
-                .text(scheduleMessageProperties.getChangeDeleteRoute())
-                .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/#/updateRoute"))
-                .build()));
-        buttons.add(List.of(InlineKeyboardButton.builder()
-                .text(scheduleMessageProperties.getAddNewRoute())
-                .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/#/route"))
-                .build()));
-        buttons.add(List.of(InlineKeyboardButton.builder()
                 .text(scheduleMessageProperties.getMakeSchedule())
                 .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/#/constructor"))
                 .build()));
@@ -63,6 +55,14 @@ public class CallbackScheduleWebAppImpl implements Callback {
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text(scheduleMessageProperties.getChangeActivity())
                 .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/#/updateActivity"))
+                .build()));
+        buttons.add(List.of(InlineKeyboardButton.builder()
+                .text(scheduleMessageProperties.getAddNewRoute())
+                .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/#/route"))
+                .build()));
+        buttons.add(List.of(InlineKeyboardButton.builder()
+                .text(scheduleMessageProperties.getChangeDeleteRoute())
+                .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/#/updateRoute"))
                 .build()));
 
         buttons.add(List.of(InlineKeyboardButton.builder()
