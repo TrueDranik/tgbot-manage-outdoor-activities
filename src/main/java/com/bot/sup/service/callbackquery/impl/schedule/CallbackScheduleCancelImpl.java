@@ -1,6 +1,7 @@
 package com.bot.sup.service.callbackquery.impl.schedule;
 
 import com.bot.sup.common.enums.CallbackEnum;
+import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -19,6 +20,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class CallbackScheduleCancelImpl implements Callback {
     private final ScheduleRepository scheduleRepository;
+    private final ScheduleMessageProperties scheduleMessageProperties;
 
     private static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.SCHEDULE_CANCEL);
 
@@ -30,7 +32,7 @@ public class CallbackScheduleCancelImpl implements Callback {
 
         return SendMessage.builder()
                 .chatId(callbackQuery.getMessage().getChatId())
-                .text("Вы уверены, что хотите отменить событие\n*" + schedule.get().getActivity().getName() + "*?")
+                .text(String.format(scheduleMessageProperties.getConfirmCancelEvent(),  schedule.get().getActivity().getName()))
                 .parseMode("Markdown")
                 .replyMarkup(createInlineKeyboard(scheduleId))
                 .build();

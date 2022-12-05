@@ -2,6 +2,7 @@ package com.bot.sup.service.callbackquery.impl.schedule;
 
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
+import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -22,6 +23,7 @@ import java.util.*;
 public class CallbackScheduleCancelYesImpl implements Callback {
     private final ScheduleRepository scheduleRepository;
     private final MainMessageProperties mainMessageProperties;
+    private final ScheduleMessageProperties scheduleMessageProperties;
 
     private static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.SCHEDULE_CANCEL_YES);
 
@@ -36,7 +38,7 @@ public class CallbackScheduleCancelYesImpl implements Callback {
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(callbackQuery.getMessage().getChatId())
-                .text("Мероприятие " + schedule.get().getActivity().getName() + " отменено")
+                .text(String.format(scheduleMessageProperties.getEventCancelled(),  schedule.get().getActivity().getName()))
                 .replyMarkup(createInlineKeyboard())
                 .build();
     }

@@ -63,13 +63,13 @@ public class FillingActivityType implements HandleRegistration {
             ActivityTypeStateEnum activityTypeCurrentState = activityTypeDataCache.getActivityTypeCurrentState(chatId);
 
             if (activityTypeCurrentState.equals(ActivityTypeStateEnum.ASK_ACTIVITY_TYPE_NAME)) {
-                replyToUser = messageService.buildReplyMessage(chatId, "Введите формат");
+                replyToUser = messageService.buildReplyMessage(chatId, activityMessageProperties.getInputActivityFormatName());
                 activityTypeDataCache.setActivityTypeCurrentState(chatId, ActivityTypeStateEnum.REGISTERED_ACTIVITY_TYPE);
 
                 return replyToUser;
             } else if (activityTypeCurrentState.equals(ActivityTypeStateEnum.REGISTERED_ACTIVITY_TYPE)) {
                 if (activityTypeRepository.existsByNameEqualsIgnoreCase(userAnswer)) {
-                    replyToUser = messageService.buildReplyMessage(chatId, "Данный формат существует");
+                    replyToUser = messageService.buildReplyMessage(chatId, activityMessageProperties.getActivityNameAlreadyTaken());
                     activityTypeDataCache.setActivityTypeCurrentState(chatId, ActivityTypeStateEnum.REGISTERED_ACTIVITY_TYPE);
 
                     return replyToUser;
@@ -78,7 +78,7 @@ public class FillingActivityType implements HandleRegistration {
                 try {
                     activityType.setName(userAnswer);
                 } catch (IndexOutOfBoundsException e) {
-                    return messageService.buildReplyMessage(chatId, "Вы не ввели формат!");
+                    return messageService.buildReplyMessage(chatId, activityMessageProperties.getInputActivityNameIsEmpty());
                 }
 
 
@@ -88,7 +88,7 @@ public class FillingActivityType implements HandleRegistration {
                     activityTypeServiceImpl.save(activityType);
                 }
 
-                replyToUser = messageService.getReplyMessageWithKeyboard(chatId, "Тип активности зарегистрирован", keyboardMarkup());
+                replyToUser = messageService.getReplyMessageWithKeyboard(chatId, activityMessageProperties.getRegisteredActivity(), keyboardMarkup());
             }
 
             if (forUpdate) {
@@ -106,7 +106,7 @@ public class FillingActivityType implements HandleRegistration {
             buttons.add(List.of(
                     InlineKeyboardButton.builder()
                             .callbackData("SUP_ACTIVITY_TYPE")
-                            .text("Зарегистрировано")
+                            .text(mainMessageProperties.getDone())
                             .build()));
             return InlineKeyboardMarkup.builder()
                     .keyboard(buttons)
