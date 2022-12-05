@@ -50,6 +50,7 @@ public class CallbackActivityFormatToDateImpl implements Callback {
                     .replyMarkup(generateKeyboardWithSchedule(eventDate, activityFormatId))
                     .build();
         }
+
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
@@ -68,6 +69,10 @@ public class CallbackActivityFormatToDateImpl implements Callback {
 
         Set<LocalDate> localDates = new HashSet<>();
         for (int indexSchedule = 0; indexSchedule < eventDate.size(); indexSchedule++) {
+            if (eventDate.get(indexSchedule).getEventDate().isBefore(LocalDate.now())) {
+                continue;
+            }
+
             localDates.add(eventDate.get(indexSchedule).getEventDate());
         }
 
@@ -83,42 +88,6 @@ public class CallbackActivityFormatToDateImpl implements Callback {
                 rowMain.clear();
             }
         });
-
-//        schedules.forEach(i -> {
-//            localDateTimes.add(i.getEventDate());
-//            if ((/*i.getActivity().getActivityFormat() != null && */i.getActivity().getActivityFormat().getId().equals(activityFormat.get().getId()))) {
-//                    if (localDateTimes.contains(i.getEventDate())) {
-//                        rowMain.add(InlineKeyboardButton.builder()
-//                                .text(i.getEventDate().format(formatter) + " " +
-//                                        i.getEventDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru")))
-//                                .callbackData(CallbackEnum.DATE_TO_ROUTE + "/" + activityFormatId)
-//                                .build());
-//                    }
-//
-//                    if (rowMain.size() == 2) {
-//                        List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);
-//                        mainKeyboard.add(temporaryKeyboardRow);
-//                        rowMain.clear();
-//                    }
-//                }
-
-//            if (i.getActivity().getActivityFormat() != null &&
-//                    i.getActivity().getActivityFormat().getId().equals(activityFormat.get().getId()) &&
-//                    localDateTimes.contains(i.getEventDate())) {
-//
-//
-//                rowMain.add(InlineKeyboardButton.builder()
-//                        .text(i.getEventDate().format(formatter) + " " +
-//                                i.getEventDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru")))
-//                        .callbackData(CallbackEnum.DATE_TO_ROUTE + "/" + activityFormatId + "/" + i.getId())
-//                        .build());
-//                if (rowMain.size() == 2) {
-//                    List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);
-//                    mainKeyboard.add(temporaryKeyboardRow);
-//                    rowMain.clear();
-//                }
-//            }
-//        });
 
         if (rowMain.size() == 1) {
             mainKeyboard.add(rowMain);
