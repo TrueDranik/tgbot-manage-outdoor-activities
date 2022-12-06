@@ -45,10 +45,7 @@ public class CallbackScheduleImpl implements Callback {
                 .text(activityMessageProperties.getListActivityFormat())
                 .callbackData(CallbackEnum.SCHEDULE_TO_ACTIVITYFORMAT.toString())
                 .build()));
-        buttons.add(List.of(InlineKeyboardButton.builder()
-                .text(scheduleMessageProperties.getTourEditor())
-                .callbackData(CallbackEnum.SCHEDULE_WEBAPP.toString())
-                .build()));
+
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text(mainMessageProperties.getMenu())
                 .callbackData(CallbackEnum.MENU.toString())
