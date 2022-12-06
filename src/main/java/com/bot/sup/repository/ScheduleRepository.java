@@ -28,4 +28,8 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>, JpaSp
     @Modifying
     @Query("DELETE FROM Schedule s WHERE s.id = ?1")
     void removeScheduleById(Long id);
+
+    List<Schedule> findSchedulesByActivity_Id(Long id);
+
+    List<Schedule> findSchedulesByRoute_Id(Long id);
 }

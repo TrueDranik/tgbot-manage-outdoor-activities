@@ -69,7 +69,8 @@ public class CallbackActivityFormatToDateImpl implements Callback {
 
         Set<LocalDate> localDates = new HashSet<>();
         for (int indexSchedule = 0; indexSchedule < eventDate.size(); indexSchedule++) {
-            if (eventDate.get(indexSchedule).getEventDate().isBefore(LocalDate.now())) {
+            if (eventDate.get(indexSchedule).getEventDate().isBefore(LocalDate.now())
+                    || eventDate.get(indexSchedule).getActive().equals(false)) {
                 continue;
             }
 
