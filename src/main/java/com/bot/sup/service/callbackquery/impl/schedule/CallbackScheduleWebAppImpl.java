@@ -67,7 +67,7 @@ public class CallbackScheduleWebAppImpl implements Callback {
 
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text(mainMessageProperties.getBack())
-                .callbackData(CallbackEnum.SCHEDULE.toString())
+                .callbackData(CallbackEnum.MENU.toString())
                 .build()));
 
         return InlineKeyboardMarkup.builder()

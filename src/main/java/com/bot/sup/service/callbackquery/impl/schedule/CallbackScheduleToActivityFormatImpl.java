@@ -40,7 +40,7 @@ public class CallbackScheduleToActivityFormatImpl implements Callback {
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text(activityMessageProperties.getListActivityFormat())
+                .text(scheduleMessageProperties.getMenuSchedules())
                 .replyMarkup(generateKeyboardWithActivity(activityFormats))
                 .build();
     }
@@ -69,7 +69,7 @@ public class CallbackScheduleToActivityFormatImpl implements Callback {
 
         rowSecond.add(InlineKeyboardButton.builder()
                 .text(mainMessageProperties.getBack())
-                .callbackData(CallbackEnum.SCHEDULE.toString())
+                .callbackData(CallbackEnum.MENU.toString())
                 .build());
 
         mainKeyboard.add(rowSecond);
