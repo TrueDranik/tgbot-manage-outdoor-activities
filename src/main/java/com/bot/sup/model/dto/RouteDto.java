@@ -14,4 +14,5 @@ public class RouteDto {
     private String finishPointName;
     private String mapLink;
     private String lenght;
+    private Boolean active;
 }

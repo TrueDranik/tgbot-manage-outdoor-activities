@@ -43,4 +43,7 @@ public class Activity {
 
     @Column(name = "price")
     private BigDecimal price;
+
+    @Column(name = "active")
+    private Boolean active;
 }
