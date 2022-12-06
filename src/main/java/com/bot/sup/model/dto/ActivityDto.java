@@ -20,4 +20,5 @@ public class ActivityDto {
     private String age;
     private String complexity;
     private BigDecimal price;
+    private Boolean active;
 }
