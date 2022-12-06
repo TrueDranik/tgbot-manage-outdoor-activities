@@ -35,6 +35,9 @@ public class Schedule {
     @JoinColumn(name = "route_id")
     private Route route;
 
+    @Column(name = "active")
+    private Boolean active;
+
     @ManyToMany
     @JoinTable(
             name = "schedule_client",

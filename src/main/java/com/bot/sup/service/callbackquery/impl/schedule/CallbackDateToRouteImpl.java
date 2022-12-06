@@ -66,14 +66,16 @@ public class CallbackDateToRouteImpl implements Callback {
         List<InlineKeyboardButton> rowSecond = new ArrayList<>();
 
         schedules.forEach(i -> {
-            rowMain.add(InlineKeyboardButton.builder()
-                    .text(i.getRoute().getName() + "|" + i.getEventTime().format(DateTimeFormatter.ofPattern("HH:mm")))
-                    .callbackData(CallbackEnum.SCHEDULE_INFO + "/" + activityFormatId + "/" + eventDate + "/" + i.getId())
-                    .build());
-            if (rowMain.size() == 2) {
-                List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);
-                mainKeyboard.add(temporaryKeyboardRow);
-                rowMain.clear();
+            if (i.getActive().equals(true)) {
+                rowMain.add(InlineKeyboardButton.builder()
+                        .text(i.getRoute().getName() + "|" + i.getEventTime().format(DateTimeFormatter.ofPattern("HH:mm")))
+                        .callbackData(CallbackEnum.SCHEDULE_INFO + "/" + activityFormatId + "/" + eventDate + "/" + i.getId())
+                        .build());
+                if (rowMain.size() == 2) {
+                    List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);
+                    mainKeyboard.add(temporaryKeyboardRow);
+                    rowMain.clear();
+                }
             }
         });
 
