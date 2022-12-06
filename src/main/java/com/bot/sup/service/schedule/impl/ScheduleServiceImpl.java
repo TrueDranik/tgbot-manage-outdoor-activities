@@ -2,7 +2,6 @@ package com.bot.sup.service.schedule.impl;
 
 import com.bot.sup.model.ScheduleRequestParams;
 import com.bot.sup.model.dto.ScheduleCreateDto;
-import com.bot.sup.model.entity.Activity;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.RouteRepository;
 import com.bot.sup.repository.ScheduleRepository;
@@ -77,10 +76,6 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     @Override
     public void deleteSchedule(Long id) {
-        Schedule scheduleById = findScheduleById(id);
-//        scheduleById.setActive(false);
-        scheduleById.getActivity().getId();
-
         scheduleRepository.removeScheduleById(id);
     }
 
