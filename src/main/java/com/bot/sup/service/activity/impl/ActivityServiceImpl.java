@@ -58,6 +58,7 @@ public class ActivityServiceImpl implements ActivityService {
         activity.setAge(activityCreateDto.getAge());
         activity.setComplexity(activityCreateDto.getComplexity());
         activity.setPrice(activityCreateDto.getPrice());
+        activity.setActive(true);
 
         activity.setActivityType(activityTypeRepository.findById(activityCreateDto.getActivityTypeId())
                 .orElseThrow(() -> new EntityNotFoundException("Activity type not found")));
@@ -80,6 +81,7 @@ public class ActivityServiceImpl implements ActivityService {
         activityById.setAge(activityCreateDto.getAge());
         activityById.setComplexity(activityCreateDto.getComplexity());
         activityById.setPrice(activityCreateDto.getPrice());
+        activityById.setActive(true);
 
         return activityRepository.save(activityById);
     }

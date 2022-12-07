@@ -32,8 +32,21 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public Route createRoute(RouteCreateDto createDto) {
-        Route route = routeMapper.dtoToDomain(createDto);
+    public Route createRoute(RouteCreateDto routeCreateDto) {
+        if (routeCreateDto == null) {
+            return null;
+        }
+
+        Route route = new Route();
+
+        route.setName(routeCreateDto.getName());
+        route.setStartPointCoordinates(routeCreateDto.getStartPointCoordinates());
+        route.setStartPointName(routeCreateDto.getStartPointName());
+        route.setFinishPointCoordinates(routeCreateDto.getFinishPointCoordinates());
+        route.setFinishPointName(routeCreateDto.getFinishPointName());
+        route.setMapLink(routeCreateDto.getMapLink());
+        route.setLength(routeCreateDto.getLength());
+        route.setActive(true);
 
         return routeRepository.save(route);
     }
@@ -49,6 +62,7 @@ public class RouteServiceImpl implements RouteService {
         route.setFinishPointName(routeCreateDto.getFinishPointName());
         route.setMapLink(routeCreateDto.getMapLink());
         route.setLength(routeCreateDto.getLength());
+        route.setActive(true);
 
         return routeRepository.save(route);
     }
