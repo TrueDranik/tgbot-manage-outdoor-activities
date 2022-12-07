@@ -55,6 +55,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             schedule.setActivity(activityService.getActivityById(createDto.get(i).getActivityId()));
             schedule.setRoute(routeRepository.findById(createDto.get(i).getRouteId())
                     .orElseThrow(() -> new EntityNotFoundException("Route not found")));
+            schedule.setActive(true);
 
             schedules.add(schedule);
         }
@@ -72,6 +73,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         scheduleById.setParticipants(scheduleCreateDto.getParticipants());
         scheduleById.setRoute(routeRepository.findById(scheduleCreateDto.getRouteId())
                 .orElseThrow(() -> new EntityNotFoundException("Route not found")));
+        scheduleById.setActive(true);
 
         return scheduleRepository.save(scheduleById);
     }
