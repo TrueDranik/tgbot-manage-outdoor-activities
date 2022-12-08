@@ -51,10 +51,19 @@ public class CallbackScheduleInfoImpl implements Callback {
 
         Optional<ImageData> imageData = imageDataRepository.findByRouteId(optionalRoute.get().getId());
 
-        InputStream photo = new ByteArrayInputStream(imageData.get().getImageData());
+        InputStream photo;
+        String imageName;
+
+        if (imageData.isEmpty() || imageData == null){
+            photo =  this.getClass().getClassLoader().getResourceAsStream("map.jpg");
+            imageName = "map.jpg";
+        } else {
+            photo = new ByteArrayInputStream(imageData.get().getImageData());
+            imageName = imageData.get().getName();
+        }
         return SendPhoto.builder()
                 .chatId(chatId)
-                .photo(new InputFile(photo, imageData.get().getName()))
+                .photo(new InputFile(photo, imageName))
                 .caption("Дата и время старта: " + schedule.getEventTime().format(DateTimeFormatter.ofPattern("HH:mm"))
                         + " " + LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern("dd.MM.yy")) + " ("
                         + schedule.getEventDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru"))
