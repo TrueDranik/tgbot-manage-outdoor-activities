@@ -7,7 +7,7 @@ import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -25,8 +25,12 @@ public class CallbackScheduleCancelImpl implements Callback {
     private static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.SCHEDULE_CANCEL);
 
     @Override
-    public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
-        String scheduleId = callbackQuery.getData().split("/")[1];
+    public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
+        Long chatId = callbackQuery.getMessage().getChatId();
+        String activityFormatId = callbackQuery.getData().split("/")[1];
+        String eventDate = callbackQuery.getData().split("/")[2];
+        String scheduleId = callbackQuery.getData().split("/")[3];
+
 
         Optional<Schedule> schedule = scheduleRepository.findById(Long.parseLong(scheduleId));
 
@@ -34,11 +38,11 @@ public class CallbackScheduleCancelImpl implements Callback {
                 .chatId(callbackQuery.getMessage().getChatId())
                 .text(String.format(scheduleMessageProperties.getConfirmCancelEvent(),  schedule.get().getActivity().getName()))
                 .parseMode("Markdown")
-                .replyMarkup(createInlineKeyboard(scheduleId))
+                .replyMarkup(createInlineKeyboard(activityFormatId, eventDate, scheduleId))
                 .build();
     }
 
-    private InlineKeyboardMarkup createInlineKeyboard(String scheduleId) {
+    private InlineKeyboardMarkup createInlineKeyboard(String activityFormatId, String eventDate, String scheduleId) {
         List<InlineKeyboardButton> firstRow = new ArrayList<>();
 
         firstRow.add(InlineKeyboardButton.builder()
@@ -47,7 +51,7 @@ public class CallbackScheduleCancelImpl implements Callback {
                 .build());
         firstRow.add(InlineKeyboardButton.builder()
                 .text("Нет")
-                .callbackData(CallbackEnum.SCHEDULE_CANCEL_NO.toString())
+                .callbackData(CallbackEnum.SCHEDULE_INFO + "/" + activityFormatId + "/" + eventDate + "/" + scheduleId)
                 .build());
 
         return InlineKeyboardMarkup.builder()

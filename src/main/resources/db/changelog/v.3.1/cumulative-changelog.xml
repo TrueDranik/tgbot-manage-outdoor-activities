@@ -5,9 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
 
-    <include file="v.1.0/cumulative-changelog.xml" relativeToChangelogFile="true"/>
-    <include file="v.2.0/cumulative_changelog.xml" relativeToChangelogFile="true"/>
-    <include file="v.3.0/cumulative-changelog.xml" relativeToChangelogFile="true"/>
-    <include file="v.3.1/cumulative-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-table-image_data.xml" relativeToChangelogFile="true"/>
+    <include file="add-column-in-route.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

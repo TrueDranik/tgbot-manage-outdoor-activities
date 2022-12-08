@@ -4,6 +4,7 @@ import com.bot.sup.mapper.RouteMapper;
 import com.bot.sup.model.dto.RouteCreateDto;
 import com.bot.sup.model.entity.Route;
 import com.bot.sup.model.entity.Schedule;
+import com.bot.sup.repository.ImageDataRepository;
 import com.bot.sup.repository.RouteRepository;
 import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.route.RouteService;
@@ -20,6 +21,7 @@ public class RouteServiceImpl implements RouteService {
     private final RouteRepository routeRepository;
     private final RouteMapper routeMapper;
     private final ScheduleRepository scheduleRepository;
+    private final ImageDataRepository imageDataRepository;
 
     @Override
     public List<Route> getAllRoute() {
@@ -47,6 +49,7 @@ public class RouteServiceImpl implements RouteService {
         route.setMapLink(routeCreateDto.getMapLink());
         route.setLength(routeCreateDto.getLength());
         route.setActive(true);
+        route.setImageData(imageDataRepository.findById(routeCreateDto.getImageDataId()).orElseThrow());
 
         return routeRepository.save(route);
     }
@@ -63,6 +66,7 @@ public class RouteServiceImpl implements RouteService {
         route.setMapLink(routeCreateDto.getMapLink());
         route.setLength(routeCreateDto.getLength());
         route.setActive(true);
+        route.setImageData(imageDataRepository.findById(routeCreateDto.getImageDataId()).orElseThrow());
 
         return routeRepository.save(route);
     }

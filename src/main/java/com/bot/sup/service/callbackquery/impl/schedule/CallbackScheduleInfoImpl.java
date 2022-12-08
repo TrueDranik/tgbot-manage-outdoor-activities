@@ -4,19 +4,23 @@ import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.*;
+import com.bot.sup.repository.ImageDataRepository;
 import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -28,11 +32,12 @@ public class CallbackScheduleInfoImpl implements Callback {
     private final ScheduleRepository scheduleRepository;
     private final MainMessageProperties mainMessageProperties;
     private final ScheduleMessageProperties scheduleMessageProperties;
+    private final ImageDataRepository imageDataRepository;
 
     public static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.SCHEDULE_INFO);
 
     @Override
-    public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
+    public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
         String activityFormatId = callbackQuery.getData().split("/")[1];
         String eventDate = callbackQuery.getData().split("/")[2];
@@ -44,10 +49,13 @@ public class CallbackScheduleInfoImpl implements Callback {
         Optional<Activity> optionalActivity = Optional.ofNullable(schedule.getActivity());
         Optional<Route> optionalRoute = Optional.ofNullable(schedule.getRoute());
 
-        return EditMessageText.builder()
-                .messageId(callbackQuery.getMessage().getMessageId())
+        Optional<ImageData> imageData = imageDataRepository.findByRouteId(optionalRoute.get().getId());
+
+        InputStream photo = new ByteArrayInputStream(imageData.get().getImageData());
+        return SendPhoto.builder()
                 .chatId(chatId)
-                .text("Дата и время старта: " + schedule.getEventTime().format(DateTimeFormatter.ofPattern("HH:mm"))
+                .photo(new InputFile(photo, imageData.get().getName()))
+                .caption("Дата и время старта: " + schedule.getEventTime().format(DateTimeFormatter.ofPattern("HH:mm"))
                         + " " + LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern("dd.MM.yy")) + " ("
                         + schedule.getEventDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru"))
                         + ")\n"
@@ -83,7 +91,7 @@ public class CallbackScheduleInfoImpl implements Callback {
                 .build());
         secondRow.add(InlineKeyboardButton.builder()
                 .text(scheduleMessageProperties.getCancelSchedule())
-                .callbackData(CallbackEnum.SCHEDULE_CANCEL + "/" + scheduleId)
+                .callbackData(CallbackEnum.SCHEDULE_CANCEL + "/" + activityFormatId + "/" + eventDate + "/" + scheduleId)
                 .build());
 
         thirdRow.add(InlineKeyboardButton.builder()
