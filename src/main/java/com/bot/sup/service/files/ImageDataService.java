@@ -32,6 +32,7 @@ public class ImageDataService {
         Optional<ImageData> dbImage = imageDataRepository.findByName(name);
 
         return ImageData.builder()
+                .id(dbImage.get().getId())
                 .name(dbImage.get().getName())
                 .type(dbImage.get().getType())
                 .imageData(dbImage.get().getImageData()).build();
