@@ -37,4 +37,7 @@ public class Route {
 
     @Column(name = "active")
     private Boolean active;
+
+    @OneToOne
+    private ImageData imageData;
 }
