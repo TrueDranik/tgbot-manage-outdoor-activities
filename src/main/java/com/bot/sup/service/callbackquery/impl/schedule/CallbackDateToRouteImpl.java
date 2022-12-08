@@ -8,7 +8,8 @@ import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -30,7 +31,7 @@ public class CallbackDateToRouteImpl implements Callback {
     private static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.DATE_TO_ROUTE);
 
     @Override
-    public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
+    public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
         String activityFormatId = callbackQuery.getData().split("/")[1];
         String eventDate = callbackQuery.getData().split("/")[2];
@@ -47,6 +48,18 @@ public class CallbackDateToRouteImpl implements Callback {
                     .parseMode("Markdown")
                     .replyMarkup(createInlineKeyboard(schedules, activityFormatId, eventDate))
                     .build();
+        }
+
+        if(callbackQuery.getMessage().hasPhoto()){
+            return SendMessage.builder()
+                    .chatId(chatId)
+                    .text(String.format(scheduleMessageProperties.getChooseRouteForDate(),
+                            LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                            LocalDate.parse(eventDate).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru"))))
+                    .parseMode("Markdown")
+                    .replyMarkup(createInlineKeyboard(schedules, activityFormatId, eventDate))
+                    .build();
+
         }
 
         return EditMessageText.builder()
