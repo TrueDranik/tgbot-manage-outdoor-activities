@@ -1,13 +1,22 @@
 package com.bot.sup.common.properties;
 
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.PropertySource;
 
 @Data
 @ConfigurationProperties(prefix = "telegram")
 public class TelegramProperties {
     private String nameBot;
     private String tokenBot;
-    private String frontUrl;
+    @Value("${telegram.url.constructor}")
+    private String webAppConstructor;
+    @Value("${telegram.url.activity}")
+    private String webAppActivity;
+    @Value("${telegram.url.updateActivity}")
+    private String webAppUpdateActivity;
+    @Value("${telegram.url.route}")
+    private String webAppRoute;
+    @Value("${telegram.url.updateRoute}")
+    private String webAppUpdateRoute;
 }
