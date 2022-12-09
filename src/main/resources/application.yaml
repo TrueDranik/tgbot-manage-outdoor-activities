@@ -5,7 +5,7 @@ telegram:
     updateActivity: https://tgsupbot-admin.reliab.tech/#/updateActivity
     route: https://tgsupbot-admin.reliab.tech/#/route
     updateRoute: https://tgsupbot-admin.reliab.tech/#/updateRoute
-  botUsername: @sup31_bot'
+  botUsername: '@sup31_bot'
   botToken: 5617783598:AAEVI_edk9ptSp6aFrjRjZ8XeMMdn9m3PEc
 
 spring:
