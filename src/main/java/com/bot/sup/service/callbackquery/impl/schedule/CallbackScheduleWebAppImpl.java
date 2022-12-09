@@ -1,6 +1,7 @@
 package com.bot.sup.service.callbackquery.impl.schedule;
 
 import com.bot.sup.common.enums.CallbackEnum;
+import com.bot.sup.common.properties.TelegramProperties;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.service.callbackquery.Callback;
@@ -24,6 +25,7 @@ import java.util.Set;
 public class CallbackScheduleWebAppImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
     private final ScheduleMessageProperties scheduleMessageProperties;
+    private final TelegramProperties telegramProperties;
 
     private static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.SCHEDULE_WEBAPP);
 
@@ -38,31 +40,27 @@ public class CallbackScheduleWebAppImpl implements Callback {
     }
 
     private InlineKeyboardMarkup createInlineKeyboard() {
-        WebAppInfo webAppInfo = WebAppInfo.builder()
-                .url("https://tgsupbot.reliab.tech/admin")
-                .build();
-
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text(scheduleMessageProperties.getMakeSchedule())
-                .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/#/constructor"))
+                .webApp(new WebAppInfo(telegramProperties.getWebAppConstructor()))
                 .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text(scheduleMessageProperties.getCreateActivity())
-                .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/#/activity"))
+                .webApp(new WebAppInfo(telegramProperties.getWebAppActivity()))
                 .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text(scheduleMessageProperties.getChangeActivity())
-                .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/#/updateActivity"))
+                .webApp(new WebAppInfo(telegramProperties.getWebAppUpdateActivity()))
                 .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text(scheduleMessageProperties.getAddNewRoute())
-                .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/#/route"))
+                .webApp(new WebAppInfo(telegramProperties.getWebAppRoute()))
                 .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text(scheduleMessageProperties.getChangeDeleteRoute())
-                .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/#/updateRoute"))
+                .webApp(new WebAppInfo(telegramProperties.getWebAppUpdateRoute()))
                 .build()));
 
         buttons.add(List.of(InlineKeyboardButton.builder()
