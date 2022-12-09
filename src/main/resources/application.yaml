@@ -5,8 +5,8 @@ telegram:
     updateActivity: https://tgsupbot-admin.reliab.tech/#/updateActivity
     route: https://tgsupbot-admin.reliab.tech/#/route
     updateRoute: https://tgsupbot-admin.reliab.tech/#/updateRoute
-  nameBot: '@SupAdminTest_bot'
-  tokenBot: 5655610927:AAG58hHGVMC9OdMkS2lfRYa5DbzxgvXBOa4
+  botUsername: '@SupAdminTest_bot'
+  botToken: 5655610927:AAG58hHGVMC9OdMkS2lfRYa5DbzxgvXBOa4
 
 spring:
   liquibase:

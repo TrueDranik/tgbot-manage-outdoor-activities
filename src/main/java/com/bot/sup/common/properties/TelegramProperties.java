@@ -7,8 +7,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties(prefix = "telegram")
 public class TelegramProperties {
-    private String nameBot;
-    private String tokenBot;
+    private String botUsername;
+    private String botToken;
     @Value("${telegram.url.constructor}")
     private String webAppConstructor;
     @Value("${telegram.url.activity}")
