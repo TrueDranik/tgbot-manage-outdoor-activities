@@ -4,6 +4,7 @@ import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.Client;
+import com.bot.sup.repository.BookingRepository;
 import com.bot.sup.repository.ClientRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class CallbackScheduleAllClientInfoImpl implements Callback {
     private final ClientRepository clientRepository;
+    private final BookingRepository bookingRepository;
     private final MainMessageProperties mainMessageProperties;
     private final ScheduleMessageProperties scheduleMessageProperties;
 
@@ -37,13 +39,15 @@ public class CallbackScheduleAllClientInfoImpl implements Callback {
         String scheduleId = callbackQuery.getData().split("/")[3];
 
         List<Client> clientByScheduleId = clientRepository.findClientByScheduleId(Long.valueOf(scheduleId));
-
+        Long sumBookingClients = bookingRepository.findSumBookingClientByScheduleId(Long.valueOf(scheduleId));
         int numberClients = clientByScheduleId.size();
+
+        Long sum = sumBookingClients + numberClients;
 
         if (callbackQuery.getMessage().hasPhoto()){
             return SendMessage.builder()
                     .chatId(callbackQuery.getMessage().getChatId())
-                    .text(String.format(scheduleMessageProperties.getClientsRecorded(), numberClients))
+                    .text(String.format(scheduleMessageProperties.getClientsRecorded(), sum))
                     .parseMode("Markdown")
                     .replyMarkup(createInlineKeyboard(clientByScheduleId, activityFormatId, eventDate, scheduleId))
                     .build();
@@ -52,7 +56,7 @@ public class CallbackScheduleAllClientInfoImpl implements Callback {
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(callbackQuery.getMessage().getChatId())
-                .text(String.format(scheduleMessageProperties.getClientsRecorded(), numberClients))
+                .text(String.format(scheduleMessageProperties.getClientsRecorded(), sum))
                 .parseMode("Markdown")
                 .replyMarkup(createInlineKeyboard(clientByScheduleId, activityFormatId, eventDate, scheduleId))
                 .build();

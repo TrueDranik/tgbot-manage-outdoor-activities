@@ -38,15 +38,20 @@ public class CallbackClientInfoImpl implements Callback {
 
         Optional<Client> client = clientRepository.findById(Long.valueOf(clientId));
         Optional<Booking> invitedUsers = bookingRepository.findBookingByClient_Id(Long.valueOf(clientId));
-
+        Boolean paymentStatus = invitedUsers.get().getPaymentStatus();
         String userId = String.format("<a href=\"tg://user?id=%s\"> (профиль)</a>", client.get().getTelegramId().toString());
+
+        int invitedUsers1 = invitedUsers.get().getInvitedUsers() - 1;
+
+        String s = invitedUsers1 > 0 ? scheduleMessageProperties.getInvitedFriends() + invitedUsers1 + "\n" : "";
 
         return EditMessageText.builder()
                 .chatId(callbackQuery.getMessage().getChatId())
                 .messageId(callbackQuery.getMessage().getMessageId())
-                .text(client.get().getFirstName() + client.get().getLastName() + userId + "\n"
-                        + client.get().getPhoneNumber() + "\n"
-                        + (invitedUsers.map(booking -> scheduleMessageProperties.getInvitedFriends() + booking.getInvitedUsers()).orElse("")))
+                .text(client.get().getFirstName() + " " + client.get().getLastName() + userId + "\n"
+                        + "☎️" + client.get().getPhoneNumber() + "\n"
+                        + s
+                        + "\uD83D\uDCB8 Статус оплаты: " + paymentStatus)
                 .parseMode("HTML")
                 .replyMarkup(createInlineKeyboard(client, activityFormatId, eventDate, scheduleId))
                 .build();
