@@ -16,6 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 @Service
@@ -32,18 +33,19 @@ public class CallbackScheduleCancelYesImpl implements Callback {
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         String scheduleId = callbackQuery.getData().split("/")[1];
 
-        Optional<Schedule> schedule = scheduleRepository.findById(Long.parseLong(scheduleId));
+        Optional<Schedule> schedule = Optional.ofNullable(scheduleRepository.findById(Long.parseLong(scheduleId))
+                .orElseThrow(() -> new EntityNotFoundException("Schedule with id[" + scheduleId + "] not found")));
 
         scheduleRepository.deleteScheduleById(Long.parseLong(scheduleId));
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(callbackQuery.getMessage().getChatId())
-                .text(String.format(scheduleMessageProperties.getEventCancelled(),  schedule.get().getActivity().getName()))
+                .text(String.format(scheduleMessageProperties.getEventCancelled(), schedule.get().getActivity().getName()))
                 .replyMarkup(createInlineKeyboard())
                 .build();
     }
 
-    private InlineKeyboardMarkup createInlineKeyboard(){
+    private InlineKeyboardMarkup createInlineKeyboard() {
         List<InlineKeyboardButton> firstRow = new ArrayList<>();
 
         firstRow.add(InlineKeyboardButton.builder()

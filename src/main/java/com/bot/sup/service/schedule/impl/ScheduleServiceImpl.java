@@ -3,7 +3,6 @@ package com.bot.sup.service.schedule.impl;
 import com.bot.sup.model.ScheduleRequestParams;
 import com.bot.sup.model.dto.ScheduleCreateDto;
 import com.bot.sup.model.entity.Schedule;
-import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.repository.RouteRepository;
 import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.repository.specification.ScheduleSpecification;
@@ -17,7 +16,6 @@ import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +23,6 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final ActivityServiceImpl activityService;
     private final RouteRepository routeRepository;
-    private final ActivityRepository activityRepository;
 
     @Override
     public List<Schedule> getAllSchedule(ScheduleRequestParams params) {

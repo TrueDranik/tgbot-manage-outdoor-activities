@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface ScheduleMapper extends BaseMapper<Schedule, ScheduleCreateDto>{
+public interface ScheduleMapper extends BaseMapper<Schedule, ScheduleCreateDto> {
     Schedule toEntity(ScheduleDto scheduleDto);
 
     @Override

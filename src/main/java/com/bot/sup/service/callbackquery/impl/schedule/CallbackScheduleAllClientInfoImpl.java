@@ -42,9 +42,9 @@ public class CallbackScheduleAllClientInfoImpl implements Callback {
         Long sumBookingClients = bookingRepository.findSumBookingClientByScheduleId(Long.valueOf(scheduleId));
         int numberClients = clientByScheduleId.size();
 
-        Long sum = sumBookingClients + numberClients;
+        Long sum = sumBookingClients == null ? numberClients : sumBookingClients + numberClients;
 
-        if (callbackQuery.getMessage().hasPhoto()){
+        if (callbackQuery.getMessage().hasPhoto()) {
             return SendMessage.builder()
                     .chatId(callbackQuery.getMessage().getChatId())
                     .text(String.format(scheduleMessageProperties.getClientsRecorded(), sum))

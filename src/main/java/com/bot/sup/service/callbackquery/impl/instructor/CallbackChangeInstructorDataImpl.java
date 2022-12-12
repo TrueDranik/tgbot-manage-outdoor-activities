@@ -9,7 +9,6 @@ import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -34,7 +33,6 @@ public class CallbackChangeInstructorDataImpl implements Callback {
 
         InstructorStateEnum botStateEnum = InstructorStateEnum.FILLING_INSTRUCTOR;
         instructorDataCache.saveInstructorForUpdate(callbackQuery.getMessage().getChatId(), Long.parseLong(instructorId));
-        //instructorDataCache.setInstructorCurrentState(Long.parseLong(instructorId), botStateEnum);
         middlewareDataCache.setValidCurrentState(Long.parseLong(instructorId), botStateEnum);
 
         return stateContext.processInputMessage(botStateEnum, callbackQuery.getMessage());

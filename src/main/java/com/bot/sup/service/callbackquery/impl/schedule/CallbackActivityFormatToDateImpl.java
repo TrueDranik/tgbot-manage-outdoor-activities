@@ -10,13 +10,13 @@ import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -39,7 +39,9 @@ public class CallbackActivityFormatToDateImpl implements Callback {
         Long chatId = callbackQuery.getMessage().getChatId();
         String activityFormatId = callbackQuery.getData().split("/")[1];
 
-        Optional<ActivityFormat> activityFormat = activityFormatRepository.findById(Long.parseLong(activityFormatId));
+        Optional<ActivityFormat> activityFormat = Optional.ofNullable(activityFormatRepository.findById(Long.parseLong(activityFormatId))
+                .orElseThrow(() -> new EntityNotFoundException("ActivityFormat with id[" + activityFormatId + "] not found")));
+
         List<Schedule> eventDate = scheduleRepository.getSchedulesByActivity_ActivityFormat_Id(Long.valueOf(activityFormatId));
 
         if (generateKeyboardWithSchedule(eventDate, activityFormatId).getKeyboard().size() <= 1) {

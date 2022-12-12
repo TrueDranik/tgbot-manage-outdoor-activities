@@ -8,7 +8,6 @@ import com.bot.sup.repository.ActivityFormatRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -37,7 +36,7 @@ public class CallbackListActivityFormatImpl implements Callback {
             buttonActivityFormat.add(Collections.singletonList(
                     InlineKeyboardButton.builder()
                             .text(mainMessageProperties.getBack())
-                            .callbackData("SUP_ACTIVITY_FORMAT")
+                            .callbackData(CallbackEnum.SUP_ACTIVITY_FORMAT.toString())
                             .build()
             ));
             InlineKeyboardMarkup keyboard = InlineKeyboardMarkup.builder()
@@ -68,7 +67,7 @@ public class CallbackListActivityFormatImpl implements Callback {
         activities.forEach(i -> {
                     rowMain.add(InlineKeyboardButton.builder()
                             .text(i.getName())
-                            .callbackData("ACTIVITY_FORMAT_OPTION/" + i.getId())
+                            .callbackData(CallbackEnum.ACTIVITY_FORMAT_OPTION + "/" + i.getId())
                             .build());
                     if (rowMain.size() == 2) {
                         List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);
@@ -84,7 +83,7 @@ public class CallbackListActivityFormatImpl implements Callback {
 
         rowSecond.add(InlineKeyboardButton.builder()
                 .text(mainMessageProperties.getBack())
-                .callbackData("SUP_ACTIVITY_FORMAT")
+                .callbackData(CallbackEnum.SUP_ACTIVITY_FORMAT.toString())
                 .build());
 
         mainKeyboard.add(rowSecond);

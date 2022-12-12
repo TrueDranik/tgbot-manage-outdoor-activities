@@ -25,7 +25,7 @@ public class ImageData {
     private String type;
 
     @Lob
-    @Type(type="org.hibernate.type.BinaryType")
+    @Type(type = "org.hibernate.type.BinaryType")
     @Column(name = "imagedata")
     private byte[] imageData;
 }

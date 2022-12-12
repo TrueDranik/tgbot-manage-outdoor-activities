@@ -24,7 +24,7 @@ public class DocsConfig {
     @Value("${app.docs.title:Sup BOT Admin API Docs}")
     private String apiTitle;
 
-    @Value("${app.docs.version:v2.0}")
+    @Value("${app.docs.version:v0.5}")
     private String apiVersion;
 
     @Bean

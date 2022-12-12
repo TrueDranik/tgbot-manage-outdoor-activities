@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface ActivityMapper extends BaseMapper<Activity, ActivityCreateDto>{
+public interface ActivityMapper extends BaseMapper<Activity, ActivityCreateDto> {
     @Override
     ActivityCreateDto domainToDto(Activity domain);
 

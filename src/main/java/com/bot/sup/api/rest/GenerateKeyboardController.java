@@ -30,7 +30,8 @@ public class GenerateKeyboardController {
     }
 
     @PostMapping("/schedule-info")
-    public void sendScheduleInfo(Long telegramId, Integer messageId, String activityFormatId, String eventDate, String scheduleId) throws TelegramApiException {
+    public void sendScheduleInfo(Long telegramId, Integer messageId, String activityFormatId, String eventDate, String scheduleId)
+            throws TelegramApiException {
         generateKeyboard.scheduleInfo(telegramId, messageId, activityFormatId, eventDate, scheduleId);
     }
 }

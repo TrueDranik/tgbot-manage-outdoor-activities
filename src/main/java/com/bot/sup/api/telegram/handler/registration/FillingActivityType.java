@@ -2,6 +2,7 @@ package com.bot.sup.api.telegram.handler.registration;
 
 import com.bot.sup.cache.ActivityTypeDataCache;
 import com.bot.sup.common.enums.ActivityTypeStateEnum;
+import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.ActivityType;
@@ -58,7 +59,6 @@ public class FillingActivityType implements HandleRegistration {
         public BotApiMethod<?> processInputMessage(Message message, Long chatId, ActivityType activityType,
         boolean forUpdate){
             BotApiMethod<?> replyToUser = null;
-            //ActivityType activityType = new ActivityType();
             String userAnswer = message.getText();
             ActivityTypeStateEnum activityTypeCurrentState = activityTypeDataCache.getActivityTypeCurrentState(chatId);
 
@@ -105,7 +105,7 @@ public class FillingActivityType implements HandleRegistration {
 
             buttons.add(List.of(
                     InlineKeyboardButton.builder()
-                            .callbackData("SUP_ACTIVITY_TYPE")
+                            .callbackData(CallbackEnum.SUP_ACTIVITY_TYPE.toString())
                             .text(mainMessageProperties.getDone())
                             .build()));
             return InlineKeyboardMarkup.builder()

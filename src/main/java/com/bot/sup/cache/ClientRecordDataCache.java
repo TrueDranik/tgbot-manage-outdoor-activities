@@ -13,7 +13,7 @@ public class ClientRecordDataCache {
     private final Map<Long, Client> clientData = new WeakHashMap<>();
     private final Map<Long, Long> scheduleState = new WeakHashMap<>();
 
-    public void setClientRecrodCurrentState(Long chatId, ClientRecordStateEnum registrationState) {
+    public void setClientRecordCurrentState(Long chatId, ClientRecordStateEnum registrationState) {
         clientRecordState.put(chatId, registrationState);
     }
 

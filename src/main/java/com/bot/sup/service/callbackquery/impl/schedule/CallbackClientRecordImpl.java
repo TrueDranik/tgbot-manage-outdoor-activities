@@ -31,7 +31,7 @@ public class CallbackClientRecordImpl implements Callback {
         ClientRecordStateEnum botStateEnum = ClientRecordStateEnum.FILLING_CLIENT;
 
         clientRecordDataCache.setScheduleState(chatId, Long.valueOf(scheduleId));
-        clientRecordDataCache.setClientRecrodCurrentState(chatId, botStateEnum);
+        clientRecordDataCache.setClientRecordCurrentState(chatId, botStateEnum);
         middlewareDataCache.setValidCurrentState(chatId, botStateEnum);
 
         return stateContext.processInputMessage(botStateEnum, callbackQuery.getMessage());
