@@ -12,9 +12,5 @@ import java.util.Collection;
 public interface Callback {
     PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException;
 
-    default boolean isSupportFor(String type) {
-        return getSupportedActivities().contains(CallbackEnum.valueOf(type));
-    }
-
     Collection<CallbackEnum> getSupportedActivities();
 }

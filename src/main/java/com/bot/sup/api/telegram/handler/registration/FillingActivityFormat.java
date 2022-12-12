@@ -2,12 +2,13 @@ package com.bot.sup.api.telegram.handler.registration;
 
 import com.bot.sup.cache.ActivityFormatDataCache;
 import com.bot.sup.common.enums.ActivityFormatStateEnum;
+import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.ActivityFormat;
 import com.bot.sup.repository.ActivityFormatRepository;
-import com.bot.sup.service.activity.format.impl.ActivityFormatServiceImpl;
 import com.bot.sup.service.MessageService;
+import com.bot.sup.service.activity.format.impl.ActivityFormatServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -58,7 +59,6 @@ public class FillingActivityFormat implements HandleRegistration {
     @Transactional
     public BotApiMethod<?> processInputMessage(Message inputMessage, Long chatId, ActivityFormat activityFormat, boolean forUpdate) {
         BotApiMethod<?> replyToUser = null;
-//        ActivityFormat activityFormat = new ActivityFormat();
         String userAnswer = inputMessage.getText();
         ActivityFormatStateEnum activityCurrentState = activityFormatDataCache.getActivityFormatCurrentState(chatId);
 
@@ -82,7 +82,7 @@ public class FillingActivityFormat implements HandleRegistration {
 
             if (forUpdate) {
                 activityFormatDataCache.removeActivityFormatForUpdate(chatId);
-            }else {
+            } else {
                 activityFormatServiceImpl.save(activityFormat);
             }
 
@@ -106,7 +106,7 @@ public class FillingActivityFormat implements HandleRegistration {
 
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .callbackData("SUP_ACTIVITY_FORMAT")
+                        .callbackData(CallbackEnum.SUP_ACTIVITY_FORMAT.toString())
                         .text(mainMessageProperties.getDone())
                         .build()
         ));

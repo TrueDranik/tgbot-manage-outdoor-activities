@@ -1,16 +1,15 @@
 package com.bot.sup.api.telegram.handler.impl;
 
-import com.bot.sup.api.telegram.handler.Handle;
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.*;
 import com.bot.sup.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -33,8 +32,7 @@ public class HandleScheduleInfoImpl {
     private final ScheduleMessageProperties scheduleMessageProperties;
 
     public BotApiMethod<?> getMessage(Update update) {
-        val callbackQuery = update.getCallbackQuery();
-        Long chatId = callbackQuery.getMessage().getChatId();
+        CallbackQuery callbackQuery = update.getCallbackQuery();
         String activityFormatId = callbackQuery.getData().split("/")[1];
         String eventDate = callbackQuery.getData().split("/")[2];
         String scheduleId = callbackQuery.getData().split("/")[3];
@@ -47,21 +45,26 @@ public class HandleScheduleInfoImpl {
 
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
-                .chatId(chatId)
-                .text("Дата и время старта: " + schedule.getEventTime().format(DateTimeFormatter.ofPattern("HH:mm"))
-                        + " " + LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern("dd.MM.yy")) + " ("
-                        + schedule.getEventDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru"))
-                        + ")\n"
-                        + "Формат активности: " + optionalActivity.map(Activity::getActivityFormat)
-                        .filter(format -> format.getName() != null).map(ActivityFormat::getName).orElse("Не найдено!") + "\n"
-                        + "Тип активности: " + optionalActivity.map(Activity::getActivityType)
-                        .filter(type -> type.getName() != null).map(ActivityType::getName).orElse("Не найдено!") + "\n"
-                        + "Название маршрута: " +optionalRoute.map(Route::getName).orElse("Не найдено!") + "\n"
-                        + "Точка старта: " + optionalRoute.map(Route::getStartPointName).orElse("Не найдено!") + "\n"
-                        + "Координаты старта: " + optionalRoute.map(Route::getStartPointCoordinates).orElse("Не найдено!"))
+                .chatId(callbackQuery.getMessage().getChatId())
+                .text(scheduleInfo(eventDate, schedule, optionalActivity, optionalRoute))
                 .parseMode("Markdown")
                 .replyMarkup(createInlineKeyboard(activityFormatId, eventDate, scheduleId))
                 .build();
+    }
+
+    public static String scheduleInfo(String eventDate, Schedule schedule, Optional<Activity> optionalActivity, Optional<Route> optionalRoute) {
+        String NOT_FOUND = "Не найдено!";
+        return "Дата и время старта: " + schedule.getEventTime().format(DateTimeFormatter.ofPattern("HH:mm"))
+                + " " + LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern("dd.MM.yy")) + " ("
+                + schedule.getEventDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru"))
+                + ")\n"
+                + "Формат активности: " + optionalActivity.map(Activity::getActivityFormat)
+                .filter(format -> format.getName() != null).map(ActivityFormat::getName).orElse(NOT_FOUND) + "\n"
+                + "Тип активности: " + optionalActivity.map(Activity::getActivityType)
+                .filter(type -> type.getName() != null).map(ActivityType::getName).orElse(NOT_FOUND) + "\n"
+                + "Название маршрута: " + optionalRoute.map(Route::getName).orElse(NOT_FOUND) + "\n"
+                + "Точка старта: " + optionalRoute.map(Route::getStartPointName).orElse(NOT_FOUND) + "\n"
+                + "Координаты старта: " + optionalRoute.map(Route::getStartPointCoordinates).orElse(NOT_FOUND);
     }
 
     public InlineKeyboardMarkup createInlineKeyboard(String activityFormatId, String eventDate, String scheduleId) {

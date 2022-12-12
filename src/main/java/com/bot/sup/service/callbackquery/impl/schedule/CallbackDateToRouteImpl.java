@@ -36,6 +36,9 @@ public class CallbackDateToRouteImpl implements Callback {
         String activityFormatId = callbackQuery.getData().split("/")[1];
         String eventDate = callbackQuery.getData().split("/")[2];
 
+        String datePattern = "dd.MM.yyyy";
+        String parseMod = "Markdown";
+
         List<Schedule> schedules = scheduleRepository
                 .selectScheduleByActivityFormatIdAndEventDate(Long.valueOf(activityFormatId), LocalDate.parse(eventDate));
 
@@ -44,19 +47,19 @@ public class CallbackDateToRouteImpl implements Callback {
                     .messageId(callbackQuery.getMessage().getMessageId())
                     .chatId(chatId)
                     .text(String.format(scheduleMessageProperties.getNotFoundDate(),
-                            LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))))
-                    .parseMode("Markdown")
+                            LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern(datePattern))))
+                    .parseMode(parseMod)
                     .replyMarkup(createInlineKeyboard(schedules, activityFormatId, eventDate))
                     .build();
         }
 
-        if(callbackQuery.getMessage().hasPhoto()){
+        if (callbackQuery.getMessage().hasPhoto()) {
             return SendMessage.builder()
                     .chatId(chatId)
                     .text(String.format(scheduleMessageProperties.getChooseRouteForDate(),
-                            LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                            LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern(datePattern)),
                             LocalDate.parse(eventDate).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru"))))
-                    .parseMode("Markdown")
+                    .parseMode(parseMod)
                     .replyMarkup(createInlineKeyboard(schedules, activityFormatId, eventDate))
                     .build();
 
@@ -66,9 +69,9 @@ public class CallbackDateToRouteImpl implements Callback {
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
                 .text(String.format(scheduleMessageProperties.getChooseRouteForDate(),
-                        LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                        LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern(datePattern)),
                         LocalDate.parse(eventDate).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru"))))
-                .parseMode("Markdown")
+                .parseMode(parseMod)
                 .replyMarkup(createInlineKeyboard(schedules, activityFormatId, eventDate))
                 .build();
     }

@@ -1,6 +1,7 @@
 package com.bot.sup.api.telegram.handler.registration;
 
 import com.bot.sup.cache.InstructorDataCache;
+import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.enums.InstructorStateEnum;
 import com.bot.sup.common.properties.message.InstructorMessageProperties;
 import com.bot.sup.model.entity.Instructor;
@@ -137,8 +138,6 @@ public class FillingInstructor implements HandleRegistration {
                 instructorService.save(instructor);
             }
 
-            //instructorDataCache.removeInstructorCurrentState(chatId);
-
             replyToUser = messageService.getReplyMessageWithKeyboard(chatId, instructorMessageProperties.getRegistrationDone() +
                     instructorInfo(instructor), keyboardMenu());
         }
@@ -163,7 +162,7 @@ public class FillingInstructor implements HandleRegistration {
 
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .callbackData("INSTRUCTORS")
+                        .callbackData(CallbackEnum.INSTRUCTORS.toString())
                         .text(instructorMessageProperties.getMenuInstructors())
                         .build()
         ));

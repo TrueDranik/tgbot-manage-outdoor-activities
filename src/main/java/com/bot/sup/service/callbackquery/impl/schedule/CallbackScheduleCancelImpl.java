@@ -14,6 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 @Service
@@ -26,17 +27,17 @@ public class CallbackScheduleCancelImpl implements Callback {
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
-        Long chatId = callbackQuery.getMessage().getChatId();
         String activityFormatId = callbackQuery.getData().split("/")[1];
         String eventDate = callbackQuery.getData().split("/")[2];
         String scheduleId = callbackQuery.getData().split("/")[3];
 
 
-        Optional<Schedule> schedule = scheduleRepository.findById(Long.parseLong(scheduleId));
+        Optional<Schedule> schedule = Optional.ofNullable(scheduleRepository.findById(Long.parseLong(scheduleId))
+                .orElseThrow(() -> new EntityNotFoundException("Schedule with id[" + scheduleId + "] not found")));
 
         return SendMessage.builder()
                 .chatId(callbackQuery.getMessage().getChatId())
-                .text(String.format(scheduleMessageProperties.getConfirmCancelEvent(),  schedule.get().getActivity().getName()))
+                .text(String.format(scheduleMessageProperties.getConfirmCancelEvent(), schedule.get().getActivity().getName()))
                 .parseMode("Markdown")
                 .replyMarkup(createInlineKeyboard(activityFormatId, eventDate, scheduleId))
                 .build();

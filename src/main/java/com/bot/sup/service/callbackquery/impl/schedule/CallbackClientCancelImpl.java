@@ -14,6 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 @Service
@@ -31,7 +32,8 @@ public class CallbackClientCancelImpl implements Callback {
         String scheduleId = callbackQuery.getData().split("/")[3];
         String clientId = callbackQuery.getData().split("/")[4];
 
-        Optional<Client> client = clientRepository.findById(Long.valueOf(clientId));
+        Optional<Client> client = Optional.ofNullable(clientRepository.findById(Long.valueOf(clientId))
+                .orElseThrow(() -> new EntityNotFoundException("Clint with id[" + clientId + "] not found")));
         String userId = String.format("<a href=\"tg://user?id=%d\">%s %s</a>", client.get().getTelegramId(),
                 client.get().getFirstName(), client.get().getLastName());
 

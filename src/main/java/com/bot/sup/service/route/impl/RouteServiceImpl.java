@@ -1,6 +1,5 @@
 package com.bot.sup.service.route.impl;
 
-import com.bot.sup.mapper.RouteMapper;
 import com.bot.sup.model.dto.RouteCreateDto;
 import com.bot.sup.model.entity.Route;
 import com.bot.sup.model.entity.Schedule;
@@ -19,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RouteServiceImpl implements RouteService {
     private final RouteRepository routeRepository;
-    private final RouteMapper routeMapper;
     private final ScheduleRepository scheduleRepository;
     private final ImageDataRepository imageDataRepository;
 
@@ -41,15 +39,7 @@ public class RouteServiceImpl implements RouteService {
 
         Route route = new Route();
 
-        route.setName(routeCreateDto.getName());
-        route.setStartPointCoordinates(routeCreateDto.getStartPointCoordinates());
-        route.setStartPointName(routeCreateDto.getStartPointName());
-        route.setFinishPointCoordinates(routeCreateDto.getFinishPointCoordinates());
-        route.setFinishPointName(routeCreateDto.getFinishPointName());
-        route.setMapLink(routeCreateDto.getMapLink());
-        route.setLength(routeCreateDto.getLength());
-        route.setActive(true);
-        route.setImageData(imageDataRepository.findById(routeCreateDto.getImageDataId()).orElseThrow());
+        routeMapper(routeCreateDto, route);
 
         return routeRepository.save(route);
     }
@@ -58,15 +48,7 @@ public class RouteServiceImpl implements RouteService {
     public Route updateRoute(Long id, RouteCreateDto routeCreateDto) {
         Route route = findRouteById(id);
 
-        route.setName(routeCreateDto.getName());
-        route.setStartPointCoordinates(routeCreateDto.getStartPointCoordinates());
-        route.setStartPointName(routeCreateDto.getStartPointName());
-        route.setFinishPointCoordinates(routeCreateDto.getFinishPointCoordinates());
-        route.setFinishPointName(routeCreateDto.getFinishPointName());
-        route.setMapLink(routeCreateDto.getMapLink());
-        route.setLength(routeCreateDto.getLength());
-        route.setActive(true);
-        route.setImageData(imageDataRepository.findById(routeCreateDto.getImageDataId()).orElseThrow());
+        routeMapper(routeCreateDto, route);
 
         return routeRepository.save(route);
     }
@@ -78,8 +60,7 @@ public class RouteServiceImpl implements RouteService {
         routeById.setActive(false);
 
         List<Schedule> schedulesByRouteId = scheduleRepository.findSchedulesByRoute_Id(id);
-        for (Schedule schedule :
-                schedulesByRouteId) {
+        for (Schedule schedule : schedulesByRouteId) {
             schedule.setActive(false);
         }
     }
@@ -87,5 +68,18 @@ public class RouteServiceImpl implements RouteService {
     private Route findRouteById(Long id) {
         return routeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Route with id[" + id + "] not found"));
+    }
+
+    private void routeMapper(RouteCreateDto routeCreateDto, Route route) {
+        route.setName(routeCreateDto.getName());
+        route.setStartPointCoordinates(routeCreateDto.getStartPointCoordinates());
+        route.setStartPointName(routeCreateDto.getStartPointName());
+        route.setFinishPointCoordinates(routeCreateDto.getFinishPointCoordinates());
+        route.setFinishPointName(routeCreateDto.getFinishPointName());
+        route.setMapLink(routeCreateDto.getMapLink());
+        route.setLength(routeCreateDto.getLength());
+        route.setActive(true);
+        route.setImageData(imageDataRepository.findById(routeCreateDto.getImageDataId())
+                .orElseThrow(() -> new EntityNotFoundException("Image with id[" + routeCreateDto.getImageDataId() + "] not found")));
     }
 }

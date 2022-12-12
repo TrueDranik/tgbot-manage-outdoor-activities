@@ -45,7 +45,6 @@ public class Bot extends TelegramLongPollingBot {
     private final ClientRecordDataCache clientRecordDataCache;
     private final StateContext stateContext;
     private final List<BaseCommand> commands;
-    private BotApiMethod<?> replyMessage;
     final TelegramProperties config;
     private Update userUpdate;
 
@@ -74,7 +73,7 @@ public class Bot extends TelegramLongPollingBot {
                 execute(getDeleteMessage(update));
                 execute((SendPhoto) callbackQuery);
             } else if (EditMessageText.class.equals(callbackQuery.getClass())) {
-                    execute((EditMessageText) callbackQuery);
+                execute((EditMessageText) callbackQuery);
             } else if (DeleteMessage.class.equals(callbackQuery.getClass())) {
                 execute((DeleteMessage) callbackQuery);
             }
@@ -82,6 +81,7 @@ public class Bot extends TelegramLongPollingBot {
             Long chatId = message.getChatId();
 
             log.info("chatId from message = " + chatId);
+            BotApiMethod<?> replyMessage;
             if (message.isCommand()) {
                 BaseCommand baseCommand = commands.stream()
                         .filter(it -> message.getText().equals("/" + it.getBotCommand().getCommand()))

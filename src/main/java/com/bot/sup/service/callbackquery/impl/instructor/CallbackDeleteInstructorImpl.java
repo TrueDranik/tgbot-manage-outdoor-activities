@@ -8,7 +8,6 @@ import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -49,7 +48,7 @@ public class CallbackDeleteInstructorImpl implements Callback {
         buttons.add(Collections.singletonList(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getBack())
-                        .callbackData("LIST_INSTRUCTORS")
+                        .callbackData(CallbackEnum.LIST_INSTRUCTORS.toString())
                         .build()));
 
         return InlineKeyboardMarkup.builder()

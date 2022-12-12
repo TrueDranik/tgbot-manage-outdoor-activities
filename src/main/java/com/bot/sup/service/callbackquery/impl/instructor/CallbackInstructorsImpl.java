@@ -6,7 +6,6 @@ import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -46,17 +45,17 @@ public class CallbackInstructorsImpl implements Callback {
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text(instructorMessageProperties.getListInstructor())
-                        .callbackData("LIST_INSTRUCTORS")
+                        .callbackData(CallbackEnum.LIST_INSTRUCTORS.toString())
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text(instructorMessageProperties.getAddInstructor())
-                        .callbackData("ADD_INSTRUCTOR")
+                        .callbackData(CallbackEnum.ADD_INSTRUCTOR.toString())
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getMenu())
-                        .callbackData("MENU")
+                        .callbackData(CallbackEnum.MENU.toString())
                         .build()));
 
         return InlineKeyboardMarkup.builder()

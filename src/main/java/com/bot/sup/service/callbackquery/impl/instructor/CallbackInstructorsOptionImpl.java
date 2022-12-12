@@ -7,7 +7,6 @@ import com.bot.sup.repository.InstructorRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -15,10 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.bot.sup.common.enums.CallbackEnum.INSTRUCTOR_OPTION;
 
@@ -34,14 +30,14 @@ public class CallbackInstructorsOptionImpl implements Callback {
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.getMessage().getChatId();
         String instructorId = callbackQuery.getData().split("/")[1];
-        Instructor instructor = instructorRepository.findByTelegramId(Long.parseLong(instructorId))
-                .orElseThrow(EntityNotFoundException::new);
+        Optional<Instructor> instructor = Optional.ofNullable(instructorRepository.findByTelegramId(Long.parseLong(instructorId))
+                .orElseThrow(() -> new EntityNotFoundException("Instructor with id[" + instructorId + "] not found")));
 
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
                 .text(instructorInfo(instructor))
-                .parseMode("Markdown")
+                .parseMode("HTML")
                 .replyMarkup(generateKeyboardWithInstructors(instructorId))
                 .build();
     }
@@ -53,18 +49,18 @@ public class CallbackInstructorsOptionImpl implements Callback {
         firstRow.add(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getChange())
-                        .callbackData("CHANGE_INSTRUCTOR/" + instructorId)
+                        .callbackData(CallbackEnum.CHANGE_INSTRUCTOR + "/" + instructorId)
                         .build());
         firstRow.add(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getDelete())
-                        .callbackData("DELETE_INSTRUCTOR/" + instructorId)
+                        .callbackData(CallbackEnum.DELETE_INSTRUCTOR + "/" + instructorId)
                         .build());
 
         secondRow.add(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getBack())
-                        .callbackData("LIST_INSTRUCTORS")
+                        .callbackData(CallbackEnum.LIST_INSTRUCTORS.toString())
                         .build());
 
         return InlineKeyboardMarkup.builder()
@@ -73,10 +69,11 @@ public class CallbackInstructorsOptionImpl implements Callback {
                 .build();
     }
 
-    private String instructorInfo(Instructor instructor) {
-        return "*ФИ:* " + instructor.getFirstName() + " " + instructor.getLastName()
-                + "\n*Номер телефона:* " + instructor.getPhoneNumber()
-                + "\n*Имя пользователя:* " + instructor.getUsername();
+    private String instructorInfo(Optional<Instructor> instructor) {
+        String userId = String.format("<a href=\"tg://user?id=%s\"> (профиль)</a>", instructor.get().getTelegramId().toString());
+        return "\uD83E\uDEAA ФИ: " + instructor.get().getFirstName() + " " + instructor.get().getLastName() + userId
+                + "\n☎️ Номер телефона: " + instructor.get().getPhoneNumber()
+                + "\n\uD83C\uDF10 Имя пользователя: @" + instructor.map(Instructor::getUsername).orElse("");
     }
 
     @Override

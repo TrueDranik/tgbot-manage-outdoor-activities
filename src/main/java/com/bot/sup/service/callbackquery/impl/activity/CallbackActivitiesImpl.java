@@ -46,17 +46,17 @@ public class CallbackActivitiesImpl implements Callback {
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text(activityMessageProperties.getActivityFormat())
-                        .callbackData("SUP_ACTIVITY_FORMAT")
+                        .callbackData(CallbackEnum.SUP_ACTIVITY_FORMAT.toString())
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text(activityMessageProperties.getActivityType())
-                        .callbackData("SUP_ACTIVITY_TYPE")
+                        .callbackData(CallbackEnum.SUP_ACTIVITY_TYPE.toString())
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getMenu())
-                        .callbackData("MENU")
+                        .callbackData(CallbackEnum.MENU.toString())
                         .build()));
 
         return InlineKeyboardMarkup.builder()

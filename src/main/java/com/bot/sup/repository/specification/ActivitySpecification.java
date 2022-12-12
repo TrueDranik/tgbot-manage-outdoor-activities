@@ -32,7 +32,7 @@ public class ActivitySpecification implements Specification<Activity> {
                     builder.equal(root.get("activityFormat"), params.getActivityFormatId())
             );
         }
-        if (params.getRouteId() != null){
+        if (params.getRouteId() != null) {
             predicates.add(
                     builder.equal(root.get("route"), params.getRouteId())
             );

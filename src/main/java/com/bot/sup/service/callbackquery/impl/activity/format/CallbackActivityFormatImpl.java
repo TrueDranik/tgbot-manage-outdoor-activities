@@ -6,7 +6,6 @@ import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -45,17 +44,17 @@ public class CallbackActivityFormatImpl implements Callback {
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text(activityMessageProperties.getListActivityFormat())
-                        .callbackData("LIST_ACTIVITY_FORMAT")
+                        .callbackData(CallbackEnum.LIST_ACTIVITY_FORMAT.toString())
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text(activityMessageProperties.getAddActivityFormat())
-                        .callbackData("ADD_ACTIVITY_FORMAT")
+                        .callbackData(CallbackEnum.ADD_ACTIVITY_FORMAT.toString())
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getBack())
-                        .callbackData("SUP_ACTIVITIES")
+                        .callbackData(CallbackEnum.SUP_ACTIVITIES.toString())
                         .build()));
 
         return InlineKeyboardMarkup.builder()

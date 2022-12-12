@@ -8,7 +8,6 @@ import com.bot.sup.repository.ActivityTypeRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -36,7 +35,7 @@ public class CallbackListActivityTypeImpl implements Callback {
             buttonActivityType.add(Collections.singletonList(
                     InlineKeyboardButton.builder()
                             .text(mainMessageProperties.getBack())
-                            .callbackData("SUP_ACTIVITY_TYPE")
+                            .callbackData(CallbackEnum.SUP_ACTIVITY_TYPE.toString())
                             .build()));
 
             InlineKeyboardMarkup keyboardMarkup = InlineKeyboardMarkup.builder()
@@ -67,11 +66,11 @@ public class CallbackListActivityTypeImpl implements Callback {
         activityTypes.forEach(i -> {
             mainRow.add(InlineKeyboardButton.builder()
                     .text(i.getName())
-                    .callbackData("ACTIVITY_TYPE_OPTION/" + i.getId())
+                    .callbackData(CallbackEnum.ACTIVITY_TYPE_OPTION + "/" + i.getId())
                     .build());
             if (mainRow.size() == 2) {
-                List<InlineKeyboardButton> temporaryKeayboardRow = new ArrayList<>(mainRow);
-                mainKeyboard.add(temporaryKeayboardRow);
+                List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(mainRow);
+                mainKeyboard.add(temporaryKeyboardRow);
                 mainRow.clear();
             }
         });
@@ -82,7 +81,7 @@ public class CallbackListActivityTypeImpl implements Callback {
 
         secondRow.add(InlineKeyboardButton.builder()
                 .text(mainMessageProperties.getBack())
-                .callbackData("SUP_ACTIVITY_TYPE")
+                .callbackData(CallbackEnum.SUP_ACTIVITY_TYPE.toString())
                 .build());
         mainKeyboard.add(secondRow);
 
