@@ -58,7 +58,7 @@ public class ActivityServiceImpl implements ActivityService {
         activity.setAge(activityCreateDto.getAge());
         activity.setComplexity(activityCreateDto.getComplexity());
         activity.setPrice(activityCreateDto.getPrice());
-        activity.setActive(true);
+        activity.setIsActive(true);
 
         activity.setActivityType(activityTypeRepository.findById(activityCreateDto.getActivityTypeId())
                 .orElseThrow(() -> new EntityNotFoundException("Activity type not found")));
@@ -81,7 +81,7 @@ public class ActivityServiceImpl implements ActivityService {
         activityById.setAge(activityCreateDto.getAge());
         activityById.setComplexity(activityCreateDto.getComplexity());
         activityById.setPrice(activityCreateDto.getPrice());
-        activityById.setActive(true);
+        activityById.setIsActive(true);
 
         return activityRepository.save(activityById);
     }
@@ -90,12 +90,12 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public void deleteActivity(Long id) {
         Activity activityById = findActivityById(id);
-        activityById.setActive(false);
+        activityById.setIsActive(false);
 
         List<Schedule> schedulesByActivityId = scheduleRepository.findSchedulesByActivity_Id(id);
         for (Schedule schedule :
                 schedulesByActivityId) {
-            schedule.setActive(false);
+            schedule.setIsActive(false);
         }
     }
 

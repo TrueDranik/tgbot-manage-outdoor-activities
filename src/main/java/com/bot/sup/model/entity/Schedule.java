@@ -35,8 +35,8 @@ public class Schedule {
     @JoinColumn(name = "route_id")
     private Route route;
 
-    @Column(name = "active")
-    private Boolean active;
+    @Column(name = "is_active")
+    private Boolean isActive;
 
     @ManyToMany
     @JoinTable(

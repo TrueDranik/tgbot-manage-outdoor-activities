@@ -22,5 +22,5 @@ public class ScheduleDto {
     private Route route;
     private Set<Client> client;
     private Set<Instructor> instructor;
-    private Boolean active;
+    private Boolean isActive;
 }

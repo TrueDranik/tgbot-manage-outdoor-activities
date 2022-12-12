@@ -35,8 +35,8 @@ public class Route {
     @Column(name = "length", length = 30)
     private String length;
 
-    @Column(name = "active")
-    private Boolean active;
+    @Column(name = "is_active")
+    private Boolean isActive;
 
     @OneToOne
     private ImageData imageData;
