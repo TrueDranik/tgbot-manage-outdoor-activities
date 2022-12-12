@@ -57,11 +57,11 @@ public class RouteServiceImpl implements RouteService {
     @Override
     public void deleteRoute(Long id) {
         Route routeById = findRouteById(id);
-        routeById.setActive(false);
+        routeById.setIsActive(false);
 
         List<Schedule> schedulesByRouteId = scheduleRepository.findSchedulesByRoute_Id(id);
         for (Schedule schedule : schedulesByRouteId) {
-            schedule.setActive(false);
+            schedule.setIsActive(false);
         }
     }
 
@@ -78,7 +78,7 @@ public class RouteServiceImpl implements RouteService {
         route.setFinishPointName(routeCreateDto.getFinishPointName());
         route.setMapLink(routeCreateDto.getMapLink());
         route.setLength(routeCreateDto.getLength());
-        route.setActive(true);
+        route.setIsActive(true);
         route.setImageData(imageDataRepository.findById(routeCreateDto.getImageDataId())
                 .orElseThrow(() -> new EntityNotFoundException("Image with id[" + routeCreateDto.getImageDataId() + "] not found")));
     }

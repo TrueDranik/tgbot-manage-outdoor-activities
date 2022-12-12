@@ -82,7 +82,7 @@ public class CallbackDateToRouteImpl implements Callback {
         List<InlineKeyboardButton> rowSecond = new ArrayList<>();
 
         schedules.forEach(i -> {
-            if (i.getActive().equals(true)) {
+            if (i.getIsActive().equals(true)) {
                 rowMain.add(InlineKeyboardButton.builder()
                         .text(i.getRoute().getName() + "|" + i.getEventTime().format(DateTimeFormatter.ofPattern("HH:mm")))
                         .callbackData(CallbackEnum.SCHEDULE_INFO + "/" + activityFormatId + "/" + eventDate + "/" + i.getId())
