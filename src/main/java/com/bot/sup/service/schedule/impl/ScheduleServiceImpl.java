@@ -41,9 +41,10 @@ public class ScheduleServiceImpl implements ScheduleService {
             return Collections.emptyList();
         }
 
-        List<Schedule> schedules = new ArrayList<>();
+//        Schedule schedule = new Schedule();
+        List<Schedule> schedules = new ArrayList<Schedule>(createDto.size());
 
-        for (int i = 0; i <= createDto.size() - 1; i++) {
+        for (int i = 0; i <= createDto.size() - 1; i++) { //TODO: переписать на foreach
             Schedule schedule = new Schedule();
             schedule.setEventDate(createDto.get(i).getEventDate());
             schedule.setEventTime(createDto.get(i).getEventTime());
@@ -56,6 +57,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 
             schedules.add(schedule);
         }
+
+//        for (ScheduleCreateDto scheduleCreateDto : createDto) {
+//            schedule.setEventDate(scheduleCreateDto.getEventDate());
+//        }
 
         return scheduleRepository.saveAll(schedules);
     }
@@ -79,7 +84,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public void deleteSchedule(Long id) {
         Schedule scheduleById = findScheduleById(id);
-        scheduleById.setIsActive(false);
+        scheduleById.setIsActive(false); //TODO: написать метод save
+        scheduleRepository.save(scheduleById);
     }
 
     private Schedule findScheduleById(Long id) {

@@ -2,6 +2,7 @@ package com.bot.sup.api.rest;
 
 import com.bot.sup.model.ActivityRequestParams;
 import com.bot.sup.model.dto.ActivityCreateDto;
+import com.bot.sup.model.dto.ActivityDto;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.service.activity.ActivityService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,7 +27,8 @@ public class ActivityController {
 
     @GetMapping
     @Operation(summary = "Получить список всех активностей")
-    public ResponseEntity<List<Activity>> getAllActivity(@ParameterObject ActivityRequestParams params) {
+    public ResponseEntity<List<ActivityDto>> getAllActivity(@ParameterObject ActivityRequestParams params) {
+        //TODO возвращать dto, а не entity
         return new ResponseEntity<>(activityService.getAllActivity(params), HttpStatus.OK);
     }
 

@@ -3,7 +3,7 @@ package com.bot.sup.validation;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Validation {
+public class Validation { // TODO: 12.12.2022 мб назвать utils
 
     private static final String REGEX_LETTERS = "^(?![\\d+_@.-]+$)[a-zA-Z а-яёА-ЯЁ+_@.-]*$";
     private static final String REGEX_PHONE = "^(\\+7)?[489][0-9]{2}[0-9]{3}[0-9]{2}[0-9]{2}$";
