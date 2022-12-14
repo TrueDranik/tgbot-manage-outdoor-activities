@@ -2,6 +2,7 @@ package com.bot.sup.service.activity.impl;
 
 import com.bot.sup.model.ActivityRequestParams;
 import com.bot.sup.model.dto.ActivityCreateDto;
+import com.bot.sup.model.dto.ActivityDto;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.ActivityFormatRepository;
@@ -34,7 +35,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public List<Activity> getAllActivity(ActivityRequestParams params) {
+    public List<ActivityDto> getAllActivity(ActivityRequestParams params) {
         return activityRepository.findAll(new ActivitySpecification(params));
     }
 
