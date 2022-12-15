@@ -12,7 +12,7 @@ import java.util.List;
 public interface ActivityService {
     List<ActivityDto> getAllActivity(ActivityRequestParams params);
 
-    Activity getActivityById(Long id);
+    ActivityDto getActivityById(Long id);
 
     Activity createActivity(ActivityCreateDto activityCreateDto);
 
