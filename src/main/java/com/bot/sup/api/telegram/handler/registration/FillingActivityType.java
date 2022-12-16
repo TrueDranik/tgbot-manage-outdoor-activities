@@ -49,72 +49,72 @@ public class FillingActivityType implements HandleRegistration {
             activityType = activityTypeDataCache.getActivityTypeProfileData(chatId);
         }
 
-            if (activityTypeDataCache.getActivityTypeCurrentState(chatId).equals(ActivityTypeStateEnum.FILLING_ACTIVITY_TYPE))
-                activityTypeDataCache.setActivityTypeCurrentState(chatId, ActivityTypeStateEnum.ASK_ACTIVITY_TYPE_NAME);
+        if (activityTypeDataCache.getActivityTypeCurrentState(chatId).equals(ActivityTypeStateEnum.FILLING_ACTIVITY_TYPE))
+            activityTypeDataCache.setActivityTypeCurrentState(chatId, ActivityTypeStateEnum.ASK_ACTIVITY_TYPE_NAME);
 
-            return processInputMessage(message, chatId, activityType, forUpdate);
-        }
+        return processInputMessage(message, chatId, activityType, forUpdate);
+    }
 
-        @Transactional
-        public BotApiMethod<?> processInputMessage(Message message, Long chatId, ActivityType activityType,
-        boolean forUpdate){
-            BotApiMethod<?> replyToUser = null;
-            String userAnswer = message.getText();
-            ActivityTypeStateEnum activityTypeCurrentState = activityTypeDataCache.getActivityTypeCurrentState(chatId);
+    @Transactional
+    public BotApiMethod<?> processInputMessage(Message message, Long chatId, ActivityType activityType,
+                                               boolean forUpdate) {
+        BotApiMethod<?> replyToUser = null;
+        String userAnswer = message.getText();
+        ActivityTypeStateEnum activityTypeCurrentState = activityTypeDataCache.getActivityTypeCurrentState(chatId);
 
-            if (activityTypeCurrentState.equals(ActivityTypeStateEnum.ASK_ACTIVITY_TYPE_NAME)) {
-                replyToUser = messageService.buildReplyMessage(chatId, activityMessageProperties.getInputActivityFormatName());
+        if (ActivityTypeStateEnum.ASK_ACTIVITY_TYPE_NAME.equals(activityTypeCurrentState)) {
+            replyToUser = messageService.buildReplyMessage(chatId, activityMessageProperties.getInputActivityFormatName());
+            activityTypeDataCache.setActivityTypeCurrentState(chatId, ActivityTypeStateEnum.REGISTERED_ACTIVITY_TYPE);
+
+            return replyToUser;
+        } else if (ActivityTypeStateEnum.REGISTERED_ACTIVITY_TYPE.equals(activityTypeCurrentState)) {
+            if (activityTypeRepository.existsByNameEqualsIgnoreCase(userAnswer)) {
+                replyToUser = messageService.buildReplyMessage(chatId, activityMessageProperties.getActivityNameAlreadyTaken());
                 activityTypeDataCache.setActivityTypeCurrentState(chatId, ActivityTypeStateEnum.REGISTERED_ACTIVITY_TYPE);
 
                 return replyToUser;
-            } else if (activityTypeCurrentState.equals(ActivityTypeStateEnum.REGISTERED_ACTIVITY_TYPE)) {
-                if (activityTypeRepository.existsByNameEqualsIgnoreCase(userAnswer)) {
-                    replyToUser = messageService.buildReplyMessage(chatId, activityMessageProperties.getActivityNameAlreadyTaken());
-                    activityTypeDataCache.setActivityTypeCurrentState(chatId, ActivityTypeStateEnum.REGISTERED_ACTIVITY_TYPE);
-
-                    return replyToUser;
-                }
-
-                try {
-                    activityType.setName(userAnswer);
-                } catch (IndexOutOfBoundsException e) {
-                    return messageService.buildReplyMessage(chatId, activityMessageProperties.getInputActivityNameIsEmpty());
-                }
-
-
-                if (forUpdate) {
-                    activityTypeDataCache.removeActivityTypeForUpdate(chatId);
-                }else {
-                    activityTypeServiceImpl.save(activityType);
-                }
-
-                replyToUser = messageService.getReplyMessageWithKeyboard(chatId, activityMessageProperties.getRegisteredActivity(), keyboardMarkup());
             }
+//todo не обрабатывай unccheked exeption
+            try {
+                activityType.setName(userAnswer);
+            } catch (IndexOutOfBoundsException e) {
+                return messageService.buildReplyMessage(chatId, activityMessageProperties.getInputActivityNameIsEmpty());
+            }
+
 
             if (forUpdate) {
-                activityTypeServiceImpl.save(activityType);
+                activityTypeDataCache.removeActivityTypeForUpdate(chatId);
             } else {
-                activityTypeDataCache.saveActivityTypeProfileData(chatId, activityType);
+                activityTypeServiceImpl.save(activityType);
             }
 
-            return replyToUser;
+            replyToUser = messageService.getReplyMessageWithKeyboard(chatId, activityMessageProperties.getRegisteredActivity(), keyboardMarkup());
         }
 
-        private InlineKeyboardMarkup keyboardMarkup () {
-            List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
+        if (forUpdate) {
+            activityTypeServiceImpl.save(activityType);
+        } /*else {
+            activityTypeDataCache.saveActivityTypeProfileData(chatId, activityType);
+        }*/
 
-            buttons.add(List.of(
-                    InlineKeyboardButton.builder()
-                            .callbackData(CallbackEnum.SUP_ACTIVITY_TYPE.toString())
-                            .text(mainMessageProperties.getDone())
-                            .build()));
-            return InlineKeyboardMarkup.builder()
-                    .keyboard(buttons)
-                    .build();
-        }
-
-        @Override
-        public Enum<?> getType () {
-            return ActivityTypeStateEnum.FILLING_ACTIVITY_TYPE;
-        }
+        return replyToUser;
     }
+
+    private InlineKeyboardMarkup keyboardMarkup() {
+        List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
+
+        buttons.add(List.of(
+                InlineKeyboardButton.builder()
+                        .callbackData(CallbackEnum.SUP_ACTIVITY_TYPE.toString())
+                        .text(mainMessageProperties.getDone())
+                        .build()));
+        return InlineKeyboardMarkup.builder()
+                .keyboard(buttons)
+                .build();
+    }
+
+    @Override
+    public Enum<?> getType() {
+        return ActivityTypeStateEnum.FILLING_ACTIVITY_TYPE;
+    }
+}

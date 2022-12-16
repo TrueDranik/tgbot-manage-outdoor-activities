@@ -54,12 +54,12 @@ public class FillingClientImpl implements HandleRegistration {
         ClientRecordStateEnum clientRecordCurrentState = clientRecordDataCache.getClientRecordCurrentState(chatId);
         Long scheduleId = clientRecordDataCache.getScheduleState(chatId);
 
-        if (clientRecordCurrentState.equals(ClientRecordStateEnum.ASK_TELEGRAM_ID)) {
+        if (ClientRecordStateEnum.ASK_TELEGRAM_ID.equals(clientRecordCurrentState)) {
             replyToUser = messageService.buildReplyMessage(chatId, "Перешлите любое сообщение клиента");
             clientRecordDataCache.setClientRecordCurrentState(chatId, ClientRecordStateEnum.ASK_FULL_NAME);
 
             return replyToUser;
-        } else if (clientRecordCurrentState.equals(ClientRecordStateEnum.ASK_FULL_NAME)) {
+        } else if (ClientRecordStateEnum.ASK_FULL_NAME.equals(clientRecordCurrentState)) {
             Optional<User> forwardFrom = Optional.ofNullable(message.getForwardFrom());
             Optional<Client> clientByTelegramId = clientRepository.findByTelegramId(forwardFrom.get().getId());
 
@@ -80,14 +80,15 @@ public class FillingClientImpl implements HandleRegistration {
                 replyToUser = messageService.buildReplyMessage(chatId, "Введите ФИ клиента.");
                 clientRecordDataCache.setClientRecordCurrentState(chatId, ClientRecordStateEnum.ASK_PHONE_NUMBER);
             }
-        } else if (clientRecordCurrentState.equals(ClientRecordStateEnum.ASK_PHONE_NUMBER)) {
+        } else if (ClientRecordStateEnum.ASK_PHONE_NUMBER.equals(clientRecordCurrentState)) {
             if (Validation.isValidText(userAnswer)) {
                 try {
                     String[] fullName = userAnswer.split(" ");
 
                     client.setFirstName(fullName[0]);
                     client.setLastName(fullName[1]);
-
+                    // todo вынести условие в метод
+                    // todo вынеси чиста в константы
                     if (client.getFirstName().length() < 2 || client.getFirstName().length() > 15
                             && client.getLastName().length() < 2 || client.getLastName().length() > 15) {
                         return messageService.buildReplyMessage(message.getChatId(), "Неккоректный ввод!");
@@ -107,7 +108,7 @@ public class FillingClientImpl implements HandleRegistration {
 
                 return replyToUser;
             }
-        } else if (clientRecordCurrentState.equals(ClientRecordStateEnum.ASK_BIRTHDAY)) {
+        } else if (ClientRecordStateEnum.ASK_BIRTHDAY.equals(clientRecordCurrentState)) {
             if (Validation.isValidPhoneNumber(userAnswer)) {
                 client.setPhoneNumber(userAnswer);
 
@@ -123,7 +124,7 @@ public class FillingClientImpl implements HandleRegistration {
 
                 return replyToUser;
             }
-        } else if (clientRecordCurrentState.equals(ClientRecordStateEnum.REGISTERED_CLIENT)) {
+        } else if (ClientRecordStateEnum.REGISTERED_CLIENT.equals(clientRecordCurrentState)) {
             try {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
                 LocalDate birthday = LocalDate.from(formatter.parse(userAnswer));
