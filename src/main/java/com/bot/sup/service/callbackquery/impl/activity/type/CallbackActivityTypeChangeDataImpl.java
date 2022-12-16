@@ -12,9 +12,6 @@ import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.Collection;
-import java.util.Set;
-
 @Service
 @RequiredArgsConstructor
 public class CallbackActivityTypeChangeDataImpl implements Callback {
@@ -22,7 +19,7 @@ public class CallbackActivityTypeChangeDataImpl implements Callback {
     private final MiddlewareDataCache middlewareDataCache;
     private final ActivityTypeDataCache activityTypeDataCache;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.ACTIVITY_TYPE_CHANGE);
+    public static final CallbackEnum ACTIVITIES = CallbackEnum.ACTIVITY_TYPE_CHANGE;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
@@ -38,7 +35,7 @@ public class CallbackActivityTypeChangeDataImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

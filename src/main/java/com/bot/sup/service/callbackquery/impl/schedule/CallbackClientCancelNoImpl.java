@@ -9,14 +9,11 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.Collection;
-import java.util.Set;
-
 @Service
 @RequiredArgsConstructor
 public class CallbackClientCancelNoImpl implements Callback {
 
-    private static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.CLIENT_CANCEL_NO);
+    private static final CallbackEnum ACTIVITIES = CallbackEnum.CLIENT_CANCEL_NO;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
@@ -27,7 +24,7 @@ public class CallbackClientCancelNoImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

@@ -13,16 +13,13 @@ import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.Collection;
-import java.util.Set;
-
 import static com.bot.sup.common.enums.CallbackEnum.CHANGE_INSTRUCTOR;
 
 @RequiredArgsConstructor
 @Service
 @Slf4j
 public class CallbackChangeInstructorDataImpl implements Callback {
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(CHANGE_INSTRUCTOR);
+    public static final CallbackEnum ACTIVITIES = CHANGE_INSTRUCTOR;
     private final StateContext stateContext;
     private final InstructorDataCache instructorDataCache;
     private final MiddlewareDataCache middlewareDataCache;
@@ -39,7 +36,7 @@ public class CallbackChangeInstructorDataImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

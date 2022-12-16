@@ -23,7 +23,7 @@ public class CallbackScheduleCancelImpl implements Callback {
     private final ScheduleRepository scheduleRepository;
     private final ScheduleMessageProperties scheduleMessageProperties;
 
-    private static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.SCHEDULE_CANCEL);
+    private static final CallbackEnum ACTIVITIES = CallbackEnum.SCHEDULE_CANCEL;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
@@ -61,7 +61,7 @@ public class CallbackScheduleCancelImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

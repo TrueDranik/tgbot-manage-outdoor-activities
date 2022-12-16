@@ -10,18 +10,13 @@ import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
-import java.util.Collection;
-import java.util.Set;
-
-import static com.bot.sup.common.enums.CallbackEnum.MENU;
-
 @Service
 @RequiredArgsConstructor
 public class CallbackMenuImpl implements Callback {
     private final HandleMainMenuImpl handleMainMenu;
     private final MainMessageProperties mainMessageProperties;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(MENU);
+    public static final CallbackEnum ACTIVITIES = CallbackEnum.MENU;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -34,7 +29,7 @@ public class CallbackMenuImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

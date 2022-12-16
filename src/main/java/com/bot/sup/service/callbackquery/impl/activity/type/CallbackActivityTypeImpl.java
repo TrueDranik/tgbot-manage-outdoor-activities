@@ -14,9 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import static com.bot.sup.common.enums.CallbackEnum.SUP_ACTIVITY_TYPE;
 
@@ -26,7 +24,7 @@ public class CallbackActivityTypeImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
 
-    private static final Set<CallbackEnum> ACTIVITIES = Set.of(SUP_ACTIVITY_TYPE);
+    private static final CallbackEnum ACTIVITIES = SUP_ACTIVITY_TYPE;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
@@ -42,7 +40,7 @@ public class CallbackActivityTypeImpl implements Callback {
 
     private InlineKeyboardMarkup setUpKeyboard() {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
-
+// todo IKB builder вынеси в метод
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text(activityMessageProperties.getListActivityType())
@@ -65,7 +63,7 @@ public class CallbackActivityTypeImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

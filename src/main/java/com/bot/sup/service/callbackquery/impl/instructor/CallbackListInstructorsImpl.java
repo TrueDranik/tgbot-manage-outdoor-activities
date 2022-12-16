@@ -14,9 +14,9 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.util.*;
-
-import static com.bot.sup.common.enums.CallbackEnum.LIST_INSTRUCTORS;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class CallbackListInstructorsImpl implements Callback {
     private final InstructorMessageProperties instructorMessageProperties;
     private final InstructorRepository instructorRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(LIST_INSTRUCTORS);
+    public static final CallbackEnum ACTIVITIES = CallbackEnum.LIST_INSTRUCTORS;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -94,7 +94,7 @@ public class CallbackListInstructorsImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

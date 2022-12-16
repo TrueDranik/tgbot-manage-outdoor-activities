@@ -16,9 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import static com.bot.sup.common.enums.CallbackEnum.SCHEDULE_TO_ACTIVITYFORMAT;
 
@@ -30,7 +28,7 @@ public class CallbackScheduleToActivityFormatImpl implements Callback {
     private final ActivityMessageProperties activityMessageProperties;
     private final ActivityFormatRepository activityFormatRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(SCHEDULE_TO_ACTIVITYFORMAT);
+    public static final CallbackEnum ACTIVITIES = SCHEDULE_TO_ACTIVITYFORMAT;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -80,7 +78,7 @@ public class CallbackScheduleToActivityFormatImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }
