@@ -11,8 +11,6 @@ import com.bot.sup.repository.ActivityTypeRepository;
 import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.repository.specification.ActivitySpecification;
 import com.bot.sup.service.activity.ActivityService;
-import com.bot.sup.service.activity.format.ActivityFormatService;
-import com.bot.sup.service.activity.type.ActivityTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,13 +24,11 @@ public class ActivityServiceImpl implements ActivityService {
     private final ActivityRepository activityRepository;
     private final ActivityTypeRepository activityTypeRepository;
     private final ActivityFormatRepository activityFormatRepository;
-    private final ActivityFormatService activityFormatService;
-    private final ActivityTypeService activityTypeService;
     private final ScheduleRepository scheduleRepository;
 
-    public void save(Activity activity) {
-        activityRepository.save(activity);
-    }
+//    public void save(Activity activity) {
+//        activityRepository.save(activity);
+//    }
 
     @Override
     public List<ActivityDto> getAllActivity(ActivityRequestParams params) {
@@ -40,18 +36,71 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public Activity getActivityById(Long id) {
-        return findActivityById(id);
+    public ActivityDto getActivityById(Long id) {
+        Activity activityById = findActivityById(id);
+
+        return activityToActivityDto(activityById);
     }
 
     @Override
-    public Activity createActivity(ActivityCreateDto activityCreateDto) {
+    public ActivityDto createActivity(ActivityCreateDto activityCreateDto) {
         if (activityCreateDto == null) {
             return null;
         }
 
         Activity activity = new Activity();
 
+        activityDtoToActivity(activityCreateDto, activity);
+
+        return activityToActivityDto(activity);
+    }
+
+    @Override
+    public ActivityDto updateActivity(Long id, ActivityCreateDto activityCreateDto) {
+        Activity activity = findActivityById(id);
+
+        activityDtoToActivity(activityCreateDto, activity);
+
+        return activityToActivityDto(activity);
+    }
+
+    @Transactional
+    @Override
+    public void deleteActivity(Long id) {
+        Activity activityById = findActivityById(id);
+        activityById.setIsActive(false);
+
+        //todo подумай над запросом
+        List<Schedule> schedulesByActivityId = scheduleRepository.findSchedulesByActivity_Id(id);
+        for (Schedule schedule : schedulesByActivityId) {
+            schedule.setIsActive(false);
+        }
+    }
+
+    private Activity findActivityById(Long id) {
+        return activityRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Activity with id[" + id + "] not found"));
+    }
+
+    private static ActivityDto activityToActivityDto(Activity activity) {
+        ActivityDto activityDto = new ActivityDto();
+
+        activityDto.setId(activity.getId());
+        activityDto.setName(activity.getName());
+        activityDto.setSeasonality(activity.getSeasonality());
+        activityDto.setDescription(activity.getDescription());
+        activityDto.setDuration(activity.getDuration());
+        activityDto.setAge(activity.getAge());
+        activityDto.setComplexity(activity.getComplexity());
+        activityDto.setPrice(activity.getPrice());
+        activityDto.setIsActive(activity.getIsActive());
+        activityDto.setActivityFormat(activity.getActivityFormat());
+        activityDto.setActivityType(activity.getActivityType());
+
+        return activityDto;
+    }
+
+    private void activityDtoToActivity(ActivityCreateDto activityCreateDto, Activity activity) {
         activity.setName(activityCreateDto.getName());
         activity.setSeasonality(activityCreateDto.getSeasonality());
         activity.setDescription(activityCreateDto.getDescription());
@@ -66,42 +115,6 @@ public class ActivityServiceImpl implements ActivityService {
         activity.setActivityFormat(activityFormatRepository.findById(activityCreateDto.getActivityFormatId())
                 .orElseThrow(() -> new EntityNotFoundException("Activity format not found")));
 
-        return activityRepository.save(activity);
-    }
-
-    @Override
-    public Activity updateActivity(Long id, ActivityCreateDto activityCreateDto) {
-        Activity activityById = findActivityById(id);
-
-        activityById.setName(activityCreateDto.getName());
-        activityById.setSeasonality(activityCreateDto.getSeasonality());
-        activityById.setActivityFormat(activityFormatService.getActivityFormatById(activityCreateDto.getActivityFormatId()));
-        activityById.setActivityType(activityTypeService.getActivityTypeById(activityCreateDto.getActivityTypeId()));
-        activityById.setDescription(activityCreateDto.getDescription());
-        activityById.setDuration(activityCreateDto.getDuration());
-        activityById.setAge(activityCreateDto.getAge());
-        activityById.setComplexity(activityCreateDto.getComplexity());
-        activityById.setPrice(activityCreateDto.getPrice());
-        activityById.setIsActive(true);
-
-        return activityRepository.save(activityById);
-    }
-
-    @Transactional
-    @Override
-    public void deleteActivity(Long id) {
-        Activity activityById = findActivityById(id);
-        activityById.setIsActive(false);
-
-        List<Schedule> schedulesByActivityId = scheduleRepository.findSchedulesByActivity_Id(id);
-        for (Schedule schedule :
-                schedulesByActivityId) {
-            schedule.setIsActive(false);
-        }
-    }
-
-    private Activity findActivityById(Long id) {
-        return activityRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Activity with id[" + id + "] not found"));
+        activityRepository.save(activity);
     }
 }

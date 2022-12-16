@@ -1,20 +1,20 @@
 package com.bot.sup.service.route;
 
 import com.bot.sup.model.dto.RouteCreateDto;
-import com.bot.sup.model.entity.Route;
+import com.bot.sup.model.dto.RouteDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public interface RouteService {
-    List<Route> getAllRoute();
+    List<RouteDto> getAllRoute();
 
-    Route getRouteById(Long id);
+    RouteDto getRouteById(Long id);
 
-    Route createRoute(RouteCreateDto createDto);
+    RouteDto createRoute(RouteCreateDto createDto);
 
-    Route updateRoute(Long id, RouteCreateDto routeCreateDto);
+    RouteDto updateRoute(Long id, RouteCreateDto routeCreateDto);
 
     void deleteRoute(Long id);
 }
