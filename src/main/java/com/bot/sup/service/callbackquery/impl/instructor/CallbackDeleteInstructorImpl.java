@@ -14,9 +14,9 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.util.*;
-
-import static com.bot.sup.common.enums.CallbackEnum.DELETE_INSTRUCTOR;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -25,7 +25,7 @@ public class CallbackDeleteInstructorImpl implements Callback {
     private final InstructorMessageProperties instructorMessageProperties;
     private final InstructorRepository instructorRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(DELETE_INSTRUCTOR);
+    public static final CallbackEnum ACTIVITIES = CallbackEnum.DELETE_INSTRUCTOR;
 
     @Transactional
     @Override
@@ -62,7 +62,7 @@ public class CallbackDeleteInstructorImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

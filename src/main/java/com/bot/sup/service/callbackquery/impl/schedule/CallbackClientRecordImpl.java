@@ -12,9 +12,6 @@ import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.Collection;
-import java.util.Set;
-
 @Service
 @RequiredArgsConstructor
 public class CallbackClientRecordImpl implements Callback {
@@ -22,7 +19,7 @@ public class CallbackClientRecordImpl implements Callback {
     private final ClientRecordDataCache clientRecordDataCache;
     private final MiddlewareDataCache middlewareDataCache;
 
-    private static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.CLIENT_RECORD);
+    private static final CallbackEnum ACTIVITIES = CallbackEnum.CLIENT_RECORD;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
@@ -38,7 +35,7 @@ public class CallbackClientRecordImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

@@ -15,9 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +24,7 @@ public class CallbackScheduleImpl implements Callback {
     private final ScheduleMessageProperties scheduleMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
 
-    private static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.SCHEDULE);
+    private static final CallbackEnum ACTIVITIES = CallbackEnum.SCHEDULE;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
@@ -57,7 +55,7 @@ public class CallbackScheduleImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

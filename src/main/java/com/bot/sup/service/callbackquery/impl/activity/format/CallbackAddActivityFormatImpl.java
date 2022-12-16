@@ -12,9 +12,6 @@ import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.Collection;
-import java.util.Set;
-
 import static com.bot.sup.common.enums.CallbackEnum.ADD_ACTIVITY_FORMAT;
 
 @Service
@@ -24,12 +21,13 @@ public class CallbackAddActivityFormatImpl implements Callback {
     private final ActivityFormatDataCache activityFormatDataCache;
     private final MiddlewareDataCache middlewareDataCache;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ADD_ACTIVITY_FORMAT);
+    public static final CallbackEnum ACTIVITIES = ADD_ACTIVITY_FORMAT;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
 
+        middlewareDataCache.removeCurrentState(chatId);
         ActivityFormatStateEnum botStateEnum = ActivityFormatStateEnum.FILLING_ACTIVITY_FORMAT;
         activityFormatDataCache.setActivityFormatCurrentState(chatId, botStateEnum);
         middlewareDataCache.setValidCurrentState(chatId, botStateEnum);
@@ -38,7 +36,7 @@ public class CallbackAddActivityFormatImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

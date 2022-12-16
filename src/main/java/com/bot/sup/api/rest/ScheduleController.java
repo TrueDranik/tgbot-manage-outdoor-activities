@@ -2,7 +2,7 @@ package com.bot.sup.api.rest;
 
 import com.bot.sup.model.ScheduleRequestParams;
 import com.bot.sup.model.dto.ScheduleCreateDto;
-import com.bot.sup.model.entity.Schedule;
+import com.bot.sup.model.dto.ScheduleDto;
 import com.bot.sup.service.schedule.ScheduleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,14 +25,14 @@ public class ScheduleController {
 
     @GetMapping
     @Operation(summary = "Получить список всех расписаний")
-    public ResponseEntity<List<Schedule>> getAllSchedule(@ParameterObject ScheduleRequestParams params) {
+    public ResponseEntity<List<ScheduleDto>> getAllSchedule(@ParameterObject ScheduleRequestParams params) {
         return new ResponseEntity<>(scheduleService.getAllSchedule(params), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Получить расписание по id")
-    public ResponseEntity<Schedule> getScheduleById(@PathVariable("id") Long id) {
-        Optional<Schedule> schedule = Optional.ofNullable(scheduleService.getScheduleById(id));
+    public ResponseEntity<ScheduleDto> getScheduleById(@PathVariable("id") Long id) {
+        Optional<ScheduleDto> schedule = Optional.ofNullable(scheduleService.getScheduleById(id));
 
         return schedule.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
@@ -40,14 +40,14 @@ public class ScheduleController {
 
     @PostMapping
     @Operation(summary = "Создать новое расписание")
-    public ResponseEntity<List<Schedule>> createSchedule(@RequestBody List<ScheduleCreateDto> scheduleCreateDto) {
+    public ResponseEntity<List<ScheduleDto>> createSchedule(@RequestBody List<ScheduleCreateDto> scheduleCreateDto) {
         return new ResponseEntity<>(scheduleService.createSchedule(scheduleCreateDto), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
     @Operation(summary = "Изменить существующее расписание")
-    public ResponseEntity<Schedule> updateSchedule(@PathVariable(name = "id") Long id,
-                                                   @RequestBody ScheduleCreateDto scheduleCreateDto) {
+    public ResponseEntity<ScheduleDto> updateSchedule(@PathVariable(name = "id") Long id,
+                                                      @RequestBody ScheduleCreateDto scheduleCreateDto) {
         return new ResponseEntity<>(scheduleService.updateSchedule(id, scheduleCreateDto), HttpStatus.CREATED);
     }
 
@@ -55,6 +55,7 @@ public class ScheduleController {
     @Operation(summary = "Удалить существующее расписание")
     public ResponseEntity<ScheduleCreateDto> deleteSchedule(@PathVariable(name = "id") Long id) {
         scheduleService.deleteSchedule(id);
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

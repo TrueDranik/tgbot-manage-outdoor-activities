@@ -23,7 +23,7 @@ public class CallbackActivityFormatOptionImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
     private final ActivityFormatRepository activityFormatRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ACTIVITY_FORMAT_OPTION);
+    public static final CallbackEnum ACTIVITIES = ACTIVITY_FORMAT_OPTION;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -67,7 +67,7 @@ public class CallbackActivityFormatOptionImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

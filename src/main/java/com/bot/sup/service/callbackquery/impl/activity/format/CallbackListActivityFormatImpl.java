@@ -25,11 +25,12 @@ public class CallbackListActivityFormatImpl implements Callback {
     private final ActivityMessageProperties activityMessageProperties;
     private final ActivityFormatRepository activityFormatRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(LIST_ACTIVITY_FORMAT);
+    public static final CallbackEnum ACTIVITIES = LIST_ACTIVITY_FORMAT;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         List<List<InlineKeyboardButton>> buttonActivityFormat = new ArrayList<>();
+
         List<ActivityFormat> activities = activityFormatRepository.findAll();
 
         if (activities.isEmpty()) {
@@ -94,7 +95,7 @@ public class CallbackListActivityFormatImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

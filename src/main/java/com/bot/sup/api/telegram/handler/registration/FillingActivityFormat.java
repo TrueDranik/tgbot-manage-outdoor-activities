@@ -62,18 +62,19 @@ public class FillingActivityFormat implements HandleRegistration {
         String userAnswer = inputMessage.getText();
         ActivityFormatStateEnum activityCurrentState = activityFormatDataCache.getActivityFormatCurrentState(chatId);
 
-        if (activityCurrentState.equals(ActivityFormatStateEnum.ASK_ACTIVITY_FORMAT_NAME)) {
+        if (ActivityFormatStateEnum.ASK_ACTIVITY_FORMAT_NAME.equals(activityCurrentState)) {
             replyToUser = messageService.buildReplyMessage(chatId, activityMessageProperties.getInputActivityFormatName());
             activityFormatDataCache.setActivityFormatCurrentState(chatId, ActivityFormatStateEnum.REGISTERED_ACTIVITY_FORMAT);
 
             return replyToUser;
-        } else if (activityCurrentState.equals(ActivityFormatStateEnum.REGISTERED_ACTIVITY_FORMAT)) {
+        } else if (ActivityFormatStateEnum.REGISTERED_ACTIVITY_FORMAT.equals(activityCurrentState)) {
             if (activityFormatRepository.existsByNameEqualsIgnoreCase(userAnswer)) {
                 replyToUser = messageService.buildReplyMessage(chatId, activityMessageProperties.getActivityNameAlreadyTaken());
                 activityFormatDataCache.setActivityFormatCurrentState(chatId, ActivityFormatStateEnum.REGISTERED_ACTIVITY_FORMAT);
 
                 return replyToUser;
             }
+            // todo не обрабатывай unccheked exeption
             try {
                 activityFormat.setName(userAnswer);
             } catch (IndexOutOfBoundsException e) {
@@ -94,9 +95,10 @@ public class FillingActivityFormat implements HandleRegistration {
 
         if (forUpdate) {
             activityFormatServiceImpl.save(activityFormat);
-        } else {
-            activityFormatDataCache.saveActivityFormatProfileData(chatId, activityFormat);
         }
+//        else {
+//            activityFormatDataCache.saveActivityFormatProfileData(chatId, activityFormat);
+//        }
 
         return replyToUser;
     }

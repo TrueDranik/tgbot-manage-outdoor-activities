@@ -22,8 +22,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
 
-import static com.bot.sup.common.enums.CallbackEnum.ACTIVITYFORMAT_TO_DATE;
-
 @Service
 @RequiredArgsConstructor
 public class CallbackActivityFormatToDateImpl implements Callback {
@@ -32,7 +30,7 @@ public class CallbackActivityFormatToDateImpl implements Callback {
     private final ScheduleRepository scheduleRepository;
     private final ActivityFormatRepository activityFormatRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ACTIVITYFORMAT_TO_DATE);
+    public static final CallbackEnum ACTIVITIES = CallbackEnum.ACTIVITYFORMAT_TO_DATE;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -43,7 +41,7 @@ public class CallbackActivityFormatToDateImpl implements Callback {
                 .orElseThrow(() -> new EntityNotFoundException("ActivityFormat with id[" + activityFormatId + "] not found")));
 
         List<Schedule> eventDate = scheduleRepository.getSchedulesByActivity_ActivityFormat_Id(Long.valueOf(activityFormatId));
-
+        // todo вынеси в метод
         if (generateKeyboardWithSchedule(eventDate, activityFormatId).getKeyboard().size() <= 1) {
             return EditMessageText.builder()
                     .messageId(callbackQuery.getMessage().getMessageId())
@@ -110,7 +108,7 @@ public class CallbackActivityFormatToDateImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

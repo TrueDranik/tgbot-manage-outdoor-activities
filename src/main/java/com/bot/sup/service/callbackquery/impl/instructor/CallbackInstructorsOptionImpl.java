@@ -24,7 +24,7 @@ public class CallbackInstructorsOptionImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
     private final InstructorRepository instructorRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(INSTRUCTOR_OPTION);
+    public static final CallbackEnum ACTIVITIES = INSTRUCTOR_OPTION;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -70,6 +70,7 @@ public class CallbackInstructorsOptionImpl implements Callback {
     }
 
     private String instructorInfo(Optional<Instructor> instructor) {
+        // todo вынести в ресурсы
         String userId = String.format("<a href=\"tg://user?id=%s\"> (профиль)</a>", instructor.get().getTelegramId().toString());
         return "\uD83E\uDEAA ФИ: " + instructor.get().getFirstName() + " " + instructor.get().getLastName() + userId
                 + "\n☎️ Номер телефона: " + instructor.get().getPhoneNumber()
@@ -77,7 +78,7 @@ public class CallbackInstructorsOptionImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

@@ -2,7 +2,6 @@ package com.bot.sup.service.callbackquery.impl.schedule;
 
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
-import com.bot.sup.mapper.ActivityMapper;
 import com.bot.sup.model.entity.Activity;
 import com.bot.sup.model.entity.ActivityType;
 import com.bot.sup.model.entity.Route;
@@ -21,7 +20,10 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +31,7 @@ public class CallbackScheduleDescriptionImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
     private final ScheduleRepository scheduleRepository;
 
-    private static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.SCHEDULE_DESCRIPTION);
-    private final ActivityMapper activityMapper;
+    private static final CallbackEnum ACTIVITIES = CallbackEnum.SCHEDULE_DESCRIPTION;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
@@ -107,7 +108,7 @@ public class CallbackScheduleDescriptionImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

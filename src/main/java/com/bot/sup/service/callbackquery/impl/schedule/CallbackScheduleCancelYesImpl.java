@@ -26,7 +26,7 @@ public class CallbackScheduleCancelYesImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
     private final ScheduleMessageProperties scheduleMessageProperties;
 
-    private static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.SCHEDULE_CANCEL_YES);
+    private static final CallbackEnum ACTIVITIES = CallbackEnum.SCHEDULE_CANCEL_YES;
 
     @Transactional
     @Override
@@ -59,7 +59,7 @@ public class CallbackScheduleCancelYesImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

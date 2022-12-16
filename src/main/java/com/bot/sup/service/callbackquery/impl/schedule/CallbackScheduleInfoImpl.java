@@ -20,9 +20,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import javax.persistence.EntityNotFoundException;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.Collection;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +30,7 @@ public class CallbackScheduleInfoImpl implements Callback {
     private final HandleScheduleInfoImpl handleScheduleInfo;
 
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.SCHEDULE_INFO);
+    public static final CallbackEnum ACTIVITIES = CallbackEnum.SCHEDULE_INFO;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
@@ -68,7 +66,7 @@ public class CallbackScheduleInfoImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

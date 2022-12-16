@@ -1,7 +1,7 @@
 package com.bot.sup.repository.specification;
 
 import com.bot.sup.model.ScheduleRequestParams;
-import com.bot.sup.model.entity.Schedule;
+import com.bot.sup.model.dto.ScheduleDto;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -11,7 +11,7 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScheduleSpecification implements Specification<Schedule> {
+public class ScheduleSpecification implements Specification<ScheduleDto> {
     private final ScheduleRequestParams params;
 
     public ScheduleSpecification(ScheduleRequestParams params) {
@@ -19,7 +19,7 @@ public class ScheduleSpecification implements Specification<Schedule> {
     }
 
     @Override
-    public Predicate toPredicate(Root<Schedule> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+    public Predicate toPredicate(Root<ScheduleDto> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
         List<Predicate> predicates = new ArrayList<>();
         if (params.getActivityId() != null) {
             predicates.add(

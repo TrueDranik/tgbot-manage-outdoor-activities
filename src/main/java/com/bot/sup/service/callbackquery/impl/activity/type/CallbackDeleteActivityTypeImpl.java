@@ -25,7 +25,7 @@ public class CallbackDeleteActivityTypeImpl implements Callback {
     private final ActivityMessageProperties activityMessageProperties;
     private final ActivityTypeRepository activityTypeRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(DELETE_ACTIVITY_TYPE);
+    public static final CallbackEnum ACTIVITIES = DELETE_ACTIVITY_TYPE;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
@@ -52,14 +52,14 @@ public class CallbackDeleteActivityTypeImpl implements Callback {
                 .keyboard(buttons)
                 .build();
     }
-
+    // todo у тебя есть сервис для этого
     private void deleteActivity(Long chatId) {
         activityTypeRepository.deleteById(chatId);
     }
 
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

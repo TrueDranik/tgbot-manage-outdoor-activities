@@ -24,7 +24,7 @@ public class CallbackDeleteActivityFormatImpl implements Callback {
     private final ActivityMessageProperties activityMessageProperties;
     private final ActivityFormatRepository activityFormatRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(DELETE_ACTIVITY_FORMAT);
+    public static final CallbackEnum ACTIVITIES = DELETE_ACTIVITY_FORMAT;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -52,12 +52,13 @@ public class CallbackDeleteActivityFormatImpl implements Callback {
                 .build();
     }
 
+    //todo подумай над этим метод, если у тебя есть сервис
     private void deleteActivity(Long chatId) {
         activityFormatRepository.deleteById(chatId);
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

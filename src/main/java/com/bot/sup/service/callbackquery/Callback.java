@@ -6,11 +6,9 @@ import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.Collection;
-
 @Component
 public interface Callback {
     PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException;
 
-    Collection<CallbackEnum> getSupportedActivities();
+    CallbackEnum getSupportedActivities();
 }

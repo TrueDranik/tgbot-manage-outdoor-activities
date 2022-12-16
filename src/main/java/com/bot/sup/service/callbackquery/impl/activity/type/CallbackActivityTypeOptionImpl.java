@@ -24,7 +24,7 @@ public class CallbackActivityTypeOptionImpl implements Callback {
     private final ActivityTypeRepository activityTypeRepository;
     private final MainMessageProperties mainMessageProperties;
 
-    private static final Set<CallbackEnum> ACTIVITIES = Set.of(ACTIVITY_TYPE_OPTION);
+    private static final CallbackEnum ACTIVITIES = ACTIVITY_TYPE_OPTION;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
@@ -68,7 +68,7 @@ public class CallbackActivityTypeOptionImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

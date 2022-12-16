@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+//TODO: 15.12.2022 переделать на EhCache
 @Component
 public class ClientRecordDataCache {
     private final Map<Long, ClientRecordStateEnum> clientRecordState = new WeakHashMap<>();
