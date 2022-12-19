@@ -17,6 +17,6 @@ public class SelectedSchedule {
     @Column(name = "telegram_id")
     private Long telegramId;
 
-    @Column(name = "schedule_id")
-    private Long scheduleId;
+    @Column(name = "current_schedule_id")
+    private Long currentScheduleId;
 }
