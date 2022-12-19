@@ -25,8 +25,8 @@ public class ScheduleController {
 
     @GetMapping("/telegramId/{telegramId}")
     @Operation(summary = "Получить расписание, выбранное пользователем")
-    public ResponseEntity<Schedule> getScheduleByTelegramId(@PathVariable("telegramId") Long telegramId) {
-        Optional<Schedule> schedule = Optional.ofNullable(scheduleService.getScheduleByTelegramId(telegramId));
+    public ResponseEntity<ScheduleDto> getScheduleByTelegramId(@PathVariable("telegramId") Long telegramId) {
+        Optional<ScheduleDto> schedule = Optional.ofNullable(scheduleService.getScheduleByTelegramId(telegramId));
 
         return schedule.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));

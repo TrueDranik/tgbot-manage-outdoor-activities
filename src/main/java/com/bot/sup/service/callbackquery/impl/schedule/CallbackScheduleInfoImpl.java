@@ -2,12 +2,10 @@ package com.bot.sup.service.callbackquery.impl.schedule;
 
 import com.bot.sup.api.telegram.handler.impl.HandleScheduleInfoImpl;
 import com.bot.sup.common.enums.CallbackEnum;
-import com.bot.sup.model.entity.Activity;
-import com.bot.sup.model.entity.ImageData;
-import com.bot.sup.model.entity.Route;
-import com.bot.sup.model.entity.Schedule;
+import com.bot.sup.model.entity.*;
 import com.bot.sup.repository.ImageDataRepository;
 import com.bot.sup.repository.ScheduleRepository;
+import com.bot.sup.repository.SelectedScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,6 +25,7 @@ import java.util.Optional;
 public class CallbackScheduleInfoImpl implements Callback {
     private final ScheduleRepository scheduleRepository;
     private final ImageDataRepository imageDataRepository;
+    private final SelectedScheduleRepository selectedScheduleRepository;
     private final HandleScheduleInfoImpl handleScheduleInfo;
 
 
@@ -37,6 +36,12 @@ public class CallbackScheduleInfoImpl implements Callback {
         String activityFormatId = callbackQuery.getData().split("/")[1];
         String eventDate = callbackQuery.getData().split("/")[2];
         String scheduleId = callbackQuery.getData().split("/")[3];
+
+        SelectedSchedule selectedSchedule = new SelectedSchedule();
+        selectedSchedule.setTelegramId(callbackQuery.getMessage().getChatId());
+        selectedSchedule.setCurrentScheduleId(Long.valueOf(scheduleId));
+        selectedScheduleRepository.save(selectedSchedule);
+
 
         Schedule schedule = scheduleRepository.findById(Long.parseLong(scheduleId))
                 .orElseThrow(() -> new EntityNotFoundException("Schedule with id [" + scheduleId + "] not found"));
