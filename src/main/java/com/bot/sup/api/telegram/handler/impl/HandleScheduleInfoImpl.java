@@ -92,7 +92,7 @@ public class HandleScheduleInfoImpl {
 
         thirdRow.add(InlineKeyboardButton.builder()
                 .text(mainMessageProperties.getBack())
-                .callbackData(CallbackEnum.DATE_TO_ROUTE + "/" + activityFormatId + "/" + eventDate + "/" + scheduleId)
+                .callbackData(CallbackEnum.DATE_TO_ROUTE + "/" + activityFormatId + "/" + eventDate)
                 .build());
 
         return InlineKeyboardMarkup.builder()
