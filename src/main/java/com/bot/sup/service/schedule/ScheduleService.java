@@ -9,6 +9,8 @@ import java.util.List;
 
 @Service
 public interface ScheduleService {
+    ScheduleDto getScheduleByTelegramId(Long telegramId);
+
     List<ScheduleDto> getAllSchedule(ScheduleRequestParams params);
 
     ScheduleDto getScheduleById(Long id);

@@ -10,5 +10,6 @@
     <include file="v.3.0/cumulative-changelog.xml" relativeToChangelogFile="true"/>
     <include file="v.3.1/cumulative-changelog.xml" relativeToChangelogFile="true"/>
     <include file="v.4.0/cumulative-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="v.4.1/rename-column.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
