@@ -65,10 +65,9 @@ public class Bot extends TelegramLongPollingBot {
             log.info("callback = " + update.getCallbackQuery().getData());
 
             Object callbackQuery = callback.getCallbackQuery(update.getCallbackQuery());
-            Long chatId = update.getCallbackQuery().getMessage().getChatId();
-            if (Objects.equals(callbackQuery.getClass(), SendMessage.class) && (middlewareDataCache.getCurrentData(chatId) != null)) {
-                execute(getDeleteMessage(update));
 
+            if (Objects.equals(callbackQuery.getClass(), SendMessage.class)) {
+                execute(getDeleteMessage(update));
                 execute((SendMessage) callbackQuery);
             } else if (SendPhoto.class.equals(callbackQuery.getClass())) {
                 execute(getDeleteMessage(update));
