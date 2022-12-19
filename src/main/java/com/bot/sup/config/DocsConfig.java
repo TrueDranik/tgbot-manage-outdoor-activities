@@ -9,8 +9,6 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.responses.ApiResponse;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
-import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springdoc.core.customizers.GlobalOpenApiCustomizer;
 import org.springdoc.core.customizers.GlobalOperationCustomizer;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +24,7 @@ public class DocsConfig {
     @Value("${app.docs.title:Applicant Store API Docs}")
     private String apiTitle;
 
-    @Value("${app.docs.version:v0.1}")
+    @Value("${app.docs.version:v0.5}")
     private String apiVersion;
 
     @Bean

@@ -9,10 +9,11 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.bot.sup.common.enums.ActivityFormatStateEnum.FILLING_ACTIVITY_FORMAT;
 import static com.bot.sup.common.enums.ActivityTypeStateEnum.FILLING_ACTIVITY_TYPE;
@@ -21,10 +22,12 @@ import static com.bot.sup.common.enums.InstructorStateEnum.FILLING_INSTRUCTOR;
 
 @Component
 public class StateContext {
-    private final Map<Enum<?>, HandleRegistration> messageHandlers = new HashMap<>();
+    private final Map<Enum<?>, HandleRegistration> messageHandlers;
 
     public StateContext(List<HandleRegistration> messageHandlers) {
-        messageHandlers.forEach(handler -> this.messageHandlers.put(handler.getType(), handler));
+        this.messageHandlers = messageHandlers.stream()
+                .collect(Collectors.toMap(HandleRegistration::getType, Function.identity(),
+                        (existing, replacement) -> existing));
     }
 
     public BotApiMethod<?> processInputMessage(Enum<?> botStateEnum, Message message) {

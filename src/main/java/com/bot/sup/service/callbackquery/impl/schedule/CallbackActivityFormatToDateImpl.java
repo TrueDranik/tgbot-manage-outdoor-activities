@@ -2,6 +2,7 @@ package com.bot.sup.service.callbackquery.impl.schedule;
 
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
+import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.ActivityFormat;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.ActivityFormatRepository;
@@ -9,41 +10,43 @@ import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
 
-import static com.bot.sup.common.enums.CallbackEnum.ACTIVITYFORMAT_TO_DATE;
-
 @Service
 @RequiredArgsConstructor
 public class CallbackActivityFormatToDateImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
+    private final ScheduleMessageProperties scheduleMessageProperties;
     private final ScheduleRepository scheduleRepository;
     private final ActivityFormatRepository activityFormatRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ACTIVITYFORMAT_TO_DATE);
+    public static final CallbackEnum ACTIVITIES = CallbackEnum.ACTIVITYFORMAT_TO_DATE;
 
     @Override
-    public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
+    public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.getMessage().getChatId();
         String activityFormatId = callbackQuery.getData().split("/")[1];
 
-        Optional<ActivityFormat> activityFormat = activityFormatRepository.findById(Long.parseLong(activityFormatId));
-        List<Schedule> eventDate = scheduleRepository.getSchedulesByActivity_ActivityFormat_Id(Long.valueOf(activityFormatId));
+        Optional<ActivityFormat> activityFormat = Optional.ofNullable(activityFormatRepository.findById(Long.parseLong(activityFormatId))
+                .orElseThrow(() -> new EntityNotFoundException("ActivityFormat with id[" + activityFormatId + "] not found")));
 
+        List<Schedule> eventDate = scheduleRepository.getSchedulesByActivity_ActivityFormat_Id(Long.valueOf(activityFormatId));
+        // todo вынеси в метод
         if (generateKeyboardWithSchedule(eventDate, activityFormatId).getKeyboard().size() <= 1) {
             return EditMessageText.builder()
                     .messageId(callbackQuery.getMessage().getMessageId())
                     .chatId(chatId)
-                    .text("❌ Расписание для формата *" + activityFormat.get().getName() + "* отсутствует.\nВернитесь назад.")
+                    .text(String.format(scheduleMessageProperties.getNotFoundFormat(), activityFormat.get().getName()))
                     .parseMode("Markdown")
                     .replyMarkup(generateKeyboardWithSchedule(eventDate, activityFormatId))
                     .build();
@@ -52,7 +55,7 @@ public class CallbackActivityFormatToDateImpl implements Callback {
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text("Выберите дату для *" + activityFormat.get().getName() + "*")
+                .text(String.format(scheduleMessageProperties.getDateChoice(), activityFormat.get().getName()))
                 .parseMode("Markdown")
                 .replyMarkup(generateKeyboardWithSchedule(eventDate, activityFormatId))
                 .build();
@@ -67,6 +70,11 @@ public class CallbackActivityFormatToDateImpl implements Callback {
 
         Set<LocalDate> localDates = new HashSet<>();
         for (int indexSchedule = 0; indexSchedule < eventDate.size(); indexSchedule++) {
+            if (eventDate.get(indexSchedule).getEventDate().isBefore(LocalDate.now())
+                    || eventDate.get(indexSchedule).getIsActive().equals(false)) {
+                continue;
+            }
+
             localDates.add(eventDate.get(indexSchedule).getEventDate());
         }
 
@@ -82,42 +90,6 @@ public class CallbackActivityFormatToDateImpl implements Callback {
                 rowMain.clear();
             }
         });
-
-//        schedules.forEach(i -> {
-//            localDateTimes.add(i.getEventDate());
-//            if ((/*i.getActivity().getActivityFormat() != null && */i.getActivity().getActivityFormat().getId().equals(activityFormat.get().getId()))) {
-//                    if (localDateTimes.contains(i.getEventDate())) {
-//                        rowMain.add(InlineKeyboardButton.builder()
-//                                .text(i.getEventDate().format(formatter) + " " +
-//                                        i.getEventDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru")))
-//                                .callbackData(CallbackEnum.DATE_TO_ROUTE + "/" + activityFormatId)
-//                                .build());
-//                    }
-//
-//                    if (rowMain.size() == 2) {
-//                        List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);
-//                        mainKeyboard.add(temporaryKeyboardRow);
-//                        rowMain.clear();
-//                    }
-//                }
-
-//            if (i.getActivity().getActivityFormat() != null &&
-//                    i.getActivity().getActivityFormat().getId().equals(activityFormat.get().getId()) &&
-//                    localDateTimes.contains(i.getEventDate())) {
-//
-//
-//                rowMain.add(InlineKeyboardButton.builder()
-//                        .text(i.getEventDate().format(formatter) + " " +
-//                                i.getEventDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru")))
-//                        .callbackData(CallbackEnum.DATE_TO_ROUTE + "/" + activityFormatId + "/" + i.getId())
-//                        .build());
-//                if (rowMain.size() == 2) {
-//                    List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);
-//                    mainKeyboard.add(temporaryKeyboardRow);
-//                    rowMain.clear();
-//                }
-//            }
-//        });
 
         if (rowMain.size() == 1) {
             mainKeyboard.add(rowMain);
@@ -136,7 +108,7 @@ public class CallbackActivityFormatToDateImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

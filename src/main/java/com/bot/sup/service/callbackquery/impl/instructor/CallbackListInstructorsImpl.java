@@ -8,15 +8,15 @@ import com.bot.sup.repository.InstructorRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.util.*;
-
-import static com.bot.sup.common.enums.CallbackEnum.LIST_INSTRUCTORS;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,10 +25,10 @@ public class CallbackListInstructorsImpl implements Callback {
     private final InstructorMessageProperties instructorMessageProperties;
     private final InstructorRepository instructorRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(LIST_INSTRUCTORS);
+    public static final CallbackEnum ACTIVITIES = CallbackEnum.LIST_INSTRUCTORS;
 
     @Override
-    public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
+    public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         List<List<InlineKeyboardButton>> buttonEmptyInstructors = new ArrayList<>();
         List<Instructor> instructor = instructorRepository.findAll();
 
@@ -36,7 +36,7 @@ public class CallbackListInstructorsImpl implements Callback {
             buttonEmptyInstructors.add(Collections.singletonList(
                     InlineKeyboardButton.builder()
                             .text(mainMessageProperties.getBack())
-                            .callbackData("INSTRUCTORS")
+                            .callbackData(CallbackEnum.INSTRUCTORS.toString())
                             .build()
             ));
             InlineKeyboardMarkup keyboard = InlineKeyboardMarkup.builder()
@@ -67,7 +67,7 @@ public class CallbackListInstructorsImpl implements Callback {
         instructor.forEach(i -> {
                     rowMain.add(InlineKeyboardButton.builder()
                             .text(i.getFirstName() + " " + i.getLastName())
-                            .callbackData("INSTRUCTOR_OPTION/" + i.getTelegramId())
+                            .callbackData(CallbackEnum.INSTRUCTOR_OPTION + "/" + i.getTelegramId())
                             .build());
                     if (rowMain.size() == 2) {
                         List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);
@@ -83,7 +83,7 @@ public class CallbackListInstructorsImpl implements Callback {
 
         rowSecond.add(InlineKeyboardButton.builder()
                 .text(mainMessageProperties.getBack())
-                .callbackData("INSTRUCTORS")
+                .callbackData(CallbackEnum.INSTRUCTORS.toString())
                 .build());
 
         mainKeyboard.add(rowSecond);
@@ -94,7 +94,7 @@ public class CallbackListInstructorsImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

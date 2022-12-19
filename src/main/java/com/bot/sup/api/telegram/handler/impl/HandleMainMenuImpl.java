@@ -1,6 +1,7 @@
 package com.bot.sup.api.telegram.handler.impl;
 
 import com.bot.sup.api.telegram.handler.Handle;
+import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.common.properties.message.InstructorMessageProperties;
 import com.bot.sup.common.properties.message.MainMessageProperties;
@@ -36,21 +37,24 @@ public class HandleMainMenuImpl implements Handle {
     public InlineKeyboardMarkup createInlineKeyboard() {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
-        buttons.add(List.of(
-                InlineKeyboardButton.builder()
-                        .text(scheduleMessageProperties.getSchedules())
-                        .callbackData("SCHEDULE")
-                        .build()));
+        buttons.add(List.of(InlineKeyboardButton.builder()
+                .text(scheduleMessageProperties.getSchedules())
+                .callbackData(CallbackEnum.SCHEDULE_TO_ACTIVITYFORMAT.toString())
+                .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text(instructorMessageProperties.getInstructors())
-                        .callbackData("INSTRUCTORS")
+                        .callbackData(CallbackEnum.INSTRUCTORS.toString())
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text(activityMessageProperties.getActivities())
-                        .callbackData("SUP_ACTIVITIES")
+                        .callbackData(CallbackEnum.SUP_ACTIVITIES.toString())
                         .build()));
+        buttons.add(List.of(InlineKeyboardButton.builder()
+                .text(scheduleMessageProperties.getTourEditor())
+                .callbackData(CallbackEnum.SCHEDULE_WEBAPP.toString())
+                .build()));
 
         return InlineKeyboardMarkup.builder()
                 .keyboard(buttons)

@@ -7,13 +7,14 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+//TODO: 15.12.2022 переделать на EhCache
 @Component
 public class ClientRecordDataCache {
     private final Map<Long, ClientRecordStateEnum> clientRecordState = new WeakHashMap<>();
     private final Map<Long, Client> clientData = new WeakHashMap<>();
     private final Map<Long, Long> scheduleState = new WeakHashMap<>();
 
-    public void setClientRecrodCurrentState(Long chatId, ClientRecordStateEnum registrationState) {
+    public void setClientRecordCurrentState(Long chatId, ClientRecordStateEnum registrationState) {
         clientRecordState.put(chatId, registrationState);
     }
 

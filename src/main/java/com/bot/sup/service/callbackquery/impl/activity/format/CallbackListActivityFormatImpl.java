@@ -8,7 +8,7 @@ import com.bot.sup.repository.ActivityFormatRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -25,18 +25,19 @@ public class CallbackListActivityFormatImpl implements Callback {
     private final ActivityMessageProperties activityMessageProperties;
     private final ActivityFormatRepository activityFormatRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(LIST_ACTIVITY_FORMAT);
+    public static final CallbackEnum ACTIVITIES = LIST_ACTIVITY_FORMAT;
 
     @Override
-    public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
+    public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         List<List<InlineKeyboardButton>> buttonActivityFormat = new ArrayList<>();
+
         List<ActivityFormat> activities = activityFormatRepository.findAll();
 
         if (activities.isEmpty()) {
             buttonActivityFormat.add(Collections.singletonList(
                     InlineKeyboardButton.builder()
                             .text(mainMessageProperties.getBack())
-                            .callbackData("SUP_ACTIVITY_FORMAT")
+                            .callbackData(CallbackEnum.SUP_ACTIVITY_FORMAT.toString())
                             .build()
             ));
             InlineKeyboardMarkup keyboard = InlineKeyboardMarkup.builder()
@@ -67,7 +68,7 @@ public class CallbackListActivityFormatImpl implements Callback {
         activities.forEach(i -> {
                     rowMain.add(InlineKeyboardButton.builder()
                             .text(i.getName())
-                            .callbackData("ACTIVITY_FORMAT_OPTION/" + i.getId())
+                            .callbackData(CallbackEnum.ACTIVITY_FORMAT_OPTION + "/" + i.getId())
                             .build());
                     if (rowMain.size() == 2) {
                         List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);
@@ -83,7 +84,7 @@ public class CallbackListActivityFormatImpl implements Callback {
 
         rowSecond.add(InlineKeyboardButton.builder()
                 .text(mainMessageProperties.getBack())
-                .callbackData("SUP_ACTIVITY_FORMAT")
+                .callbackData(CallbackEnum.SUP_ACTIVITY_FORMAT.toString())
                 .build());
 
         mainKeyboard.add(rowSecond);
@@ -94,7 +95,7 @@ public class CallbackListActivityFormatImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

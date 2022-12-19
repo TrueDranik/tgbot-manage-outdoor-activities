@@ -1,6 +1,7 @@
 package com.bot.sup.api.telegram.handler.registration;
 
 import com.bot.sup.cache.InstructorDataCache;
+import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.enums.InstructorStateEnum;
 import com.bot.sup.common.properties.message.InstructorMessageProperties;
 import com.bot.sup.model.entity.Instructor;
@@ -60,12 +61,12 @@ public class FillingInstructor implements HandleRegistration {
         InstructorStateEnum instructorCurrentState = instructorDataCache.getInstructorCurrentState(chatId);
         BotApiMethod<?> replyToUser = null;
 
-        if (instructorCurrentState.equals(InstructorStateEnum.ASK_FULL_NAME)) {
+        if (InstructorStateEnum.ASK_FULL_NAME.equals(instructorCurrentState)) {
             replyToUser = messageService.buildReplyMessage(chatId, instructorMessageProperties.getInputFullNameInstructor());
             instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.ASK_PHONE_NUMBER);
 
             return replyToUser;
-        } else if (instructorCurrentState.equals(InstructorStateEnum.ASK_PHONE_NUMBER)) {
+        } else if (InstructorStateEnum.ASK_PHONE_NUMBER.equals(instructorCurrentState)) {
             if (Validation.isValidText(userAnswer)) {
                 try {
                     String[] fullName = userAnswer.split(" ");
@@ -92,7 +93,7 @@ public class FillingInstructor implements HandleRegistration {
 
                 return replyToUser;
             }
-        } else if (instructorCurrentState.equals(InstructorStateEnum.ASK_TELEGRAM_ID)) {
+        } else if (InstructorStateEnum.ASK_TELEGRAM_ID.equals(instructorCurrentState)) {
             if (Validation.isValidPhoneNumber(userAnswer)) {
                 instructor.setPhoneNumber(userAnswer);
 
@@ -108,7 +109,7 @@ public class FillingInstructor implements HandleRegistration {
 
                 return replyToUser;
             }
-        } else if (instructorCurrentState.equals(InstructorStateEnum.REGISTERED_INSTRUCTOR)) {
+        } else if (InstructorStateEnum.REGISTERED_INSTRUCTOR.equals(instructorCurrentState)) {
             Optional<User> forwardFrom = Optional.ofNullable(inputMessage.getForwardFrom());
 
             if (forwardFrom.isPresent() && instructorRepository.existsByTelegramId(forwardFrom.get().getId()) && !forUpdate) {
@@ -137,8 +138,6 @@ public class FillingInstructor implements HandleRegistration {
                 instructorService.save(instructor);
             }
 
-            //instructorDataCache.removeInstructorCurrentState(chatId);
-
             replyToUser = messageService.getReplyMessageWithKeyboard(chatId, instructorMessageProperties.getRegistrationDone() +
                     instructorInfo(instructor), keyboardMenu());
         }
@@ -163,7 +162,7 @@ public class FillingInstructor implements HandleRegistration {
 
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .callbackData("INSTRUCTORS")
+                        .callbackData(CallbackEnum.INSTRUCTORS.toString())
                         .text(instructorMessageProperties.getMenuInstructors())
                         .build()
         ));

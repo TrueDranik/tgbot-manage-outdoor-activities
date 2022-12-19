@@ -1,8 +1,12 @@
 telegram:
-  #      url:
-  #        webapp: https://192.168.110.84:3000/
-  nameBot: '@SupAdminTest_bot'
-  tokenBot: 5655610927:AAG58hHGVMC9OdMkS2lfRYa5DbzxgvXBOa4
+  url:
+    constructor: https://tgsupbot-admin.reliab.tech/#/constructor
+    activity: https://tgsupbot-admin.reliab.tech/#/activity
+    updateActivity: https://tgsupbot-admin.reliab.tech/#/updateActivity
+    route: https://tgsupbot-admin.reliab.tech/#/route
+    updateRoute: https://tgsupbot-admin.reliab.tech/#/updateRoute
+  botUsername: '@SupAdminTest_bot'
+  botToken: 5655610927:AAG58hHGVMC9OdMkS2lfRYa5DbzxgvXBOa4
 
 spring:
   liquibase:

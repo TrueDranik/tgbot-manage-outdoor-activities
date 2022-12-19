@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -32,4 +33,13 @@ public class Booking {
 
     @Column(name = "modif_time")
     private LocalDate modifTime;
+
+    @Column(name = "is_active")
+    private Boolean isActive;
+
+    @Column(name = "amount_paid")
+    private BigDecimal amount_paid;
+
+    @Column(name = "payment_type")
+    private String paymentType;
 }

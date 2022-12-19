@@ -2,22 +2,20 @@ package com.bot.sup.service.schedule;
 
 import com.bot.sup.model.ScheduleRequestParams;
 import com.bot.sup.model.dto.ScheduleCreateDto;
-import com.bot.sup.model.entity.Schedule;
+import com.bot.sup.model.dto.ScheduleDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public interface ScheduleService {
-    Schedule getScheduleByTelegramId(Long telegramId);
+    List<ScheduleDto> getAllSchedule(ScheduleRequestParams params);
 
-    List<Schedule> getAllSchedule(ScheduleRequestParams params);
+    ScheduleDto getScheduleById(Long id);
 
-    Schedule getScheduleById(Long id);
+    List<ScheduleDto> createSchedule(List<ScheduleCreateDto> createDto);
 
-    List<Schedule> createSchedule(List<ScheduleCreateDto> createDto);
-
-    Schedule updateSchedule(Long id, ScheduleCreateDto scheduleCreateDto);
+    ScheduleDto updateSchedule(Long id, ScheduleCreateDto scheduleCreateDto);
 
     void deleteSchedule(Long id);
 }

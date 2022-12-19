@@ -11,4 +11,6 @@ public class RouteCreateDto {
     private String finishPointName;
     private String mapLink;
     private String length;
+    private Boolean isActive;
+    private Long imageDataId;
 }

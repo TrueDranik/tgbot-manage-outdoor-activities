@@ -7,7 +7,7 @@ import com.bot.sup.repository.ActivityTypeRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -25,10 +25,10 @@ public class CallbackDeleteActivityTypeImpl implements Callback {
     private final ActivityMessageProperties activityMessageProperties;
     private final ActivityTypeRepository activityTypeRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(DELETE_ACTIVITY_TYPE);
+    public static final CallbackEnum ACTIVITIES = DELETE_ACTIVITY_TYPE;
 
     @Override
-    public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
+    public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
         String activityId = callbackQuery.getData().split("/")[1];
         deleteActivity(Long.parseLong(activityId));
@@ -45,21 +45,21 @@ public class CallbackDeleteActivityTypeImpl implements Callback {
         buttons.add(Collections.singletonList(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getBack())
-                        .callbackData("SUP_ACTIVITY_TYPE")
+                        .callbackData(CallbackEnum.SUP_ACTIVITY_TYPE.toString())
                         .build()));
 
         return InlineKeyboardMarkup.builder()
                 .keyboard(buttons)
                 .build();
     }
-
+    // todo у тебя есть сервис для этого
     private void deleteActivity(Long chatId) {
         activityTypeRepository.deleteById(chatId);
     }
 
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

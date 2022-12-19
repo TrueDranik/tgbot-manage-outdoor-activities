@@ -8,15 +8,15 @@ import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.util.*;
-
-import static com.bot.sup.common.enums.CallbackEnum.DELETE_INSTRUCTOR;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -25,11 +25,11 @@ public class CallbackDeleteInstructorImpl implements Callback {
     private final InstructorMessageProperties instructorMessageProperties;
     private final InstructorRepository instructorRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(DELETE_INSTRUCTOR);
+    public static final CallbackEnum ACTIVITIES = CallbackEnum.DELETE_INSTRUCTOR;
 
     @Transactional
     @Override
-    public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
+    public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.getMessage().getChatId();
         String instructorId = callbackQuery.getData().split("/")[1];
         deleteInstructor(Long.parseLong(instructorId));
@@ -48,7 +48,7 @@ public class CallbackDeleteInstructorImpl implements Callback {
         buttons.add(Collections.singletonList(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getBack())
-                        .callbackData("LIST_INSTRUCTORS")
+                        .callbackData(CallbackEnum.LIST_INSTRUCTORS.toString())
                         .build()));
 
         return InlineKeyboardMarkup.builder()
@@ -62,7 +62,7 @@ public class CallbackDeleteInstructorImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

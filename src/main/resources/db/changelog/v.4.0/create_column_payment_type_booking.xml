@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <changeSet author="Ruslan" id="create-column-payment-type-booking">
+
+        <addColumn tableName="booking">
+            <column name="is_active" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount_paid" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_type" type="varchar">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <renameColumn
+                newColumnName="is_active"
+                oldColumnName="active"
+                tableName="schedule"/>
+
+        <renameColumn
+                newColumnName="is_active"
+                oldColumnName="active"
+                tableName="route"/>
+
+        <renameColumn
+                newColumnName="is_active"
+                oldColumnName="active"
+                tableName="activity"/>
+
+        <modifyDataType
+                columnName="payment_status"
+                newDataType="varchar"
+                tableName="booking"/>
+
+    </changeSet>
+
+
+
+</databaseChangeLog>

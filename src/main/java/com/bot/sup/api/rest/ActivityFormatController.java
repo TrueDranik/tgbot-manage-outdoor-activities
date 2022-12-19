@@ -1,6 +1,7 @@
 package com.bot.sup.api.rest;
 
 import com.bot.sup.model.dto.ActivityFormatCreateDto;
+import com.bot.sup.model.dto.ActivityFormatDto;
 import com.bot.sup.model.entity.ActivityFormat;
 import com.bot.sup.service.activity.format.ActivityFormatService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
 @CrossOrigin("*")
+@RestController
 @RequestMapping("/activity_format")
 @RequiredArgsConstructor
 @Tag(name = "Формат активности")
@@ -23,14 +24,14 @@ public class ActivityFormatController {
 
     @GetMapping
     @Operation(summary = "Получить список всех форматов активности")
-    public ResponseEntity<List<ActivityFormat>> getAllActivityFormat() {
+    public ResponseEntity<List<ActivityFormatDto>> getAllActivityFormat() {
         return new ResponseEntity<>(activityFormatService.getAllActivityFormat(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Получить формат активности по id")
-    public ResponseEntity<ActivityFormat> getActivityFormatById(@PathVariable(name = "id") Long id) {
-        Optional<ActivityFormat> activityFormat = Optional.ofNullable(activityFormatService.getActivityFormatById(id));
+    public ResponseEntity<ActivityFormatDto> getActivityFormatById(@PathVariable(name = "id") Long id) {
+        Optional<ActivityFormatDto> activityFormat = Optional.ofNullable(activityFormatService.getActivityFormatById(id));
 
         return activityFormat.map(format -> new ResponseEntity<>(format, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
@@ -38,14 +39,14 @@ public class ActivityFormatController {
 
     @PostMapping
     @Operation(summary = "Создать новый формат активности")
-    public ResponseEntity<ActivityFormat> createActivityFormat(@RequestBody ActivityFormatCreateDto activityFormatCreateDto) {
+    public ResponseEntity<ActivityFormatDto> createActivityFormat(@RequestBody ActivityFormatCreateDto activityFormatCreateDto) {
         return new ResponseEntity<>(activityFormatService.createActivityFormat(activityFormatCreateDto), HttpStatus.OK);
     }
 
     @PutMapping("{id}")
     @Operation(summary = "Изменить существующий формат активности")
-    public ResponseEntity<ActivityFormat> updateActivityFormat(@PathVariable(name = "id") Long id,
-                                                               @RequestBody ActivityFormatCreateDto activityFormatCreateDto) {
+    public ResponseEntity<ActivityFormatDto> updateActivityFormat(@PathVariable(name = "id") Long id,
+                                                                  @RequestBody ActivityFormatCreateDto activityFormatCreateDto) {
         return new ResponseEntity<>(activityFormatService.updateActivityFormat(id, activityFormatCreateDto), HttpStatus.OK);
     }
 

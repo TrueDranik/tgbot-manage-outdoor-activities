@@ -2,15 +2,14 @@ package com.bot.sup.service.callbackquery.impl.schedule;
 
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
+import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.Schedule;
-import com.bot.sup.model.entity.SelectedSchedule;
 import com.bot.sup.repository.ScheduleRepository;
-import com.bot.sup.repository.SelectedScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -26,22 +25,19 @@ import java.util.*;
 @RequiredArgsConstructor
 public class CallbackDateToRouteImpl implements Callback {
     private final ScheduleRepository scheduleRepository;
-    private final SelectedScheduleRepository selectedScheduleRepository;
     private final MainMessageProperties mainMessageProperties;
+    private final ScheduleMessageProperties scheduleMessageProperties;
 
-    private static final Set<CallbackEnum> ACTIVITIES = Set.of(CallbackEnum.DATE_TO_ROUTE);
+    private static final CallbackEnum ACTIVITIES = CallbackEnum.DATE_TO_ROUTE;
 
-    @Transactional
     @Override
-    public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
+    public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
         String activityFormatId = callbackQuery.getData().split("/")[1];
         String eventDate = callbackQuery.getData().split("/")[2];
 
-        Optional<SelectedSchedule> selectedActivity = selectedScheduleRepository.findByTelegramId(chatId);
-        if (selectedActivity.isPresent()) {
-            selectedScheduleRepository.deleteByTelegramId(chatId);
-        }
+        String datePattern = "dd.MM.yyyy";
+        String parseMod = "Markdown";
 
         List<Schedule> schedules = scheduleRepository
                 .selectScheduleByActivityFormatIdAndEventDate(Long.valueOf(activityFormatId), LocalDate.parse(eventDate));
@@ -50,22 +46,32 @@ public class CallbackDateToRouteImpl implements Callback {
             return EditMessageText.builder()
                     .messageId(callbackQuery.getMessage().getMessageId())
                     .chatId(chatId)
-                    .text("❌ Расписание на *" +
-                            LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) +
-                            "* отсутствуют.\nВернитесь назад.")
-                    .parseMode("Markdown")
+                    .text(String.format(scheduleMessageProperties.getNotFoundDate(),
+                            LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern(datePattern))))
+                    .parseMode(parseMod)
                     .replyMarkup(createInlineKeyboard(schedules, activityFormatId, eventDate))
                     .build();
+        }
+
+        if (callbackQuery.getMessage().hasPhoto()) {
+            return SendMessage.builder()
+                    .chatId(chatId)
+                    .text(String.format(scheduleMessageProperties.getChooseRouteForDate(),
+                            LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern(datePattern)),
+                            LocalDate.parse(eventDate).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru"))))
+                    .parseMode(parseMod)
+                    .replyMarkup(createInlineKeyboard(schedules, activityFormatId, eventDate))
+                    .build();
+
         }
 
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text("Выберите маршрут для даты *" + LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + "*"
-                        + " ("
-                        + LocalDate.parse(eventDate).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru"))
-                        + ")\n")
-                .parseMode("Markdown")
+                .text(String.format(scheduleMessageProperties.getChooseRouteForDate(),
+                        LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern(datePattern)),
+                        LocalDate.parse(eventDate).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru"))))
+                .parseMode(parseMod)
                 .replyMarkup(createInlineKeyboard(schedules, activityFormatId, eventDate))
                 .build();
     }
@@ -76,14 +82,16 @@ public class CallbackDateToRouteImpl implements Callback {
         List<InlineKeyboardButton> rowSecond = new ArrayList<>();
 
         schedules.forEach(i -> {
-            rowMain.add(InlineKeyboardButton.builder()
-                    .text(i.getRoute().getName() + "|" + i.getEventTime().format(DateTimeFormatter.ofPattern("HH:mm")))
-                    .callbackData(CallbackEnum.SCHEDULE_INFO + "/" + activityFormatId + "/" + eventDate + "/" + i.getId())
-                    .build());
-            if (rowMain.size() == 2) {
-                List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);
-                mainKeyboard.add(temporaryKeyboardRow);
-                rowMain.clear();
+            if (i.getIsActive().equals(true)) {
+                rowMain.add(InlineKeyboardButton.builder()
+                        .text(i.getRoute().getName() + "|" + i.getEventTime().format(DateTimeFormatter.ofPattern("HH:mm")))
+                        .callbackData(CallbackEnum.SCHEDULE_INFO + "/" + activityFormatId + "/" + eventDate + "/" + i.getId())
+                        .build());
+                if (rowMain.size() == 2) {
+                    List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);
+                    mainKeyboard.add(temporaryKeyboardRow);
+                    rowMain.clear();
+                }
             }
         });
 
@@ -104,7 +112,7 @@ public class CallbackDateToRouteImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

@@ -6,7 +6,7 @@ import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -14,9 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import static com.bot.sup.common.enums.CallbackEnum.SUP_ACTIVITY_TYPE;
 
@@ -26,37 +24,37 @@ public class CallbackActivityTypeImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
 
-    private static final Set<CallbackEnum> ACTIVITIES = Set.of(SUP_ACTIVITY_TYPE);
+    private static final CallbackEnum ACTIVITIES = SUP_ACTIVITY_TYPE;
 
     @Override
-    public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
+    public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
 
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text("Тип активности")
+                .text(activityMessageProperties.getActivityType())
                 .replyMarkup(setUpKeyboard())
                 .build();
     }
 
-    private InlineKeyboardMarkup setUpKeyboard(){
+    private InlineKeyboardMarkup setUpKeyboard() {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
-
+// todo IKB builder вынеси в метод
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("Список типов")
-                        .callbackData("LIST_ACTIVITY_TYPE")
+                        .text(activityMessageProperties.getListActivityType())
+                        .callbackData(CallbackEnum.LIST_ACTIVITY_TYPE.toString())
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text("Добавить тип")
-                        .callbackData("ADD_ACTIVITY_TYPE")
+                        .text(activityMessageProperties.getAddActivityType())
+                        .callbackData(CallbackEnum.ADD_ACTIVITY_TYPE.toString())
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getBack())
-                        .callbackData("SUP_ACTIVITIES")
+                        .callbackData(CallbackEnum.SUP_ACTIVITIES.toString())
                         .build()));
 
         return InlineKeyboardMarkup.builder()
@@ -65,7 +63,7 @@ public class CallbackActivityTypeImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

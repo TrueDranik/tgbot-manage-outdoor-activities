@@ -3,11 +3,11 @@ package com.bot.sup.service;
 import com.bot.sup.api.telegram.command.BaseCommand;
 import com.bot.sup.api.telegram.handler.StateContext;
 import com.bot.sup.cache.*;
-import com.bot.sup.common.enums.ActivityTypeStateEnum;
 import com.bot.sup.common.CallbackMap;
+import com.bot.sup.common.enums.ActivityFormatStateEnum;
+import com.bot.sup.common.enums.ActivityTypeStateEnum;
 import com.bot.sup.common.enums.ClientRecordStateEnum;
 import com.bot.sup.common.enums.InstructorStateEnum;
-import com.bot.sup.common.enums.ActivityFormatStateEnum;
 import com.bot.sup.common.properties.TelegramProperties;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +18,10 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
@@ -25,6 +29,7 @@ import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScope
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -40,8 +45,8 @@ public class Bot extends TelegramLongPollingBot {
     private final ClientRecordDataCache clientRecordDataCache;
     private final StateContext stateContext;
     private final List<BaseCommand> commands;
-    private BotApiMethod<?> replyMessage;
     final TelegramProperties config;
+    private Update userUpdate;
 
     @SneakyThrows
     @Override
@@ -52,16 +57,31 @@ public class Bot extends TelegramLongPollingBot {
         ActivityTypeStateEnum activityTypeStateEnum;
         ClientRecordStateEnum clientRecordStateEnum;
 
+        setUpdate(update);
+
         if (update.hasCallbackQuery()) {
             Callback callback = callbackMap.getCallback(update.getCallbackQuery().getData().split("/")[0]);
 
             log.info("callback = " + update.getCallbackQuery().getData());
 
-            execute(callback.getCallbackQuery(update.getCallbackQuery()));
+            Object callbackQuery = callback.getCallbackQuery(update.getCallbackQuery());
+
+            if (Objects.equals(callbackQuery.getClass(), SendMessage.class)) {
+                execute(getDeleteMessage(update));
+                execute((SendMessage) callbackQuery);
+            } else if (SendPhoto.class.equals(callbackQuery.getClass())) {
+                execute(getDeleteMessage(update));
+                execute((SendPhoto) callbackQuery);
+            } else if (EditMessageText.class.equals(callbackQuery.getClass())) {
+                execute((EditMessageText) callbackQuery);
+            } else if (DeleteMessage.class.equals(callbackQuery.getClass())) {
+                execute((DeleteMessage) callbackQuery);
+            }
         } else if (update.hasMessage()) {
             Long chatId = message.getChatId();
 
             log.info("chatId from message = " + chatId);
+            BotApiMethod<?> replyMessage;
             if (message.isCommand()) {
                 BaseCommand baseCommand = commands.stream()
                         .filter(it -> message.getText().equals("/" + it.getBotCommand().getCommand()))
@@ -89,7 +109,7 @@ public class Bot extends TelegramLongPollingBot {
 
                 replyMessage = stateContext.processInputMessage(activityTypeStateEnum, message);
                 execute(replyMessage);
-            } else if (middlewareDataCache.getCurrentData(chatId) instanceof ClientRecordStateEnum){
+            } else if (middlewareDataCache.getCurrentData(chatId) instanceof ClientRecordStateEnum) {
                 clientRecordStateEnum = clientRecordDataCache.getClientRecordCurrentState(chatId);
 
                 log.info("state = " + clientRecordStateEnum);
@@ -98,6 +118,13 @@ public class Bot extends TelegramLongPollingBot {
                 execute(replyMessage);
             }
         }
+    }
+
+    private static DeleteMessage getDeleteMessage(Update update) {
+        return DeleteMessage.builder()
+                .chatId(update.getCallbackQuery().getMessage().getChatId())
+                .messageId(update.getCallbackQuery().getMessage().getMessageId())
+                .build();
     }
 
     @PostConstruct
@@ -115,13 +142,21 @@ public class Bot extends TelegramLongPollingBot {
         execute(myCommands);
     }
 
+    public void setUpdate(Update userUpdate) {
+        this.userUpdate = userUpdate;
+    }
+
+    public Update getUpdate() {
+        return userUpdate;
+    }
+
     @Override
     public String getBotUsername() {
-        return config.getNameBot();
+        return config.getBotUsername();
     }
 
     @Override
     public String getBotToken() {
-        return config.getTokenBot();
+        return config.getBotToken();
     }
 }

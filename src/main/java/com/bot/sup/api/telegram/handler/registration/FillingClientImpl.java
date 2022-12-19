@@ -4,7 +4,6 @@ import com.bot.sup.cache.ClientRecordDataCache;
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.enums.ClientRecordStateEnum;
 import com.bot.sup.model.entity.Client;
-import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.ClientRepository;
 import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.MessageService;
@@ -20,7 +19,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import javax.persistence.EntityNotFoundException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -42,7 +40,7 @@ public class FillingClientImpl implements HandleRegistration {
         Long chatId = message.getChatId();
 
         if (clientRecordDataCache.getClientRecordCurrentState(chatId).equals(ClientRecordStateEnum.FILLING_CLIENT)) {
-            clientRecordDataCache.setClientRecrodCurrentState(chatId, ClientRecordStateEnum.ASK_TELEGRAM_ID);
+            clientRecordDataCache.setClientRecordCurrentState(chatId, ClientRecordStateEnum.ASK_TELEGRAM_ID);
         }
 
         return processInputMessage(message, chatId);
@@ -56,12 +54,12 @@ public class FillingClientImpl implements HandleRegistration {
         ClientRecordStateEnum clientRecordCurrentState = clientRecordDataCache.getClientRecordCurrentState(chatId);
         Long scheduleId = clientRecordDataCache.getScheduleState(chatId);
 
-        if (clientRecordCurrentState.equals(ClientRecordStateEnum.ASK_TELEGRAM_ID)) {
+        if (ClientRecordStateEnum.ASK_TELEGRAM_ID.equals(clientRecordCurrentState)) {
             replyToUser = messageService.buildReplyMessage(chatId, "Перешлите любое сообщение клиента");
-            clientRecordDataCache.setClientRecrodCurrentState(chatId, ClientRecordStateEnum.ASK_FULL_NAME);
+            clientRecordDataCache.setClientRecordCurrentState(chatId, ClientRecordStateEnum.ASK_FULL_NAME);
 
             return replyToUser;
-        } else if (clientRecordCurrentState.equals(ClientRecordStateEnum.ASK_FULL_NAME)) {
+        } else if (ClientRecordStateEnum.ASK_FULL_NAME.equals(clientRecordCurrentState)) {
             Optional<User> forwardFrom = Optional.ofNullable(message.getForwardFrom());
             Optional<Client> clientByTelegramId = clientRepository.findByTelegramId(forwardFrom.get().getId());
 
@@ -80,16 +78,17 @@ public class FillingClientImpl implements HandleRegistration {
                 client.setUsername(message.getForwardFrom().getUserName());
 
                 replyToUser = messageService.buildReplyMessage(chatId, "Введите ФИ клиента.");
-                clientRecordDataCache.setClientRecrodCurrentState(chatId, ClientRecordStateEnum.ASK_PHONE_NUMBER);
+                clientRecordDataCache.setClientRecordCurrentState(chatId, ClientRecordStateEnum.ASK_PHONE_NUMBER);
             }
-        } else if (clientRecordCurrentState.equals(ClientRecordStateEnum.ASK_PHONE_NUMBER)) {
+        } else if (ClientRecordStateEnum.ASK_PHONE_NUMBER.equals(clientRecordCurrentState)) {
             if (Validation.isValidText(userAnswer)) {
                 try {
                     String[] fullName = userAnswer.split(" ");
 
                     client.setFirstName(fullName[0]);
                     client.setLastName(fullName[1]);
-
+                    // todo вынести условие в метод
+                    // todo вынеси чиста в константы
                     if (client.getFirstName().length() < 2 || client.getFirstName().length() > 15
                             && client.getLastName().length() < 2 || client.getLastName().length() > 15) {
                         return messageService.buildReplyMessage(message.getChatId(), "Неккоректный ввод!");
@@ -102,14 +101,14 @@ public class FillingClientImpl implements HandleRegistration {
 
                 replyToUser = messageService.buildReplyMessage(chatId, "Введите номер телефона формата +79123456789");
 
-                clientRecordDataCache.setClientRecrodCurrentState(chatId, ClientRecordStateEnum.ASK_BIRTHDAY);
+                clientRecordDataCache.setClientRecordCurrentState(chatId, ClientRecordStateEnum.ASK_BIRTHDAY);
             } else {
                 replyToUser = messageService.buildReplyMessage(chatId, "💢 Допустимы только *кириллица* и *английский*!");
-                clientRecordDataCache.setClientRecrodCurrentState(chatId, ClientRecordStateEnum.ASK_PHONE_NUMBER);
+                clientRecordDataCache.setClientRecordCurrentState(chatId, ClientRecordStateEnum.ASK_PHONE_NUMBER);
 
                 return replyToUser;
             }
-        } else if (clientRecordCurrentState.equals(ClientRecordStateEnum.ASK_BIRTHDAY)) {
+        } else if (ClientRecordStateEnum.ASK_BIRTHDAY.equals(clientRecordCurrentState)) {
             if (Validation.isValidPhoneNumber(userAnswer)) {
                 client.setPhoneNumber(userAnswer);
 
@@ -118,14 +117,14 @@ public class FillingClientImpl implements HandleRegistration {
                 replyToUser = messageService.buildReplyMessage(chatId,
                         "Введите дату рождения в формате дд.мм.гггг");
 
-                clientRecordDataCache.setClientRecrodCurrentState(chatId, ClientRecordStateEnum.REGISTERED_CLIENT);
+                clientRecordDataCache.setClientRecordCurrentState(chatId, ClientRecordStateEnum.REGISTERED_CLIENT);
             } else {
                 replyToUser = messageService.buildReplyMessage(chatId, "Неверный формат номера");
-                clientRecordDataCache.setClientRecrodCurrentState(chatId, ClientRecordStateEnum.ASK_TELEGRAM_ID);
+                clientRecordDataCache.setClientRecordCurrentState(chatId, ClientRecordStateEnum.ASK_TELEGRAM_ID);
 
                 return replyToUser;
             }
-        } else if (clientRecordCurrentState.equals(ClientRecordStateEnum.REGISTERED_CLIENT)) {
+        } else if (ClientRecordStateEnum.REGISTERED_CLIENT.equals(clientRecordCurrentState)) {
             try {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
                 LocalDate birthday = LocalDate.from(formatter.parse(userAnswer));
@@ -137,7 +136,7 @@ public class FillingClientImpl implements HandleRegistration {
                 clientRepository.save(client);
                 replyToUser = messageService.getReplyMessageWithKeyboard(chatId, "Клиент записан!", keyboardMarkup());
             } catch (EntityNotFoundException e) {
-                clientRecordDataCache.setClientRecrodCurrentState(chatId, ClientRecordStateEnum.REGISTERED_CLIENT);
+                clientRecordDataCache.setClientRecordCurrentState(chatId, ClientRecordStateEnum.REGISTERED_CLIENT);
             }
         }
 
@@ -151,8 +150,8 @@ public class FillingClientImpl implements HandleRegistration {
 
         buttons.add(
                 InlineKeyboardButton.builder()
-                        .callbackData(CallbackEnum.SCHEDULE_TO_ACTIVITYFORMAT.toString())
                         .text("Зарегистрировано")
+                        .callbackData(CallbackEnum.SCHEDULE_TO_ACTIVITYFORMAT.toString())
                         .build());
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(buttons)

@@ -2,7 +2,7 @@ package com.bot.sup.api.rest;
 
 import com.bot.sup.model.ActivityRequestParams;
 import com.bot.sup.model.dto.ActivityCreateDto;
-import com.bot.sup.model.entity.Activity;
+import com.bot.sup.model.dto.ActivityDto;
 import com.bot.sup.service.activity.ActivityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -26,14 +26,14 @@ public class ActivityController {
 
     @GetMapping
     @Operation(summary = "Получить список всех активностей")
-    public ResponseEntity<List<Activity>> getAllActivity(@ParameterObject ActivityRequestParams params) {
+    public ResponseEntity<List<ActivityDto>> getAllActivity(@ParameterObject ActivityRequestParams params) {
         return new ResponseEntity<>(activityService.getAllActivity(params), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
     @Operation(summary = "Получить активность по id")
-    public ResponseEntity<Activity> getActivityById(@Parameter(description = "Id") @PathVariable(name = "id") Long id) {
-        Optional<Activity> activity = Optional.ofNullable(activityService.getActivityById(id));
+    public ResponseEntity<ActivityDto> getActivityById(@Parameter(description = "Id") @PathVariable(name = "id") Long id) {
+        Optional<ActivityDto> activity = Optional.ofNullable(activityService.getActivityById(id));
 
         return activity.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
@@ -41,20 +41,20 @@ public class ActivityController {
 
     @PostMapping
     @Operation(summary = "Создать новую активность")
-    public ResponseEntity<Activity> createActivity(@RequestBody ActivityCreateDto createDto) {
+    public ResponseEntity<ActivityDto> createActivity(@RequestBody ActivityCreateDto createDto) {
         return new ResponseEntity<>(activityService.createActivity(createDto), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
     @Operation(summary = "Изменить существующую активность")
-    public ResponseEntity<Activity> updateActivity(@PathVariable(name = "id") Long id,
+    public ResponseEntity<ActivityDto> updateActivity(@PathVariable(name = "id") Long id,
                                                    @RequestBody ActivityCreateDto createDto) {
         return new ResponseEntity<>(activityService.updateActivity(id, createDto), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
     @Operation(summary = "Изменить активность")
-    public ResponseEntity<Activity> deleteActivity(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<ActivityDto> deleteActivity(@PathVariable(name = "id") Long id) {
         activityService.deleteActivity(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

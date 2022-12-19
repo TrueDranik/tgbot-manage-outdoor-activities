@@ -6,7 +6,7 @@ import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -14,9 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import static com.bot.sup.common.enums.CallbackEnum.SUP_ACTIVITIES;
 
@@ -26,10 +24,10 @@ public class CallbackActivitiesImpl implements Callback {
     private final ActivityMessageProperties activityMessageProperties;
     private final MainMessageProperties mainMessageProperties;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(SUP_ACTIVITIES);
+    public static final CallbackEnum ACTIVITIES = SUP_ACTIVITIES;
 
     @Override
-    public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
+    public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
 
         return EditMessageText.builder()
@@ -45,18 +43,18 @@ public class CallbackActivitiesImpl implements Callback {
 
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text(activityMessageProperties.getListActivityFormat())
-                        .callbackData("SUP_ACTIVITY_FORMAT")
+                        .text(activityMessageProperties.getActivityFormat())
+                        .callbackData(CallbackEnum.SUP_ACTIVITY_FORMAT.toString())
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
-                        .text(activityMessageProperties.getListActivityType())
-                        .callbackData("SUP_ACTIVITY_TYPE")
+                        .text(activityMessageProperties.getActivityType())
+                        .callbackData(CallbackEnum.SUP_ACTIVITY_TYPE.toString())
                         .build()));
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getMenu())
-                        .callbackData("MENU")
+                        .callbackData(CallbackEnum.MENU.toString())
                         .build()));
 
         return InlineKeyboardMarkup.builder()
@@ -65,7 +63,7 @@ public class CallbackActivitiesImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

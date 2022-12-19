@@ -8,12 +8,9 @@ import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
-import java.util.Collection;
-import java.util.Set;
 
 import static com.bot.sup.common.enums.CallbackEnum.ADD_ACTIVITY_TYPE;
 
@@ -24,10 +21,10 @@ public class CallbackAddActivityTypeImpl implements Callback {
     private final ActivityTypeDataCache activityTypeDataCache;
     private final MiddlewareDataCache middlewareDataCache;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ADD_ACTIVITY_TYPE);
+    public static final CallbackEnum ACTIVITIES = ADD_ACTIVITY_TYPE;
 
     @Override
-    public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
+    public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
 
         ActivityTypeStateEnum botStateEnum = ActivityTypeStateEnum.FILLING_ACTIVITY_TYPE;
@@ -38,7 +35,7 @@ public class CallbackAddActivityTypeImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }

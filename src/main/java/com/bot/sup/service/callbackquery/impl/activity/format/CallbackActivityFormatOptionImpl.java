@@ -7,7 +7,7 @@ import com.bot.sup.repository.ActivityFormatRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -23,18 +23,18 @@ public class CallbackActivityFormatOptionImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
     private final ActivityFormatRepository activityFormatRepository;
 
-    public static final Set<CallbackEnum> ACTIVITIES = Set.of(ACTIVITY_FORMAT_OPTION);
+    public static final CallbackEnum ACTIVITIES = ACTIVITY_FORMAT_OPTION;
 
     @Override
-    public BotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
+    public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.getMessage().getChatId();
         String activityFormatId = callbackQuery.getData().split("/")[1];
         Optional<ActivityFormat> activityFormat = activityFormatRepository.findById(Long.parseLong(activityFormatId));
-
+        String activityFormatName = activityFormat.isEmpty() ? "Формат активности не найден" : activityFormat.get().getName();
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text(activityFormat.get().getName())
+                .text(activityFormatName)
                 .replyMarkup(generateKeyboardWithActivity(activityFormatId))
                 .build();
     }
@@ -67,7 +67,7 @@ public class CallbackActivityFormatOptionImpl implements Callback {
     }
 
     @Override
-    public Collection<CallbackEnum> getSupportedActivities() {
+    public CallbackEnum getSupportedActivities() {
         return ACTIVITIES;
     }
 }
