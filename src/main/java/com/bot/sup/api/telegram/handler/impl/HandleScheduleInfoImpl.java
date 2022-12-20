@@ -1,6 +1,7 @@
 package com.bot.sup.api.telegram.handler.impl;
 
 import com.bot.sup.common.enums.CallbackEnum;
+import com.bot.sup.common.properties.TelegramProperties;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.*;
@@ -30,6 +31,7 @@ public class HandleScheduleInfoImpl {
     private final ScheduleRepository scheduleRepository;
     private final MainMessageProperties mainMessageProperties;
     private final ScheduleMessageProperties scheduleMessageProperties;
+    private final TelegramProperties telegramProperties;
 
     public BotApiMethod<?> getMessage(Update update) {
         CallbackQuery callbackQuery = update.getCallbackQuery();
@@ -83,7 +85,7 @@ public class HandleScheduleInfoImpl {
 
         secondRow.add(InlineKeyboardButton.builder()
                 .text(scheduleMessageProperties.getChangeSchedule())
-                .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/"))
+                .webApp(new WebAppInfo(telegramProperties.getUpdateSchedule()))
                 .build());
         secondRow.add(InlineKeyboardButton.builder()
                 .text(scheduleMessageProperties.getCancelSchedule())
