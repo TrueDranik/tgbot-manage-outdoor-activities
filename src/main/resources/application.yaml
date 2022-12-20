@@ -1,10 +1,11 @@
 telegram:
   url:
-    constructor: https://tgsupbot-admin.reliab.tech/#/constructor
+    constructor: https://tgsupbot-admin.reliab.tech/#/creationSchedule
     activity: https://tgsupbot-admin.reliab.tech/#/activity
     updateActivity: https://tgsupbot-admin.reliab.tech/#/updateActivity
     route: https://tgsupbot-admin.reliab.tech/#/route
     updateRoute: https://tgsupbot-admin.reliab.tech/#/updateRoute
+    updateSchedule: https://tgsupbot-admin.reliab.tech/#/updateDateTimeSchedule
   botUsername: '@sup31_bot'
   botToken: 5617783598:AAEVI_edk9ptSp6aFrjRjZ8XeMMdn9m3PEc
 

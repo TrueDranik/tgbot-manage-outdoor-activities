@@ -86,6 +86,8 @@ public class ScheduleServiceImpl implements ScheduleService {
                 .orElseThrow(() -> new EntityNotFoundException("Route not found")));
         scheduleById.setIsActive(true);
 
+        scheduleRepository.save(scheduleById);
+
         return scheduleToDto(scheduleById);
     }
 
