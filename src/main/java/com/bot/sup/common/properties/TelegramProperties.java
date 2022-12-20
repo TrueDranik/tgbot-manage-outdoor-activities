@@ -19,7 +19,6 @@ public class TelegramProperties {
     private String webAppRoute;
     @Value("${telegram.url.updateRoute}")
     private String webAppUpdateRoute;
-
-    @Value("{telegram.url.updateSchedule}")
+    @Value("${telegram.url.updateSchedule}")
     private String updateSchedule;
 }
