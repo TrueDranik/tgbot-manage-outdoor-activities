@@ -2,6 +2,8 @@ package com.bot.sup.common.enums;
 
 public enum CallbackEnum {
     MENU,
+    ABOUT_US_INFO,
+    ADD_ABOUT_US_INFO,
 
     // РАСПИСАНИЕ
     SCHEDULE,
