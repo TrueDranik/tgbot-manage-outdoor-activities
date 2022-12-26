@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Service
 @RequiredArgsConstructor
-public class CallbackAddedAboutUsInfoImpl implements Callback {
+public class CallbackAddAboutUsInfoImpl implements Callback {
     private final StateContext stateContext;
     private final AboutUsDataCache aboutUsDataCache;
     private final MiddlewareDataCache middlewareDataCache;
