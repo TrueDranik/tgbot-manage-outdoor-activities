@@ -8,6 +8,7 @@ import com.bot.sup.model.entity.*;
 import com.bot.sup.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -80,7 +81,7 @@ public class GenerateKeyboard {
                                 + "Название маршрута: " + optionalRoute.map(Route::getName).orElse("Не найдено!") + "\n"
                                 + "Точка старта: " + optionalRoute.map(Route::getStartPointName).orElse("Не найдено!") + "\n"
                                 + "Координаты старта: " + optionalRoute.map(Route::getStartPointCoordinates).orElse("Не найдено!"))
-                        .parseMode("Markdown")
+                        .parseMode(ParseMode.MARKDOWN)
                         .replyMarkup(handleScheduleInfo.createInlineKeyboard(activityFormatId, eventDate, scheduleId))
                         .build());
     }

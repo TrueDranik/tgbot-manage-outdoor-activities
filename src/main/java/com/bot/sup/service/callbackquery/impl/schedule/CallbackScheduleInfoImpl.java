@@ -9,6 +9,7 @@ import com.bot.sup.repository.SelectedScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -65,7 +66,7 @@ public class CallbackScheduleInfoImpl implements Callback {
                 .chatId(callbackQuery.getMessage().getChatId())
                 .photo(new InputFile(photo, imageName))
                 .caption(HandleScheduleInfoImpl.scheduleInfo(eventDate, schedule, optionalActivity, optionalRoute))
-                .parseMode("Markdown")
+                .parseMode(ParseMode.MARKDOWN)
                 .replyMarkup(handleScheduleInfo.createInlineKeyboard(activityFormatId, eventDate, scheduleId))
                 .build();
     }

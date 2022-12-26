@@ -10,6 +10,7 @@ import com.bot.sup.repository.ClientRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -56,7 +57,7 @@ public class CallbackClientInfoImpl implements Callback {
                         + "☎️" + client.get().getPhoneNumber() + "\n"
                         + s
                         + "\uD83D\uDCB8 Статус оплаты: " + paymentStatus)
-                .parseMode("HTML")
+                .parseMode(ParseMode.HTML)
                 .replyMarkup(createInlineKeyboard(client, activityFormatId, eventDate, scheduleId))
                 .build();
     }

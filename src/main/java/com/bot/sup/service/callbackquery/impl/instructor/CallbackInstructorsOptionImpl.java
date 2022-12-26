@@ -7,6 +7,7 @@ import com.bot.sup.repository.InstructorRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -37,7 +38,7 @@ public class CallbackInstructorsOptionImpl implements Callback {
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
                 .text(instructorInfo(instructor))
-                .parseMode("HTML")
+                .parseMode(ParseMode.HTML)
                 .replyMarkup(generateKeyboardWithInstructors(instructorId))
                 .build();
     }

@@ -9,6 +9,7 @@ import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -47,7 +48,7 @@ public class CallbackClientCancelYesImpl implements Callback {
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(callbackQuery.getMessage().getChatId())
                 .text(String.format(scheduleMessageProperties.getCancelReservationClientDone(), userId))
-                .parseMode("HTML")
+                .parseMode(ParseMode.HTML)
                 .replyMarkup(createInlineKeyboard(activityFormatId, eventDate, scheduleId))
                 .build();
     }

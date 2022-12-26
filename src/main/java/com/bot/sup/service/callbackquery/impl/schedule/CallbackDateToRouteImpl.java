@@ -11,6 +11,7 @@ import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -45,7 +46,6 @@ public class CallbackDateToRouteImpl implements Callback {
         String eventDate = callbackQuery.getData().split("/")[2];
 
         String datePattern = "dd.MM.yyyy";
-        String parseMod = "Markdown";
 
         Optional<SelectedSchedule> selectedActivity = selectedScheduleRepository.findByTelegramId(chatId);
         if (selectedActivity.isPresent()) {
@@ -62,7 +62,7 @@ public class CallbackDateToRouteImpl implements Callback {
                     .chatId(chatId)
                     .text(String.format(scheduleMessageProperties.getNotFoundDate(),
                             LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern(datePattern))))
-                    .parseMode(parseMod)
+                    .parseMode(ParseMode.MARKDOWN)
                     .replyMarkup(createInlineKeyboard(schedules, activityFormatId, eventDate))
                     .build();
         }
@@ -73,7 +73,7 @@ public class CallbackDateToRouteImpl implements Callback {
                     .text(String.format(scheduleMessageProperties.getChooseRouteForDate(),
                             LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern(datePattern)),
                             LocalDate.parse(eventDate).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru"))))
-                    .parseMode(parseMod)
+                    .parseMode(ParseMode.MARKDOWN)
                     .replyMarkup(createInlineKeyboard(schedules, activityFormatId, eventDate))
                     .build();
 
@@ -85,7 +85,7 @@ public class CallbackDateToRouteImpl implements Callback {
                 .text(String.format(scheduleMessageProperties.getChooseRouteForDate(),
                         LocalDate.parse(eventDate).format(DateTimeFormatter.ofPattern(datePattern)),
                         LocalDate.parse(eventDate).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("Ru"))))
-                .parseMode(parseMod)
+                .parseMode(ParseMode.MARKDOWN)
                 .replyMarkup(createInlineKeyboard(schedules, activityFormatId, eventDate))
                 .build();
     }

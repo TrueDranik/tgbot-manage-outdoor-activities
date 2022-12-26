@@ -9,6 +9,7 @@ import com.bot.sup.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -49,7 +50,7 @@ public class HandleScheduleInfoImpl {
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(callbackQuery.getMessage().getChatId())
                 .text(scheduleInfo(eventDate, schedule, optionalActivity, optionalRoute))
-                .parseMode("Markdown")
+                .parseMode(ParseMode.MARKDOWN)
                 .replyMarkup(createInlineKeyboard(activityFormatId, eventDate, scheduleId))
                 .build();
     }
