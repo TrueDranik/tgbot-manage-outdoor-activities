@@ -9,8 +9,6 @@ import com.bot.sup.common.enums.ActivityTypeStateEnum;
 import com.bot.sup.common.enums.ClientRecordStateEnum;
 import com.bot.sup.common.enums.InstructorStateEnum;
 import com.bot.sup.common.properties.TelegramProperties;
-import com.bot.sup.registr.Registration;
-import com.bot.sup.registr.RegistrationMap;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -30,7 +28,6 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -40,7 +37,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @EnableCaching
 public class Bot extends TelegramLongPollingBot {
-    private final RegistrationMap registrationMap;
     private final CallbackMap callbackMap;
     private final MiddlewareDataCache middlewareDataCache;
     private final InstructorDataCache instructorDataCache;
@@ -69,6 +65,7 @@ public class Bot extends TelegramLongPollingBot {
             log.info("callback = " + update.getCallbackQuery().getData());
 
             Object callbackQuery = callback.getCallbackQuery(update.getCallbackQuery());
+
             if (Objects.equals(callbackQuery.getClass(), SendMessage.class)) {
                 execute(getDeleteMessage(update));
 
@@ -81,6 +78,8 @@ public class Bot extends TelegramLongPollingBot {
                 execute((EditMessageText) callbackQuery);
             } else if (DeleteMessage.class.equals(callbackQuery.getClass())) {
                 execute((DeleteMessage) callbackQuery);
+            } else {
+                execute((EditMessageText) callback.getCallbackQuery(update.getCallbackQuery()));
             }
         } else if (update.hasMessage()) {
             Long chatId = message.getChatId();
@@ -123,12 +122,12 @@ public class Bot extends TelegramLongPollingBot {
 
                 replyMessage = stateContext.processInputMessage(clientRecordStateEnum, message);
                 execute(replyMessage);
-            } else {
+            } /*else {
                 String s = Arrays.toString(InstructorStateEnum.values());
                 Registration registration = registrationMap.getRegistration(s);
                 BotApiMethod<?> registrationMessage = registration.getMessage(update.getMessage());
                 execute(registrationMessage);
-            }
+            }*/
         }
     }
 
