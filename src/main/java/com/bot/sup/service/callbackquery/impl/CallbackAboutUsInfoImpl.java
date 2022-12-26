@@ -1,6 +1,7 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.common.enums.CallbackEnum;
+import com.bot.sup.model.entity.AboutUs;
 import com.bot.sup.repository.AboutUsRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +27,10 @@ public class CallbackAboutUsInfoImpl implements Callback {
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
-        String fullDescription = aboutUsRepository.getFullDescription();
+        Optional<AboutUs> aboutUs = aboutUsRepository.getAboutUs();
+        String fullDescription = aboutUs.isEmpty() || aboutUs.get().getFullDescription().isEmpty()
+                ? "❓ Информация отсутствует!" : aboutUs.get().getFullDescription();
+
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
@@ -34,7 +39,7 @@ public class CallbackAboutUsInfoImpl implements Callback {
                 .build();
     }
 
-        private InlineKeyboardMarkup setUpKeyboard() {
+    private InlineKeyboardMarkup setUpKeyboard() {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
         buttons.add(List.of(
                 InlineKeyboardButton.builder()
