@@ -53,7 +53,8 @@ public class FillingAboutUs implements HandleRegistration{
             return replyToUser;
         } else if (AboutUsStateEnum.REGISTERED_INFORMATION.equals(aboutUsState)){
             Optional<AboutUs> aboutUs = aboutUsRepository.findById(1L);
-            AboutUs ab = aboutUs.get();
+//            AboutUs ab = aboutUs.get();
+            AboutUs ab = aboutUs.isPresent() ? aboutUs.get() : new AboutUs();
             if (userAnswer.length()<=1024) {
                 ab.setFullDescription(userAnswer);
                 aboutUsRepository.save(ab);
