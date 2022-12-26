@@ -7,6 +7,7 @@ import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -38,7 +39,7 @@ public class CallbackScheduleCancelImpl implements Callback {
         return SendMessage.builder()
                 .chatId(callbackQuery.getMessage().getChatId())
                 .text(String.format(scheduleMessageProperties.getConfirmCancelEvent(), schedule.get().getActivity().getName()))
-                .parseMode("Markdown")
+                .parseMode(ParseMode.MARKDOWN)
                 .replyMarkup(createInlineKeyboard(activityFormatId, eventDate, scheduleId))
                 .build();
     }

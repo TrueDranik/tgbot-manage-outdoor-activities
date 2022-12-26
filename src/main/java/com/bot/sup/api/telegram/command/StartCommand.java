@@ -6,6 +6,7 @@ import com.bot.sup.common.properties.message.MainMessageProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
@@ -33,7 +34,7 @@ public class StartCommand implements BaseCommand {
                 .chatId(update.getMessage().getChatId())
                 .text(mainMessageProperties.getUserChoose())
                 .replyMarkup(handleMainMenu.createInlineKeyboard())
-                .parseMode("Markdown")
+                .parseMode(ParseMode.MARKDOWN)
                 .build();
     }
 }

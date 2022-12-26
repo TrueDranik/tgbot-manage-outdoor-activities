@@ -2,6 +2,7 @@ package com.bot.sup.api.telegram.command;
 
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
@@ -22,7 +23,7 @@ public class HelpCommand implements BaseCommand {
                 .chatId(update.getMessage().getChatId())
                 .text("Бот предназначен для администрирования активностей!" +
                         "\n/start")
-                .parseMode("HTML")
+                .parseMode(ParseMode.HTML)
                 .build();
     }
 }
