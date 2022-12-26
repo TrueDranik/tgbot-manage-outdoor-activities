@@ -1,13 +1,14 @@
 package com.bot.sup.api.telegram.handler.registration;
 
+import com.bot.sup.api.telegram.handler.registration.instructor.InstructorRegistration;
 import com.bot.sup.cache.InstructorDataCache;
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.enums.InstructorStateEnum;
 import com.bot.sup.common.properties.message.InstructorMessageProperties;
 import com.bot.sup.model.entity.Instructor;
 import com.bot.sup.repository.InstructorRepository;
-import com.bot.sup.service.instructor.InstructorService;
 import com.bot.sup.service.MessageService;
+import com.bot.sup.service.instructor.InstructorService;
 import com.bot.sup.validation.Validation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,7 @@ public class FillingInstructor implements HandleRegistration {
     private final InstructorService instructorService;
     private final InstructorMessageProperties instructorMessageProperties;
     private final InstructorRepository instructorRepository;
+    private final List<InstructorRegistration> instructorRegistrations;
 
     @Override
     public BotApiMethod<?> getMessage(Message message) {
@@ -60,6 +62,15 @@ public class FillingInstructor implements HandleRegistration {
         String userAnswer = inputMessage.getText();
         InstructorStateEnum instructorCurrentState = instructorDataCache.getInstructorCurrentState(chatId);
         BotApiMethod<?> replyToUser = null;
+
+//        List<InstructorRegistration> list = new ArrayList<>();
+//
+//        for (int i = 0; i < list.size(); i++) {
+//            InstructorRegistration instructorRegistration = list.get(i);
+//            if (instructorRegistration.support(instructorCurrentState)){
+//                replyToUser = instructorRegistration.processInputMessage(inputMessage, instructor);
+//            }
+//        }
 
         if (InstructorStateEnum.ASK_FULL_NAME.equals(instructorCurrentState)) {
             replyToUser = messageService.buildReplyMessage(chatId, instructorMessageProperties.getInputFullNameInstructor());
