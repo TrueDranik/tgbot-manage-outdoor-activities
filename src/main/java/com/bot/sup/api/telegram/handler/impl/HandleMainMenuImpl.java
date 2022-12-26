@@ -53,19 +53,21 @@ public class HandleMainMenuImpl implements Handle {
                 .text(scheduleMessageProperties.getSchedules())
                 .callbackData(CallbackEnum.SCHEDULE_TO_ACTIVITYFORMAT.toString())
                 .build()));
-        buttons.add(List.of(
-                InlineKeyboardButton.builder()
-                        .text(instructorMessageProperties.getInstructors())
-                        .callbackData(CallbackEnum.INSTRUCTORS.toString())
-                        .build()));
-        buttons.add(List.of(
-                InlineKeyboardButton.builder()
-                        .text(activityMessageProperties.getActivities())
-                        .callbackData(CallbackEnum.SUP_ACTIVITIES.toString())
-                        .build()));
+        buttons.add(List.of(InlineKeyboardButton.builder()
+                .text(instructorMessageProperties.getInstructors())
+                .callbackData(CallbackEnum.INSTRUCTORS.toString())
+                .build()));
+        buttons.add(List.of(InlineKeyboardButton.builder()
+                .text(activityMessageProperties.getActivities())
+                .callbackData(CallbackEnum.SUP_ACTIVITIES.toString())
+                .build()));
         buttons.add(List.of(InlineKeyboardButton.builder()
                 .text(scheduleMessageProperties.getTourEditor())
                 .callbackData(CallbackEnum.SCHEDULE_WEBAPP.toString())
+                .build()));
+        buttons.add(List.of(InlineKeyboardButton.builder()
+                .text("\uD83C\uDF1F О нас!")
+                .callbackData(CallbackEnum.ABOUT_US_INFO.toString())
                 .build()));
 
         return InlineKeyboardMarkup.builder()
