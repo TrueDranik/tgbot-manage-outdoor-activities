@@ -18,4 +18,12 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "inner join schedule s on s.id = sc.schedule_id " +
             "where sc.schedule_id = ?1", nativeQuery = true)
     Long findSumBookingClientByScheduleId(Long scheduleId);
+
+    @Query(value = "SELECT * " +
+            "FROM booking b " +
+            "inner join client c on c.id = b.client_id " +
+            "inner join schedule_client sc on c.id = sc.client_id " +
+            "inner join schedule s on s.id = sc.schedule_id " +
+            "where sc.schedule_id = ?1 and b.client_id = ?2", nativeQuery = true)
+    Optional<Booking> findBookingByClientIByScheduleId(Long scheduleId, Long clientId);
 }
