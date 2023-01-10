@@ -3,7 +3,6 @@ package com.bot.sup.service.callbackquery.impl.schedule;
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.common.properties.message.ScheduleMessageProperties;
-import com.bot.sup.model.entity.Client;
 import com.bot.sup.repository.BookingRepository;
 import com.bot.sup.repository.ClientRepository;
 import com.bot.sup.service.callbackquery.Callback;
@@ -37,37 +36,37 @@ public class CallbackScheduleAllClientInfoImpl implements Callback {
         String eventDate = callbackQuery.getData().split("/")[2];
         String scheduleId = callbackQuery.getData().split("/")[3];
 
-        List<Client> clientByScheduleId = clientRepository.findClientByScheduleId(Long.valueOf(scheduleId));
+//        List<Client> clientByScheduleId = clientRepository.findClientByScheduleId(Long.valueOf(scheduleId));
         Long sumBookingClients = bookingRepository.findSumBookingClientByScheduleId(Long.valueOf(scheduleId));
-        int numberClients = clientByScheduleId.size();
+//        int numberClients = clientByScheduleId.size();
 
-        Long sum = sumBookingClients == null ? numberClients : sumBookingClients + numberClients;
+//        Long sum = sumBookingClients == null ? numberClients : sumBookingClients + numberClients;
 
         if (callbackQuery.getMessage().hasPhoto()) {
             return SendMessage.builder()
                     .chatId(callbackQuery.getMessage().getChatId())
-                    .text(String.format(scheduleMessageProperties.getClientsRecorded(), sum))
+                    .text(String.format(scheduleMessageProperties.getClientsRecorded() /*sum*/))
                     .parseMode(ParseMode.MARKDOWN)
-                    .replyMarkup(createInlineKeyboard(clientByScheduleId, activityFormatId, eventDate, scheduleId))
+                    .replyMarkup(createInlineKeyboard(/*clientByScheduleId*/ activityFormatId, eventDate, scheduleId))
                     .build();
         }
 
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(callbackQuery.getMessage().getChatId())
-                .text(String.format(scheduleMessageProperties.getClientsRecorded(), sum))
+                .text(String.format(scheduleMessageProperties.getClientsRecorded() /*sum*/))
                 .parseMode(ParseMode.MARKDOWN)
-                .replyMarkup(createInlineKeyboard(clientByScheduleId, activityFormatId, eventDate, scheduleId))
+                .replyMarkup(createInlineKeyboard(/*clientByScheduleId*/ activityFormatId, eventDate, scheduleId))
                 .build();
     }
 
-    private InlineKeyboardMarkup createInlineKeyboard(List<Client> clientByScheduleId, String activityFormatId,
+    private InlineKeyboardMarkup createInlineKeyboard(/*List<Client> clientByScheduleId,*/ String activityFormatId,
                                                       String eventDate, String scheduleId) {
         List<List<InlineKeyboardButton>> mainKeyboard = new ArrayList<>();
         List<InlineKeyboardButton> firstRow = new ArrayList<>();
         List<InlineKeyboardButton> secondRow = new ArrayList<>();
 
-        clientByScheduleId.forEach(c -> {
+    /*    clientByScheduleId.forEach(c -> {
                     firstRow.add(InlineKeyboardButton.builder()
                             .text(c.getFirstName() + " " + c.getLastName())
                             .callbackData(CallbackEnum.CLIENT_INFO + "/" + activityFormatId + "/" + eventDate + "/"
@@ -79,7 +78,7 @@ public class CallbackScheduleAllClientInfoImpl implements Callback {
                         firstRow.clear();
                     }
                 }
-        );
+        );*/
 
         if (firstRow.size() == 1) {
             mainKeyboard.add(firstRow);

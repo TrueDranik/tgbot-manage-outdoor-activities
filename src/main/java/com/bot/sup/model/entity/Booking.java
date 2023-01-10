@@ -1,5 +1,6 @@
 package com.bot.sup.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jdk.jfr.BooleanFlag;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "booking")
@@ -26,7 +28,7 @@ public class Booking {
 
     @BooleanFlag
     @Column(name = "payment_status")
-    private Boolean paymentStatus;
+    private String paymentStatus;
 
     @Column(name = "ins_time")
     private LocalDate insTime;
@@ -42,4 +44,13 @@ public class Booking {
 
     @Column(name = "payment_type")
     private String paymentType;
+
+    @ManyToMany
+    @JoinTable(
+            name = "schedule_booking",
+            joinColumns = @JoinColumn(name = "booking_id"),
+            inverseJoinColumns = @JoinColumn(name = "schedule_id")
+    )
+    @JsonManagedReference
+    private Set<Schedule> schedule;
 }
