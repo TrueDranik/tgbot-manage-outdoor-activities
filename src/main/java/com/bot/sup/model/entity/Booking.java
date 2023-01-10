@@ -40,7 +40,7 @@ public class Booking {
     private Boolean isActive;
 
     @Column(name = "amount_paid")
-    private BigDecimal amount_paid;
+    private BigDecimal amountPaid;
 
     @Column(name = "payment_type")
     private String paymentType;
