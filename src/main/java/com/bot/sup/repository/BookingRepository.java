@@ -3,13 +3,22 @@ package com.bot.sup.repository;
 import com.bot.sup.model.entity.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
-    Optional<Booking> findBookingByClient_Id(Long clientId);
+    List<Booking> findBookingBySchedule(Long scheduleId);
+
+    @Query("select b from Booking b where b.schedule = ?1 and b.paymentStatus = ?2")
+    List<Booking> findBookingByScheduleIdByPaymentStatus(@Param("scheduleId") Long scheduleId, @Param("paymentStatus") String paymentStatus);
+
+
+
+    void delete(Booking entity);
 
     @Query(value = "SELECT SUM(invited_users) " +
             "FROM booking b " +
@@ -26,4 +35,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "inner join schedule s on s.id = sc.schedule_id " +
             "where sc.schedule_id = ?1 and sc.client_id = ?2", nativeQuery = true)
     Optional<Booking> findBookingByClientIByScheduleId(Long scheduleId, Long clientId);
+
 }

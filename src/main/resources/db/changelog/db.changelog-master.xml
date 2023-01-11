@@ -7,6 +7,7 @@
 
     <include file="v.1.0/cumulative-changelog.xml" relativeToChangelogFile="true"/>
     <include file="v.2.0/cumulative_changelog.xml" relativeToChangelogFile="true"/>
+    <include file="v.2.1/cumulative-changelog.xml" relativeToChangelogFile="true"/>
     <include file="v.3.0/cumulative-changelog.xml" relativeToChangelogFile="true"/>
     <include file="v.3.1/cumulative-changelog.xml" relativeToChangelogFile="true"/>
     <include file="v.4.0/cumulative-changelog.xml" relativeToChangelogFile="true"/>
