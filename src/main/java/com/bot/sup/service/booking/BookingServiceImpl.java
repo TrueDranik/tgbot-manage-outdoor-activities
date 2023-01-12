@@ -1,10 +1,11 @@
 package com.bot.sup.service.booking;
 
 import com.bot.sup.mapper.BookingMapper;
-import com.bot.sup.model.dto.BookingCreateDto;
+import com.bot.sup.model.dto.BookingDto;
 import com.bot.sup.model.entity.Booking;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.BookingRepository;
+import com.bot.sup.repository.ClientRepository;
 import com.bot.sup.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,14 +20,16 @@ public class BookingServiceImpl implements BookingService {
 
     private final ScheduleRepository scheduleRepository;
 
+    private final ClientRepository clientRepository;
+
     @Override
-    public List<BookingCreateDto> getBookingByScheduleId(Long scheduleId) {
+    public List<BookingDto> getBookingByScheduleId(Long scheduleId) {
         List<Booking> bookings = bookingRepository.findBookingByScheduleId(scheduleId);
         return bookingMapper.domainsToDtos(bookings);
     }
 
     @Override
-    public List<BookingCreateDto> getBookingByScheduleIdByPaymentStatus(Long scheduleId, String paymentStatus) {
+    public List<BookingDto> getBookingByScheduleIdByPaymentStatus(Long scheduleId, String paymentStatus) {
         List<Booking> bookings = bookingRepository.findBookingByScheduleIdByPaymentStatus(scheduleId, paymentStatus);
         return bookingMapper.domainsToDtos(bookings);
     }
@@ -45,5 +48,10 @@ public class BookingServiceImpl implements BookingService {
         }
 
         return schedule.getParticipants() - countInvatedUsers;
+    }
+
+    @Override
+    public void createBooking(BookingDto bookingDto) {
+
     }
 }

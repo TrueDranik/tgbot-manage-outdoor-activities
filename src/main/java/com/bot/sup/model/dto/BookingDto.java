@@ -7,10 +7,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
-public class BookingCreateDto {
+public class BookingDto {
     private Long id;
     private Client clientId;
     private int invitedUsers;
+    private int invitedChildren;
     private String paymentStatus;
     private LocalDate insTime;
     private LocalDate modifTime;
