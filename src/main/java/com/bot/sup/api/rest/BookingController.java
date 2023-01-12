@@ -23,10 +23,10 @@ import java.util.List;
 public class BookingController {
     private final BookingService bookingService;
 
-    @GetMapping("{id}")
+    @GetMapping("{scheduleId}")
     @Operation(summary = "Получить записи по scheduleId")
-    public ResponseEntity<List<BookingCreateDto>> getBookingByScheduleId(@PathVariable(name = "id") Long id) {
-        List<BookingCreateDto> bookings = bookingService.getBookingByScheduleId(id);
+    public ResponseEntity<List<BookingCreateDto>> getBookingByScheduleId(@PathVariable(name = "scheduleId") Long scheduleId) {
+        List<BookingCreateDto> bookings = bookingService.getBookingByScheduleId(scheduleId);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
@@ -40,7 +40,7 @@ public class BookingController {
 
     @GetMapping("/type")
     public ResponseEntity<List<String>> getPaymentType() {
-        List<String> types = PaymentStatusEnum.getTitles();
+        List<String> types = PaymentTypeEnum.getTitles();
         return new ResponseEntity<>(types, HttpStatus.OK);
     }
 
@@ -48,6 +48,12 @@ public class BookingController {
     public ResponseEntity<List<String>> getPaymentStatus() {
         List<String> statuses = PaymentStatusEnum.getTitles();
         return new ResponseEntity<>(statuses, HttpStatus.OK);
+    }
+
+    @GetMapping("/freePlace/{scheduleId}")
+    public ResponseEntity<Integer> getFreePlace(@PathVariable(name = "scheduleId") Long scheduleId){
+        Integer freePlace = bookingService.getCountFreePlaces(scheduleId);
+        return new ResponseEntity<>(freePlace, HttpStatus.OK);
     }
 
 }

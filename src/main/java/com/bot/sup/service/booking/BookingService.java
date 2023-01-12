@@ -8,17 +8,10 @@ import java.util.List;
 
 @Service
 public interface BookingService {
-//    List<BookingCreateDto> getPaymentTypes();
-//
-//    List<BookingCreateDto> getPaymentStatus();
-//
-//    List<BookingCreateDto> getBookingByPaymentStatus();
-//
-//    BookingCreateDto createClient();
-//
-//    BookingCreateDto updateBooking();
     List<BookingCreateDto> getBookingByScheduleId(Long scheduleId);
 
     List<BookingCreateDto> getBookingByScheduleIdByPaymentStatus(Long scheduleId, String paymentStatus);
+
+    Integer getCountFreePlaces(Long scheduleId);
 
 }
