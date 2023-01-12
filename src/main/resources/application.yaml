@@ -11,14 +11,14 @@ telegram:
 
 spring:
   liquibase:
-    enabled: true
+    enabled: false
     change-log: classpath:db/changelog/db.changelog-master.xml
   main:
     allow-circular-references: 'true'
   jpa:
     generate-ddl: false
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     properties:
       #      hibernate:
       #        enable_lazy_load_no_trans: 'true'
@@ -28,12 +28,13 @@ spring:
             timeout: '0'
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   datasource:
-    password: postgres
-    driver-class-name: org.postgresql.Driver
-    hikari:
-      maximum-pool-size: '5'
-    username: postgres
-    url: jdbc:postgresql://localhost:5432/SupBotAdmin
+      password: postgres_sub
+      driver-class-name: org.postgresql.Driver
+      hikari:
+        maximum-pool-size: '5'
+      username: postgres_sub
+      url: jdbc:postgresql://10.120.10.6:5433/postgres_sub
+
   jackson:
     serialization:
       FAIL_ON_EMPTY_BEANS: 'false'
