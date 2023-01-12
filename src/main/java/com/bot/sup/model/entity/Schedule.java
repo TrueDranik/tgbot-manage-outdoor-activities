@@ -38,14 +38,18 @@ public class Schedule {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    @ManyToMany
-    @JoinTable(
-            name = "schedule_client",
-            joinColumns = @JoinColumn(name = "schedule_id"),
-            inverseJoinColumns = @JoinColumn(name = "client_id")
-    )
-    @JsonManagedReference
-    private Set<Client> client;
+//    @ManyToMany
+//    @JoinTable(
+//            name = "schedule_client",
+//            joinColumns = @JoinColumn(name = "schedule_id"),
+//            inverseJoinColumns = @JoinColumn(name = "client_id")
+//    )
+//    @JsonManagedReference
+//    private Set<Client> client;
+
+    @OneToMany
+    @JoinColumn(name = "schedule_id")
+    private Set<Booking> booking;
 
     @ManyToMany
     @JoinTable(

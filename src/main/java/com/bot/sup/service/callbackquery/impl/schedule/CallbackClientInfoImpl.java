@@ -46,7 +46,7 @@ public class CallbackClientInfoImpl implements Callback {
         Optional<Booking> invitedUsers = Optional.ofNullable(bookingRepository
                 .findBookingByClientIByScheduleId(Long.valueOf(scheduleId), Long.valueOf(clientId))
                 .orElseThrow(() -> new EntityNotFoundException("Invited users with client id[" + clientId + "] not found")));
-        Boolean paymentStatus = invitedUsers.get().getPaymentStatus();
+        String paymentStatus = invitedUsers.get().getPaymentStatus();
         String userId = String.format("<a href=\"tg://user?id=%s\"> (профиль)</a>", client.get().getTelegramId().toString());
 
         int invitedUsers1 = invitedUsers.get().getInvitedUsers() - 1;

@@ -46,4 +46,7 @@ public class Activity {
 
     @Column(name = "is_active")
     private Boolean isActive;
+
+    @Column(name = "prepay_percent")
+    private int prepayPercent;
 }
