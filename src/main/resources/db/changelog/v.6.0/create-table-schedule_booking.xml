@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.18.xsd">
+
+    <changeSet id="create-table-schedule_booking" author="Ruslan">
+        <createTable tableName="schedule_booking">  
+            <column name="schedule_id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_schedule_booking"/>
+            </column>
+            <column name="booking_id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_booking_schedule"/>
+            </column>
+        </createTable>
+        
+        <addForeignKeyConstraint baseTableName="schedule_booking" baseColumnNames="schedule_id"
+                                 constraintName="fk_schedule_booking"
+                                 referencedTableName="schedule"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="schedule_booking" baseColumnNames="booking_id"
+                                 constraintName="fk_booking_schedule"
+                                 referencedTableName="booking"
+                                 referencedColumnNames="id"/>
+        
+    </changeSet>
+    
+</databaseChangeLog>

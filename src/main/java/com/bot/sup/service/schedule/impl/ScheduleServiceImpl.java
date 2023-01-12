@@ -114,7 +114,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         scheduleDto.setEventTime(scheduleById.getEventTime());
         scheduleDto.setParticipants(scheduleById.getParticipants());
         scheduleDto.setRoute(scheduleById.getRoute());
-        scheduleDto.setClient(scheduleById.getClient());
+//        scheduleDto.setClient(scheduleById.getClient());
         scheduleDto.setInstructor(scheduleById.getInstructor());
         scheduleDto.setIsActive(scheduleById.getIsActive());
 
