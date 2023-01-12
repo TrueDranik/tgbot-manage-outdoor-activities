@@ -1,30 +1,35 @@
 package com.bot.sup.common.enums;
 
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@ToString
+@Getter
+@RequiredArgsConstructor
 public enum PaymentStatusEnum {
     PAID("Оплачено"),
     NOT_PAID("Не оплачено"),
     REFUND_REQUESTED("Запрошен возврат"),
     CANCEL_WITHOUT_REFUND("Отмена без возврата"),
     RETURNED("Возвращено");
-    private String title;
+    private final String title;
 
 
-    PaymentStatusEnum(String s) {
-        this.title = s;
-    }
+    private static final Map<PaymentStatusEnum, String> titles = new HashMap<PaymentStatusEnum, String>(PaymentStatusEnum.values().length);
 
-    public static List<String> getTitles(){
-        List<String> titles = new ArrayList<>();
-        for (PaymentStatusEnum value: PaymentStatusEnum.values()) {
-            titles.add(value.getTitle());
+    static  {
+        for (PaymentStatusEnum value : PaymentStatusEnum.values()) {
+            titles.put(value, value.getTitle());
         }
-        return titles;
-    }
 
-    public String getTitle() {
-        return title;
+    }
+    public static Map<PaymentStatusEnum, String> getTitles() {
+        return titles;
     }
 }

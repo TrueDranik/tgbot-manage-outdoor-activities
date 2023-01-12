@@ -4,8 +4,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @ToString
 @Getter
@@ -19,18 +19,16 @@ public enum PaymentTypeEnum {
 
     private final String title;
 
-    private static final List<String> titles = new ArrayList<>(PaymentTypeEnum.values().length);
+    private static final Map<PaymentTypeEnum, String> titles = new HashMap<PaymentTypeEnum, String>(PaymentTypeEnum.values().length);
 
-    public static List<String> getTitles() {
-        if (!titles.isEmpty()) {
-            return titles;
-        }
-
+     static  {
         for (PaymentTypeEnum value : PaymentTypeEnum.values()) {
-            titles.add(value.getTitle());
+            titles.put(value, value.getTitle());
         }
 
-        return titles;
+    }
+    public static Map<PaymentTypeEnum, String> getTitles() {
+         return titles;
     }
 
 

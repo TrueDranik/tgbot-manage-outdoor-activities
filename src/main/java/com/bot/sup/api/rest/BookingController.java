@@ -36,13 +36,13 @@ public class BookingController {
     }
 
     @GetMapping("/type")
-    public List<String> getPaymentType() {
-        Map<PaymentTypeEnum, String> titles = new HashMap<>();
-        return PaymentTypeEnum.getTitles();
+    public Map<PaymentTypeEnum, String> getPaymentType() {
+
+       return PaymentTypeEnum.getTitles();
     }
 
     @GetMapping("/status")
-    public List<String> getPaymentStatus() {
+    public Map<PaymentStatusEnum, String> getPaymentStatus() {
         return PaymentStatusEnum.getTitles();
     }
 

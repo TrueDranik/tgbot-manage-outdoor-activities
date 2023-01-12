@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,7 +16,7 @@ class PaymentTypeEnumTest {
     void getTitles() {
         PaymentTypeEnum.getTitles();
         PaymentTypeEnum.getTitles();
-        List<String> titles = PaymentTypeEnum.getTitles();
+        Map<PaymentTypeEnum, String> titles = PaymentTypeEnum.getTitles();
         assertEquals(4, titles.size());
     }
 }
