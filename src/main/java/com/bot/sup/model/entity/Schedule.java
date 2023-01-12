@@ -47,13 +47,8 @@ public class Schedule {
 //    @JsonManagedReference
 //    private Set<Client> client;
 
-    @ManyToMany
-    @JoinTable(
-            name = "schedule_booking",
-            joinColumns = @JoinColumn(name = "schedule_id"),
-            inverseJoinColumns = @JoinColumn(name = "booking_id")
-    )
-    @JsonManagedReference
+    @OneToMany
+    @JoinColumn(name = "schedule_id")
     private Set<Booking> booking;
 
     @ManyToMany
