@@ -25,24 +25,23 @@ public class BookingController {
 
     @GetMapping("{id}")
     @Operation(summary = "Получить записи по scheduleId")
-    public ResponseEntity<List<BookingCreateDto>> getBookingByScheduleId(@Parameter(description = "Id")
-                                                                         @PathVariable(name = "id") Long id) {
+    public ResponseEntity<List<BookingCreateDto>> getBookingByScheduleId(@PathVariable(name = "id") Long id) {
         List<BookingCreateDto> bookings = bookingService.getBookingByScheduleId(id);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
     @GetMapping
     @Operation(summary = "Получить записи по scheduleId и paymentStatus ")
-    public ResponseEntity<List<BookingCreateDto>> getBookingByScheduleIdByPaymentStatus(@RequestParam(value = "id") Long id,
+    public ResponseEntity<List<BookingCreateDto>> getBookingByScheduleIdByPaymentStatus(@RequestParam(value = "id") String id,
                                                                                         @RequestParam(value = "paymentStatus") String paymentStatus){
-        List<BookingCreateDto> bookings = bookingService.getBookingByScheduleIdByPaymentStatus(id, paymentStatus);
+        List<BookingCreateDto> bookings = bookingService.getBookingByScheduleIdByPaymentStatus(Long.valueOf(id), paymentStatus);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
     @GetMapping("/type")
-    public ResponseEntity<List<PaymentTypeEnum>> getPaymentType() {
-        PaymentTypeEnum[] types = PaymentTypeEnum.values();
-        return new ResponseEntity<>(Arrays.asList(types), HttpStatus.OK);
+    public ResponseEntity<List<String>> getPaymentType() {
+        List<String> types = PaymentStatusEnum.getTitles();
+        return new ResponseEntity<>(types, HttpStatus.OK);
     }
 
     @GetMapping("/status")

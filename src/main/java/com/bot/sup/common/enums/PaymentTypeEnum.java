@@ -1,5 +1,8 @@
 package com.bot.sup.common.enums;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum PaymentTypeEnum {
 
     BANK("Банк"),
@@ -15,8 +18,12 @@ public enum PaymentTypeEnum {
         return title;
     }
 
-    public PaymentTypeEnum[] getAllPaymentType(){
-        return PaymentTypeEnum.values();
+    public static List<String> getTitles(){
+        List<String> titles = new ArrayList<>();
+        for (PaymentTypeEnum value: PaymentTypeEnum.values()) {
+            titles.add(value.getTitle());
+        }
+        return titles;
     }
 
     @Override

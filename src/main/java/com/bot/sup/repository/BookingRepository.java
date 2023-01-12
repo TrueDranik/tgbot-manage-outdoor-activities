@@ -11,9 +11,9 @@ import java.util.Optional;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
-    List<Booking> findBookingBySchedule(Long scheduleId);
+    List<Booking> findBookingByScheduleId(Long scheduleId);
 
-    @Query("select b from Booking b where b.schedule = ?1 and b.paymentStatus = ?2")
+    @Query("select b from Booking b where b.schedule = :scheduleId and b.paymentStatus = :paymentStatus")
     List<Booking> findBookingByScheduleIdByPaymentStatus(@Param("scheduleId") Long scheduleId, @Param("paymentStatus") String paymentStatus);
 
 

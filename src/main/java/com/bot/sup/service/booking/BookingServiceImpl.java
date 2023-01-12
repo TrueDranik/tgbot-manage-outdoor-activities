@@ -17,7 +17,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingCreateDto> getBookingByScheduleId(Long scheduleId) {
-        List<Booking> bookings = bookingRepository.findBookingBySchedule(scheduleId);
+        List<Booking> bookings = bookingRepository.findBookingByScheduleId(scheduleId);
         return bookingMapper.domainsToDtos(bookings);
     }
 

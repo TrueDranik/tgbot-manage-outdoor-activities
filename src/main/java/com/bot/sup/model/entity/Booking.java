@@ -45,12 +45,16 @@ public class Booking {
     @Column(name = "payment_type")
     private String paymentType;
 
-    @ManyToMany
-    @JoinTable(
-            name = "schedule_booking",
-            joinColumns = @JoinColumn(name = "booking_id"),
-            inverseJoinColumns = @JoinColumn(name = "schedule_id")
-    )
+//    @ManyToMany
+//    @JoinTable(
+//            name = "schedule_booking",
+//            joinColumns = @JoinColumn(name = "booking_id"),
+//            inverseJoinColumns = @JoinColumn(name = "schedule_id")
+//    )
+
+    @ManyToOne
+    @JoinColumn(name = "schedule_id")
+    private Client client;
     @JsonManagedReference
     private Set<Schedule> schedule;
 }
