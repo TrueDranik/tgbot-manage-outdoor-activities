@@ -12,6 +12,7 @@ public enum PaymentTypeEnum {
     private String title;
 
     PaymentTypeEnum(String s) {
+        this.title = s;
     }
 
     public String getTitle() {
