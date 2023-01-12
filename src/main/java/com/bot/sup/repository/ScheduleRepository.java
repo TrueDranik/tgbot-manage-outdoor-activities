@@ -15,6 +15,8 @@ import java.util.List;
 public interface ScheduleRepository extends JpaRepository<Schedule, Long>, JpaSpecificationExecutor<ScheduleDto> {
     List<Schedule> getSchedulesByActivity_ActivityFormat_Id(Long id);
 
+    Schedule getSchedulesById (Long id);
+
     @Modifying
     @Query("SELECT s FROM Schedule s " +
             "INNER JOIN Activity a on s.activity.id = a.id " +

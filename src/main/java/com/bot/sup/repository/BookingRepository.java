@@ -13,9 +13,8 @@ import java.util.Optional;
 public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findBookingByScheduleId(Long scheduleId);
 
-    @Query("select b from Booking b where b.schedule = :scheduleId and b.paymentStatus = :paymentStatus")
+    @Query("select b from Booking b where b.schedule.id = :scheduleId and b.paymentStatus = :paymentStatus")
     List<Booking> findBookingByScheduleIdByPaymentStatus(@Param("scheduleId") Long scheduleId, @Param("paymentStatus") String paymentStatus);
-
 
 
     void delete(Booking entity);
