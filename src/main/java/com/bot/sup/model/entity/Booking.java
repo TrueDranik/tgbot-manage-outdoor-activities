@@ -1,14 +1,11 @@
 package com.bot.sup.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jdk.jfr.BooleanFlag;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Set;
 
 @Getter
 @Entity
@@ -21,7 +18,7 @@ public class Booking {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "clientId")
-    private Client clientId;
+    private Client client;
 
     @Column(name= "invited_users")
     private int invitedUsers;
