@@ -1,6 +1,8 @@
 package com.bot.sup.service.booking;
 
+import com.bot.sup.model.dto.BookingCreateDto;
 import com.bot.sup.model.dto.BookingDto;
+import com.bot.sup.model.dto.BookingUpdateDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +15,8 @@ public interface BookingService {
 
     Integer getCountFreePlaces(Long scheduleId);
 
-    void createBooking (BookingDto bookingDto);
+    BookingDto createBooking (BookingCreateDto bookingCreateDto);
+
+    BookingDto updateBooking (BookingUpdateDto bookingUpdateDto);
 
 }

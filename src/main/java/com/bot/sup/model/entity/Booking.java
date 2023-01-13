@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jdk.jfr.BooleanFlag;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -33,9 +37,11 @@ public class Booking {
     private String paymentStatus;
 
     @Column(name= "ins_time")
+    @CreationTimestamp
     private LocalDate insTime;
 
     @Column(name= "modif_time")
+    @LastModifiedDate
     private LocalDate modifTime;
 
     @Column(name = "is_active")

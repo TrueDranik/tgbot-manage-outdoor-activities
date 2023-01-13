@@ -1,8 +1,11 @@
 package com.bot.sup.service.booking;
 
 import com.bot.sup.mapper.BookingMapper;
+import com.bot.sup.model.dto.BookingCreateDto;
 import com.bot.sup.model.dto.BookingDto;
+import com.bot.sup.model.dto.BookingUpdateDto;
 import com.bot.sup.model.entity.Booking;
+import com.bot.sup.model.entity.Client;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.BookingRepository;
 import com.bot.sup.repository.ClientRepository;
@@ -10,6 +13,8 @@ import com.bot.sup.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -51,7 +56,43 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void createBooking(BookingDto bookingDto) {
+    public BookingDto createBooking(BookingCreateDto bookingcreateDto) {
+        Client client = clientRepository.findByPhoneNumber(bookingcreateDto.getPhoneNumber());
+        if (client != null) {
+            Booking booking = new Booking();
+            booking.setClientId(client);
+            booking.setInvitedUsers(bookingcreateDto.getInvitedUsers());
+            booking.setInvitedChildren(bookingcreateDto.getInvitedChildren());
+            booking.setPaymentStatus(bookingcreateDto.getPaymentStatus());
+            booking.setPaymentType(bookingcreateDto.getPaymentType());
+            booking.setActive(true);
+            Schedule schedule = scheduleRepository.getSchedulesById(bookingcreateDto.getScheduleId());
+            booking.setSchedule(schedule);
+            booking.setInsTime(LocalDate.now());
+            booking.setModifTime(LocalDate.now());
+            booking.setAmountPaid(bookingcreateDto.getAmountPaid());
+            bookingRepository.save(booking);
+            BookingDto bookingDto = bookingMapper.domainToDto(booking);
+            bookingDto.setScheduleId(bookingcreateDto.getScheduleId());
+            return bookingDto;
+        }
+        throw new EntityNotFoundException("Client with phone number " + bookingcreateDto.getPhoneNumber() + " not found");
+    }
 
+    @Override
+    public BookingDto updateBooking(BookingUpdateDto bookingUpdateDto) {
+        Booking bookingToUpdate = bookingRepository.findBookingById(bookingUpdateDto.getId());
+        if (bookingToUpdate == null) {
+            throw new EntityNotFoundException("Client with Id " + bookingUpdateDto.getId() + " not found");
+        }
+        bookingToUpdate = bookingMapper.dtoToDomain(bookingUpdateDto);
+        bookingToUpdate.setModifTime(LocalDate.now());
+        Schedule schedule = scheduleRepository.getSchedulesById(bookingUpdateDto.getScheduleId());
+        bookingToUpdate.setSchedule(schedule);
+        bookingRepository.save(bookingToUpdate);
+        BookingDto bookingDto = bookingMapper.domainToDto(bookingToUpdate);
+        bookingDto.setScheduleId(bookingUpdateDto.getScheduleId());
+
+        return bookingDto;
     }
 }

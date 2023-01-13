@@ -2,14 +2,17 @@ package com.bot.sup.api.rest;
 
 import com.bot.sup.common.enums.PaymentStatusEnum;
 import com.bot.sup.common.enums.PaymentTypeEnum;
+import com.bot.sup.model.dto.BookingCreateDto;
 import com.bot.sup.model.dto.BookingDto;
+import com.bot.sup.model.dto.BookingUpdateDto;
 import com.bot.sup.service.booking.BookingService;
+import com.bot.sup.service.client.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +23,7 @@ import java.util.Map;
 @Tag(name = "Бронь")
 public class BookingController {
     private final BookingService bookingService;
+    private final ClientService clientService;
 
     @GetMapping("{scheduleId}")
     @ResponseStatus
@@ -38,7 +42,7 @@ public class BookingController {
     @GetMapping("/type")
     public Map<PaymentTypeEnum, String> getPaymentType() {
 
-       return PaymentTypeEnum.getTitles();
+        return PaymentTypeEnum.getTitles();
     }
 
     @GetMapping("/status")
@@ -52,9 +56,17 @@ public class BookingController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Создать ноую бронь")
-    public BookingDto createBooking (@RequestBody BookingDto bookingDto){
-        return null;
+    public BookingDto createBooking(@RequestBody BookingCreateDto bookingCreateDto) {
+        clientService.createClient(bookingCreateDto);
+        return bookingService.createBooking(bookingCreateDto);
+    }
+
+    @PutMapping
+    @Operation(summary = "Обновление букинга")
+    public BookingDto updateBooking(@RequestBody BookingUpdateDto bookingUpdateDto) {
+        return bookingService.updateBooking(bookingUpdateDto);
     }
 
 }
