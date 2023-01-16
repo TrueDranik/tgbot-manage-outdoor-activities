@@ -1,34 +1,35 @@
 package com.bot.sup.common.enums;
 
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@ToString
+@Getter
+@RequiredArgsConstructor
 public enum PaymentTypeEnum {
 
     BANK("Банк"),
     CASH("Наличные"),
     PAYMENT_BY_DETAILS("Реквизиты"),
     TRANSFER("Перевод");
-    private String title;
 
-    PaymentTypeEnum(String s) {
-        this.title = s;
-    }
+    private final String title;
 
-    public String getTitle() {
-        return title;
-    }
+    private static final Map<PaymentTypeEnum, String> titles = new HashMap<PaymentTypeEnum, String>(PaymentTypeEnum.values().length);
 
-    public static List<String> getTitles(){
-        List<String> titles = new ArrayList<>();
-        for (PaymentTypeEnum value: PaymentTypeEnum.values()) {
-            titles.add(value.getTitle());
+     static  {
+        for (PaymentTypeEnum value : PaymentTypeEnum.values()) {
+            titles.put(value, value.getTitle());
         }
-        return titles;
+
+    }
+    public static Map<PaymentTypeEnum, String> getTitles() {
+         return titles;
     }
 
-    @Override
-    public String toString() {
-        return title;
-    }
+
 }
