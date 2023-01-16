@@ -19,7 +19,7 @@ public enum PaymentTypeEnum {
 
     private final String title;
 
-    private static final Map<PaymentTypeEnum, String> titles = new HashMap<PaymentTypeEnum, String>(PaymentTypeEnum.values().length);
+    private static final Map<PaymentTypeEnum, String> titles = new HashMap<>(PaymentTypeEnum.values().length);
 
      static  {
         for (PaymentTypeEnum value : PaymentTypeEnum.values()) {

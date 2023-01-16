@@ -1,6 +1,9 @@
 package com.bot.sup.service.booking;
 
 import com.bot.sup.mapper.BookingMapper;
+import com.bot.sup.mapper.ClientMapper;
+import com.bot.sup.mapper.ScheduleMapper;
+import com.bot.sup.mapper.ScheduleMapperImpl;
 import com.bot.sup.model.dto.BookingCreateDto;
 import com.bot.sup.model.dto.BookingDto;
 import com.bot.sup.model.dto.BookingUpdateDto;
@@ -26,6 +29,9 @@ public class BookingServiceImpl implements BookingService {
     private final ScheduleRepository scheduleRepository;
 
     private final ClientRepository clientRepository;
+    private final ClientMapper clientMapper;
+
+    private final ScheduleMapper scheduleMapper;
 
     @Override
     public List<BookingDto> getBookingByScheduleId(Long scheduleId) {
@@ -73,7 +79,9 @@ public class BookingServiceImpl implements BookingService {
             booking.setAmountPaid(bookingcreateDto.getAmountPaid());
             bookingRepository.save(booking);
             BookingDto bookingDto = bookingMapper.domainToDto(booking);
-            bookingDto.setScheduleId(bookingcreateDto.getScheduleId());
+           // bookingDto.setScheduleId(bookingcreateDto.getScheduleId());
+            bookingDto.setScheduleId(scheduleMapper.domainToDto(schedule));
+            bookingDto.setClient(clientMapper.domainToDto(client));
             return bookingDto;
         }
         throw new EntityNotFoundException("Client with phone number " + bookingcreateDto.getPhoneNumber() + " not found");
@@ -83,15 +91,17 @@ public class BookingServiceImpl implements BookingService {
     public BookingDto updateBooking(BookingUpdateDto bookingUpdateDto) {
         Booking bookingToUpdate = bookingRepository.findBookingById(bookingUpdateDto.getId());
         if (bookingToUpdate == null) {
-            throw new EntityNotFoundException("Client with Id " + bookingUpdateDto.getId() + " not found");
+            throw new EntityNotFoundException("Booking with Id " + bookingUpdateDto.getId() + " not found");
         }
         bookingToUpdate = bookingMapper.dtoToDomain(bookingUpdateDto);
+        Client client = clientRepository.findById(bookingUpdateDto.getClientId().getId()).get();
+        bookingToUpdate.setClient(client);
         bookingToUpdate.setModifTime(LocalDate.now());
         Schedule schedule = scheduleRepository.getSchedulesById(bookingUpdateDto.getScheduleId());
         bookingToUpdate.setSchedule(schedule);
         bookingRepository.save(bookingToUpdate);
         BookingDto bookingDto = bookingMapper.domainToDto(bookingToUpdate);
-        bookingDto.setScheduleId(bookingUpdateDto.getScheduleId());
+        bookingDto.setScheduleId(scheduleMapper.domainToDto(schedule));
 
         return bookingDto;
     }
