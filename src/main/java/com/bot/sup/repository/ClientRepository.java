@@ -19,5 +19,11 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 
     boolean existsByTelegramId(Long chatId);
 
+    boolean existsByPhoneNumber(String phoneNumber);
+
+    Client findByPhoneNumber(String phoneNumber);
+
     Optional<Client> findByTelegramId(Long telegramId);
+
+    Optional<Client> findById(Long id);
 }

@@ -1,17 +1,22 @@
 package com.bot.sup.service.booking;
 
-import com.bot.sup.common.enums.PaymentTypeEnum;
 import com.bot.sup.model.dto.BookingCreateDto;
+import com.bot.sup.model.dto.BookingDto;
+import com.bot.sup.model.dto.BookingUpdateDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public interface BookingService {
-    List<BookingCreateDto> getBookingByScheduleId(Long scheduleId);
+    List<BookingDto> getBookingByScheduleId(Long scheduleId);
 
-    List<BookingCreateDto> getBookingByScheduleIdByPaymentStatus(Long scheduleId, String paymentStatus);
+    List<BookingDto> getBookingByScheduleIdByPaymentStatus(Long scheduleId, String paymentStatus);
 
     Integer getCountFreePlaces(Long scheduleId);
+
+    BookingDto createBooking (BookingCreateDto bookingCreateDto);
+
+    BookingDto updateBooking (BookingUpdateDto bookingUpdateDto);
 
 }
