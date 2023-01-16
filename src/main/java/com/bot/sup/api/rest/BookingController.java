@@ -26,7 +26,6 @@ public class BookingController {
     private final ClientService clientService;
 
     @GetMapping("{scheduleId}")
-    @ResponseStatus
     @Operation(summary = "Получить записи по scheduleId")
     public List<BookingDto> getBookingByScheduleId(@PathVariable(name = "scheduleId") Long scheduleId) {
         return bookingService.getBookingByScheduleId(scheduleId);
@@ -64,7 +63,7 @@ public class BookingController {
     }
 
     @PutMapping
-    @Operation(summary = "Обновление букинга")
+    @Operation(summary = "Обновление брони")
     public BookingDto updateBooking(@RequestBody BookingUpdateDto bookingUpdateDto) {
         return bookingService.updateBooking(bookingUpdateDto);
     }
