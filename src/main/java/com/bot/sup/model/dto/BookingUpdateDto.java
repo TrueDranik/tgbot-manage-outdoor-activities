@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Setter
 public class BookingUpdateDto {
     private Long id;
-    private Client clientId;
+    private ClientDto clientId;
     private int invitedUsers;
     private int invitedChildren;
     private String paymentStatus;

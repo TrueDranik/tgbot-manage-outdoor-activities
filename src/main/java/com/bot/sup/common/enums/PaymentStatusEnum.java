@@ -21,7 +21,7 @@ public enum PaymentStatusEnum {
     private final String title;
 
 
-    private static final Map<PaymentStatusEnum, String> titles = new HashMap<PaymentStatusEnum, String>(PaymentStatusEnum.values().length);
+    private static final Map<PaymentStatusEnum, String> titles = new HashMap<>(PaymentStatusEnum.values().length);
 
     static  {
         for (PaymentStatusEnum value : PaymentStatusEnum.values()) {
