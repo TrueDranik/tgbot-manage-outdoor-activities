@@ -3,7 +3,6 @@ package com.bot.sup.service.booking;
 import com.bot.sup.mapper.BookingMapper;
 import com.bot.sup.mapper.ClientMapper;
 import com.bot.sup.mapper.ScheduleMapper;
-import com.bot.sup.mapper.ScheduleMapperImpl;
 import com.bot.sup.model.dto.BookingCreateDto;
 import com.bot.sup.model.dto.BookingDto;
 import com.bot.sup.model.dto.BookingUpdateDto;
@@ -79,7 +78,7 @@ public class BookingServiceImpl implements BookingService {
             booking.setAmountPaid(bookingcreateDto.getAmountPaid());
             bookingRepository.save(booking);
             BookingDto bookingDto = bookingMapper.domainToDto(booking);
-           // bookingDto.setScheduleId(bookingcreateDto.getScheduleId());
+            // bookingDto.setScheduleId(bookingcreateDto.getScheduleId());
             bookingDto.setScheduleId(scheduleMapper.domainToDto(schedule));
             bookingDto.setClient(clientMapper.domainToDto(client));
             return bookingDto;
