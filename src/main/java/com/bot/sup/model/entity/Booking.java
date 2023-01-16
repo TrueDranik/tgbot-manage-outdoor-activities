@@ -25,7 +25,7 @@ public class Booking {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "clientId")
-    private Client clientId;
+    private Client client;
 
     @Column(name= "invited_users")
     private int invitedUsers;
