@@ -20,6 +20,7 @@ import java.util.List;
 public interface BookingMapper extends BaseMapper<Booking, BookingDto> {
 
     @Override
+    @Mapping(source = "schedule", target = "schedule")
     List<BookingDto> domainsToDtos(List<Booking> domains);
 
     @Override
