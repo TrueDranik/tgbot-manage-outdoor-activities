@@ -60,7 +60,7 @@ public class BookingServiceImpl implements BookingService {
         Client client = clientRepository.findByPhoneNumber(bookingcreateDto.getPhoneNumber());
         if (client != null) {
             Booking booking = new Booking();
-            booking.setClientId(client);
+            booking.setClient(client);
             booking.setInvitedUsers(bookingcreateDto.getInvitedUsers());
             booking.setInvitedChildren(bookingcreateDto.getInvitedChildren());
             booking.setPaymentStatus(bookingcreateDto.getPaymentStatus());
