@@ -20,4 +20,5 @@ public class ActivityCreateDto {
     private String age;
     private String complexity;
     private BigDecimal price;
+    private int prepayPercent;
 }
