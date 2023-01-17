@@ -13,6 +13,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface BookingMapper extends BaseMapper<Booking, BookingDto> {
 
+
     @Override
     List<BookingDto> domainsToDtos(List<Booking> domains);
 
@@ -23,6 +24,8 @@ public interface BookingMapper extends BaseMapper<Booking, BookingDto> {
 
     ClientCreateDto dtoToDto(BookingCreateDto bookingCreateDto);
 
-
+    @Mapping(source = "clientId", target = "client")
     Booking dtoToDomain(BookingUpdateDto bookingUpdateDto);
+
+    Booking dtoToDomain(BookingCreateDto bookingCreateDto);
 }
