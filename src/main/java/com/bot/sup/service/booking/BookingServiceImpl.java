@@ -1,14 +1,22 @@
 package com.bot.sup.service.booking;
 
 import com.bot.sup.mapper.BookingMapper;
+import com.bot.sup.mapper.ClientMapper;
+import com.bot.sup.mapper.ScheduleMapper;
 import com.bot.sup.model.dto.BookingCreateDto;
+import com.bot.sup.model.dto.BookingDto;
+import com.bot.sup.model.dto.BookingUpdateDto;
 import com.bot.sup.model.entity.Booking;
+import com.bot.sup.model.entity.Client;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.repository.BookingRepository;
+import com.bot.sup.repository.ClientRepository;
 import com.bot.sup.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -19,14 +27,16 @@ public class BookingServiceImpl implements BookingService {
 
     private final ScheduleRepository scheduleRepository;
 
+    private final ClientRepository clientRepository;
+
     @Override
-    public List<BookingCreateDto> getBookingByScheduleId(Long scheduleId) {
+    public List<BookingDto> getBookingByScheduleId(Long scheduleId) {
         List<Booking> bookings = bookingRepository.findBookingByScheduleId(scheduleId);
         return bookingMapper.domainsToDtos(bookings);
     }
 
     @Override
-    public List<BookingCreateDto> getBookingByScheduleIdByPaymentStatus(Long scheduleId, String paymentStatus) {
+    public List<BookingDto> getBookingByScheduleIdByPaymentStatus(Long scheduleId, String paymentStatus) {
         List<Booking> bookings = bookingRepository.findBookingByScheduleIdByPaymentStatus(scheduleId, paymentStatus);
         return bookingMapper.domainsToDtos(bookings);
     }
@@ -46,4 +56,41 @@ public class BookingServiceImpl implements BookingService {
 
         return schedule.getParticipants() - countInvatedUsers;
     }
+
+    @Override
+    public BookingDto createBooking(BookingCreateDto bookingcreateDto) {
+        Client client = clientRepository.findByPhoneNumber(bookingcreateDto.getPhoneNumber());
+        if (client != null) {
+            Integer freePlace = getCountFreePlaces((bookingcreateDto.getScheduleId()));
+            if(freePlace <= 0){
+                throw new IllegalArgumentException("Free place is 0");
+            }
+            Schedule schedule = scheduleRepository.getSchedulesById(bookingcreateDto.getScheduleId());
+            Booking booking = bookingMapper.dtoToDomain(bookingcreateDto);
+            booking.setClient(client);
+            booking.setSchedule(schedule);
+            booking.setInsTime(LocalDate.now());
+            booking.setModifTime(LocalDate.now());
+            bookingRepository.save(booking);
+            BookingDto bookingDto = bookingMapper.domainToDto(booking);
+            return bookingDto;
+        }
+        throw new EntityNotFoundException("Client with phone number " + bookingcreateDto.getPhoneNumber() + " not found");
+    }
+
+    @Override
+    public BookingDto updateBooking(BookingUpdateDto bookingUpdateDto) {
+        Booking bookingToUpdate = bookingRepository.findBookingById(bookingUpdateDto.getId());
+        if (bookingToUpdate == null) {
+            throw new EntityNotFoundException("Booking with Id " + bookingUpdateDto.getId() + " not found");
+        }
+        bookingToUpdate = bookingMapper.dtoToDomain(bookingUpdateDto);
+        bookingToUpdate.setModifTime(LocalDate.now());
+        Schedule schedule = scheduleRepository.getSchedulesById(bookingUpdateDto.getScheduleId());
+        bookingToUpdate.setSchedule(schedule);
+        bookingRepository.save(bookingToUpdate);
+        BookingDto bookingDto = bookingMapper.domainToDto(bookingToUpdate);
+        return bookingDto;
+    }
+
 }
