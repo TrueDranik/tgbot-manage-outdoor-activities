@@ -28,9 +28,6 @@ public class BookingServiceImpl implements BookingService {
     private final ScheduleRepository scheduleRepository;
 
     private final ClientRepository clientRepository;
-    private final ClientMapper clientMapper;
-
-    private final ScheduleMapper scheduleMapper;
 
     @Override
     public List<BookingDto> getBookingByScheduleId(Long scheduleId) {
@@ -64,6 +61,10 @@ public class BookingServiceImpl implements BookingService {
     public BookingDto createBooking(BookingCreateDto bookingcreateDto) {
         Client client = clientRepository.findByPhoneNumber(bookingcreateDto.getPhoneNumber());
         if (client != null) {
+            Integer freePlace = getCountFreePlaces((bookingcreateDto.getScheduleId()));
+            if(freePlace <= 0){
+                throw new IllegalArgumentException("Free place is 0");
+            }
             Schedule schedule = scheduleRepository.getSchedulesById(bookingcreateDto.getScheduleId());
             Booking booking = bookingMapper.dtoToDomain(bookingcreateDto);
             booking.setClient(client);
@@ -91,4 +92,5 @@ public class BookingServiceImpl implements BookingService {
         BookingDto bookingDto = bookingMapper.domainToDto(bookingToUpdate);
         return bookingDto;
     }
+
 }
