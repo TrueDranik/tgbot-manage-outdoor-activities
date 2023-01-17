@@ -1,7 +1,5 @@
 package com.bot.sup.model.dto;
 
-import com.bot.sup.model.entity.Client;
-import com.bot.sup.model.entity.Schedule;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,5 +19,5 @@ public class BookingDto {
     private Boolean isActive;
     private BigDecimal amountPaid;
     private String paymentType;
-    private ScheduleCreateDto scheduleId;
+    private ScheduleResponseDto scheduleId;
 }
