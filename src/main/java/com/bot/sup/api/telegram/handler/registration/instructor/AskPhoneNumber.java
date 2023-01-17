@@ -15,49 +15,37 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AskPhoneNumber implements InstructorRegistration {
+public class AskPhoneNumber implements InstructorMessageProcessor {
     private final InstructorDataCache instructorDataCache;
     private final MessageService messageService;
     private final InstructorMessageProperties instructorMessageProperties;
 
     @Override
-    public BotApiMethod<?> processInputMessage(Message message, Instructor instructor) {
+    public BotApiMethod<?> processInputMessage(Message message, Object instructor) {
         Long chatId = message.getChatId();
         String userAnswer = message.getText();
-        BotApiMethod<?> replyToUser;
 
-        if (Validation.isValidText(userAnswer)) {
-            try {
-                String[] fullName = userAnswer.split(" ");
+        ((Instructor) instructor).setPhoneNumber(userAnswer);
 
-                instructor.setFirstName(fullName[0]);
-                instructor.setLastName(fullName[1]);
+        log.info("instructor phone number = " + userAnswer);
 
-                if (instructor.getFirstName().length() < 2 || instructor.getFirstName().length() > 15
-                        && instructor.getLastName().length() < 2 || instructor.getLastName().length() > 15) {
-                    return messageService.buildReplyMessage(chatId, instructorMessageProperties.getValidateInputFullName());
-                }
-            } catch (IndexOutOfBoundsException e) {
-                return messageService.buildReplyMessage(chatId, instructorMessageProperties.getInputFullNameInstructorIsEmpty());
-            }
-
-            log.info("instructor Name = " + userAnswer);
-
-            replyToUser = messageService.buildReplyMessage(chatId, instructorMessageProperties.getInputPhoneNumber());
-
-            instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.ASK_TELEGRAM_ID);
-        } else {
-            replyToUser = messageService.buildReplyMessage(chatId, instructorMessageProperties.getValidateLanguage());
-            instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.ASK_PHONE_NUMBER);
-
-            return replyToUser;
-        }
-
-        return replyToUser;
+        instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.ASK_TELEGRAM_ID);
+        return  messageService.buildReplyMessage(chatId, instructorMessageProperties.getGetTelegramId());
     }
 
     @Override
-    public boolean support(InstructorStateEnum instructorCurrentState) {
-        return InstructorStateEnum.ASK_PHONE_NUMBER.equals(instructorCurrentState);
+    public BotApiMethod<?> processInvalidInputMessage(Long chatId) {
+        instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.ASK_PHONE_NUMBER);
+        return messageService.buildReplyMessage(chatId, instructorMessageProperties.getPhoneNumberNotValid());
+    }
+
+    @Override
+    public boolean isMessageInvalid(Message message) {
+        return !Validation.isValidPhoneNumber(message.getText());
+    }
+
+    @Override
+    public InstructorStateEnum getCurrentState() {
+        return InstructorStateEnum.ASK_PHONE_NUMBER;
     }
 }
