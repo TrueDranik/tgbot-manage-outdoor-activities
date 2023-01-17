@@ -21,4 +21,5 @@ public class ActivityDto {
     private String complexity;
     private BigDecimal price;
     private Boolean isActive;
+    private int prepayPercent;
 }

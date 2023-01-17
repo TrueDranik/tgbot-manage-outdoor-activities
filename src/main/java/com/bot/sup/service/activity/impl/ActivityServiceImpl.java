@@ -26,9 +26,6 @@ public class ActivityServiceImpl implements ActivityService {
     private final ActivityFormatRepository activityFormatRepository;
     private final ScheduleRepository scheduleRepository;
 
-//    public void save(Activity activity) {
-//        activityRepository.save(activity);
-//    }
 
     @Override
     public List<ActivityDto> getAllActivity(ActivityRequestParams params) {
@@ -96,6 +93,7 @@ public class ActivityServiceImpl implements ActivityService {
         activityDto.setIsActive(activity.getIsActive());
         activityDto.setActivityFormat(activity.getActivityFormat());
         activityDto.setActivityType(activity.getActivityType());
+        activityDto.setPrepayPercent(activity.getPrepayPercent());
 
         return activityDto;
     }
@@ -109,6 +107,7 @@ public class ActivityServiceImpl implements ActivityService {
         activity.setComplexity(activityCreateDto.getComplexity());
         activity.setPrice(activityCreateDto.getPrice());
         activity.setIsActive(true);
+        activity.setPrepayPercent(activityCreateDto.getPrepayPercent());
 
         activity.setActivityType(activityTypeRepository.findById(activityCreateDto.getActivityTypeId())
                 .orElseThrow(() -> new EntityNotFoundException("Activity type not found")));
