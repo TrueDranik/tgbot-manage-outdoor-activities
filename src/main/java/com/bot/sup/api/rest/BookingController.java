@@ -40,7 +40,6 @@ public class BookingController {
 
     @GetMapping("/type")
     public Map<PaymentTypeEnum, String> getPaymentType() {
-
         return PaymentTypeEnum.getTitles();
     }
 
