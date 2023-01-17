@@ -22,7 +22,6 @@ import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,8 +66,8 @@ public class FillingClientImpl implements HandleRegistration {
                 clientByTelegramId = clientRepository.findByTelegramId(forwardFrom.get().getId());
                 Client clientChoice = clientByTelegramId.get();
 
-                clientChoice.getSchedule().add(scheduleRepository.findById(scheduleId)
-                        .orElseThrow(() -> new EntityNotFoundException("Schedule not found")));
+//                clientChoice.getSchedule().add(scheduleRepository.findById(scheduleId)
+//                        .orElseThrow(() -> new EntityNotFoundException("Schedule not found")));
 
                 clientRepository.save(clientChoice);
                 replyToUser = messageService.getReplyMessageWithKeyboard(chatId, "Найден клиент: " + clientByTelegramId.get().getFirstName()
@@ -130,8 +129,8 @@ public class FillingClientImpl implements HandleRegistration {
                 LocalDate birthday = LocalDate.from(formatter.parse(userAnswer));
 
                 client.setBirthDate(birthday);
-                client.setSchedule(Collections.singleton(scheduleRepository.findById(scheduleId)
-                        .orElseThrow(() -> new EntityNotFoundException("Schedule not found"))));
+//                client.setSchedule(Collections.singleton(scheduleRepository.findById(scheduleId)
+//                        .orElseThrow(() -> new EntityNotFoundException("Schedule not found"))));
 
                 clientRepository.save(client);
                 replyToUser = messageService.getReplyMessageWithKeyboard(chatId, "Клиент записан!", keyboardMarkup());

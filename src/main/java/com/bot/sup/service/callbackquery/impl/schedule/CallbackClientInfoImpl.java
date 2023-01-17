@@ -10,6 +10,7 @@ import com.bot.sup.repository.ClientRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -18,7 +19,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,9 +43,10 @@ public class CallbackClientInfoImpl implements Callback {
         Optional<Client> client = Optional.ofNullable(clientRepository.findById(Long.valueOf(clientId))
                 .orElseThrow(() -> new EntityNotFoundException("Client with id[" + clientId + "] not found")));
 
-        Optional<Booking> invitedUsers = Optional.ofNullable(bookingRepository.findBookingByClient_Id(Long.valueOf(clientId))
+        Optional<Booking> invitedUsers = Optional.ofNullable(bookingRepository
+                .findBookingByClientIByScheduleId(Long.valueOf(scheduleId), Long.valueOf(clientId))
                 .orElseThrow(() -> new EntityNotFoundException("Invited users with client id[" + clientId + "] not found")));
-        Boolean paymentStatus = invitedUsers.get().getPaymentStatus();
+        String paymentStatus = invitedUsers.get().getPaymentStatus();
         String userId = String.format("<a href=\"tg://user?id=%s\"> (профиль)</a>", client.get().getTelegramId().toString());
 
         int invitedUsers1 = invitedUsers.get().getInvitedUsers() - 1;
@@ -56,7 +60,7 @@ public class CallbackClientInfoImpl implements Callback {
                         + "☎️" + client.get().getPhoneNumber() + "\n"
                         + s
                         + "\uD83D\uDCB8 Статус оплаты: " + paymentStatus)
-                .parseMode("HTML")
+                .parseMode(ParseMode.HTML)
                 .replyMarkup(createInlineKeyboard(client, activityFormatId, eventDate, scheduleId))
                 .build();
     }

@@ -4,10 +4,7 @@ import com.bot.sup.api.telegram.command.BaseCommand;
 import com.bot.sup.api.telegram.handler.StateContext;
 import com.bot.sup.cache.*;
 import com.bot.sup.common.CallbackMap;
-import com.bot.sup.common.enums.ActivityFormatStateEnum;
-import com.bot.sup.common.enums.ActivityTypeStateEnum;
-import com.bot.sup.common.enums.ClientRecordStateEnum;
-import com.bot.sup.common.enums.InstructorStateEnum;
+import com.bot.sup.common.enums.*;
 import com.bot.sup.common.properties.TelegramProperties;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +40,7 @@ public class Bot extends TelegramLongPollingBot {
     private final ActivityFormatDataCache activityFormatDataCache;
     private final ActivityTypeDataCache activityTypeDataCache;
     private final ClientRecordDataCache clientRecordDataCache;
+    private final AboutUsDataCache aboutUsDataCache;
     private final StateContext stateContext;
     private final List<BaseCommand> commands;
     final TelegramProperties config;
@@ -56,6 +54,7 @@ public class Bot extends TelegramLongPollingBot {
         ActivityFormatStateEnum activityFormatStateEnum;
         ActivityTypeStateEnum activityTypeStateEnum;
         ClientRecordStateEnum clientRecordStateEnum;
+        AboutUsStateEnum aboutUsStateEnum;
 
         setUpdate(update);
 
@@ -68,11 +67,9 @@ public class Bot extends TelegramLongPollingBot {
 
             if (Objects.equals(callbackQuery.getClass(), SendMessage.class)) {
                 execute(getDeleteMessage(update));
-
                 execute((SendMessage) callbackQuery);
             } else if (SendPhoto.class.equals(callbackQuery.getClass())) {
                 execute(getDeleteMessage(update));
-
                 execute((SendPhoto) callbackQuery);
             } else if (EditMessageText.class.equals(callbackQuery.getClass())) {
                 execute((EditMessageText) callbackQuery);
@@ -122,12 +119,12 @@ public class Bot extends TelegramLongPollingBot {
 
                 replyMessage = stateContext.processInputMessage(clientRecordStateEnum, message);
                 execute(replyMessage);
-            } /*else {
-                String s = Arrays.toString(InstructorStateEnum.values());
-                Registration registration = registrationMap.getRegistration(s);
-                BotApiMethod<?> registrationMessage = registration.getMessage(update.getMessage());
-                execute(registrationMessage);
-            }*/
+            } else if (middlewareDataCache.getCurrentData(chatId) instanceof AboutUsStateEnum) {
+                aboutUsStateEnum = aboutUsDataCache.getAboutUsCurrentState(chatId);
+
+                replyMessage = stateContext.processInputMessage(aboutUsStateEnum, message);
+                execute(replyMessage);
+            }
         }
     }
 

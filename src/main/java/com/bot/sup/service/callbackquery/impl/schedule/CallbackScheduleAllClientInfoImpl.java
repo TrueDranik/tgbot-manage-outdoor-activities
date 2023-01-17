@@ -9,6 +9,7 @@ import com.bot.sup.repository.ClientRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -38,15 +39,15 @@ public class CallbackScheduleAllClientInfoImpl implements Callback {
 
         List<Client> clientByScheduleId = clientRepository.findClientByScheduleId(Long.valueOf(scheduleId));
         Long sumBookingClients = bookingRepository.findSumBookingClientByScheduleId(Long.valueOf(scheduleId));
-        int numberClients = clientByScheduleId.size();
+//        int numberClients = clientByScheduleId.size();
 
-        Long sum = sumBookingClients == null ? numberClients : sumBookingClients + numberClients;
+//        Long sum = sumBookingClients == null ? numberClients : sumBookingClients + numberClients;
 
         if (callbackQuery.getMessage().hasPhoto()) {
             return SendMessage.builder()
                     .chatId(callbackQuery.getMessage().getChatId())
-                    .text(String.format(scheduleMessageProperties.getClientsRecorded(), sum))
-                    .parseMode("Markdown")
+                    .text(String.format(scheduleMessageProperties.getClientsRecorded(), sumBookingClients))
+                    .parseMode(ParseMode.MARKDOWN)
                     .replyMarkup(createInlineKeyboard(clientByScheduleId, activityFormatId, eventDate, scheduleId))
                     .build();
         }
@@ -54,8 +55,8 @@ public class CallbackScheduleAllClientInfoImpl implements Callback {
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(callbackQuery.getMessage().getChatId())
-                .text(String.format(scheduleMessageProperties.getClientsRecorded(), sum))
-                .parseMode("Markdown")
+                .text(String.format(scheduleMessageProperties.getClientsRecorded(), sumBookingClients))
+                .parseMode(ParseMode.MARKDOWN)
                 .replyMarkup(createInlineKeyboard(clientByScheduleId, activityFormatId, eventDate, scheduleId))
                 .build();
     }

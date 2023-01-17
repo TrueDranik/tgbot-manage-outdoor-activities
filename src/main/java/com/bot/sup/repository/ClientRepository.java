@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
-    @Query("SELECT c FROM Client c JOIN c.schedule s WHERE s.id = ?1")
+    @Query("SELECT c FROM Client c JOIN Booking b on c.id = b.client.id where b.schedule.id = ?1")
     List<Client> findClientByScheduleId(Long id);
 
     @Modifying

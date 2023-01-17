@@ -10,6 +10,7 @@ import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -42,7 +43,7 @@ public class CallbackScheduleDescriptionImpl implements Callback {
             return SendMessage.builder()
                     .chatId(callbackQuery.getMessage().getChatId())
                     .text(description(scheduleId))
-                    .parseMode("Markdown")
+                    .parseMode(ParseMode.MARKDOWN)
                     .replyMarkup(createInlineKeyboard(activityFormatId, eventDate, scheduleId))
                     .build();
         }
@@ -50,7 +51,7 @@ public class CallbackScheduleDescriptionImpl implements Callback {
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(callbackQuery.getMessage().getChatId())
                 .text(description(scheduleId))
-                .parseMode("Markdown")
+                .parseMode(ParseMode.MARKDOWN)
                 .replyMarkup(createInlineKeyboard(activityFormatId, eventDate, scheduleId))
                 .build();
     }

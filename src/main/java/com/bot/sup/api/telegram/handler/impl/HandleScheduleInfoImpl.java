@@ -1,6 +1,7 @@
 package com.bot.sup.api.telegram.handler.impl;
 
 import com.bot.sup.common.enums.CallbackEnum;
+import com.bot.sup.common.properties.TelegramProperties;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.*;
@@ -8,6 +9,7 @@ import com.bot.sup.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -30,6 +32,7 @@ public class HandleScheduleInfoImpl {
     private final ScheduleRepository scheduleRepository;
     private final MainMessageProperties mainMessageProperties;
     private final ScheduleMessageProperties scheduleMessageProperties;
+    private final TelegramProperties telegramProperties;
 
     public BotApiMethod<?> getMessage(Update update) {
         CallbackQuery callbackQuery = update.getCallbackQuery();
@@ -47,7 +50,7 @@ public class HandleScheduleInfoImpl {
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(callbackQuery.getMessage().getChatId())
                 .text(scheduleInfo(eventDate, schedule, optionalActivity, optionalRoute))
-                .parseMode("Markdown")
+                .parseMode(ParseMode.MARKDOWN)
                 .replyMarkup(createInlineKeyboard(activityFormatId, eventDate, scheduleId))
                 .build();
     }
@@ -83,7 +86,7 @@ public class HandleScheduleInfoImpl {
 
         secondRow.add(InlineKeyboardButton.builder()
                 .text(scheduleMessageProperties.getChangeSchedule())
-                .webApp(new WebAppInfo("https://tgsupbot-admin.reliab.tech/"))
+                .webApp(new WebAppInfo(telegramProperties.getUpdateSchedule()))
                 .build());
         secondRow.add(InlineKeyboardButton.builder()
                 .text(scheduleMessageProperties.getCancelSchedule())
@@ -92,7 +95,7 @@ public class HandleScheduleInfoImpl {
 
         thirdRow.add(InlineKeyboardButton.builder()
                 .text(mainMessageProperties.getBack())
-                .callbackData(CallbackEnum.DATE_TO_ROUTE + "/" + activityFormatId + "/" + eventDate + "/" + scheduleId)
+                .callbackData(CallbackEnum.DATE_TO_ROUTE + "/" + activityFormatId + "/" + eventDate)
                 .build());
 
         return InlineKeyboardMarkup.builder()

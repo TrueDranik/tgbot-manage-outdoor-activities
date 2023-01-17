@@ -1,12 +1,10 @@
 package com.bot.sup.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Set;
 
 @Entity
 @Table(name = "client")
@@ -35,12 +33,12 @@ public class Client {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "schedule_client",
-            joinColumns = @JoinColumn(name = "client_id"),
-            inverseJoinColumns = @JoinColumn(name = "schedule_id")
-    )
-    @JsonBackReference
-    private Set<Schedule> schedule;
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(
+//            name = "schedule_client",
+//            joinColumns = @JoinColumn(name = "client_id"),
+//            inverseJoinColumns = @JoinColumn(name = "schedule_id")
+//    )
+//    @JsonBackReference
+//    private Set<Schedule> schedule;
 }
