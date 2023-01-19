@@ -1,5 +1,6 @@
 package com.bot.sup.service.schedule.impl;
 
+import com.bot.sup.model.ScheduleParams;
 import com.bot.sup.model.ScheduleRequestParams;
 import com.bot.sup.model.dto.ScheduleCreateDto;
 import com.bot.sup.model.dto.ScheduleDto;
@@ -9,6 +10,8 @@ import com.bot.sup.repository.ActivityRepository;
 import com.bot.sup.repository.RouteRepository;
 import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.repository.SelectedScheduleRepository;
+import com.bot.sup.repository.specification.ScheduleFilterByDateSpecification;
+import com.bot.sup.repository.specification.ScheduleFilterByDateAndTimeForDaySpecification;
 import com.bot.sup.repository.specification.ScheduleSpecification;
 import com.bot.sup.service.schedule.ScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -91,6 +96,20 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleToDto(scheduleById);
     }
 
+    @Override
+    public List<ScheduleDto> getAllFilteredSchedule(ScheduleParams scheduleParams) {
+        return scheduleRepository.findAll(new ScheduleFilterByDateSpecification(scheduleParams));
+    }
+
+    @Override
+    public List<ScheduleDto> getAllFilteredSchedule(Boolean isActive, LocalDate eventDate, LocalTime eventTime) {
+        ScheduleParams scheduleParams = new ScheduleParams(isActive, eventDate, eventTime);
+        List<ScheduleDto> schedules = getFilteredByTimeSchedulesForCurrentDate(scheduleParams);
+        schedules.addAll(getFilteredSchedulesFromNextDay(scheduleParams));
+
+        return schedules;
+    }
+
     @Transactional
     @Override
     public void deleteSchedule(Long id) {
@@ -100,10 +119,21 @@ public class ScheduleServiceImpl implements ScheduleService {
         scheduleRepository.save(scheduleById);
     }
 
+    private List<ScheduleDto> getFilteredByTimeSchedulesForCurrentDate(ScheduleParams scheduleParams) {
+        return scheduleRepository.findAll(new ScheduleFilterByDateAndTimeForDaySpecification(scheduleParams));
+    }
+
+    private List<ScheduleDto> getFilteredSchedulesFromNextDay(ScheduleParams scheduleParams) {
+        scheduleParams.setEventDate(scheduleParams.getEventDate().plusDays(1));
+        return scheduleRepository.findAll(new ScheduleFilterByDateSpecification(scheduleParams));
+
+    }
+
     private Schedule findScheduleById(Long id) {
         return scheduleRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Schedule with id[" + id + "] not found"));
     }
+
 
     private static ScheduleDto scheduleToDto(Schedule scheduleById) {
         ScheduleDto scheduleDto = new ScheduleDto();
