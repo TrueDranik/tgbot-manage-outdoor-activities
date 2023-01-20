@@ -1,0 +1,67 @@
+telegram:
+  url:
+    constructor: https://tgsupbot-admin.reliab.tech/#/creationSchedule
+    activity: https://tgsupbot-admin.reliab.tech/#/activity
+    updateActivity: https://tgsupbot-admin.reliab.tech/#/updateActivity
+    route: https://tgsupbot-admin.reliab.tech/#/route
+    updateRoute: https://tgsupbot-admin.reliab.tech/#/updateRoute
+    updateSchedule: https://tgsupbot-admin.reliab.tech/#/updateDateTimeSchedule
+  botUsername: '@SupAdminTest_bot'
+  botToken: 5655610927:AAG58hHGVMC9OdMkS2lfRYa5DbzxgvXBOa4
+
+spring:
+  liquibase:
+    enabled: false
+    change-log: classpath:db/changelog/db.changelog-master.xml
+  main:
+    allow-circular-references: 'true'
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      #      hibernate:
+      #        enable_lazy_load_no_trans: 'true'
+      javax:
+        persistence:
+          query:
+            timeout: '0'
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: '5'
+    username: postgres_sub
+    password: postgres_sub
+    url: jdbc:postgresql://10.120.10.6:5434/postgres_sub_test
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: 'false'
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    csrf:
+      enabled: false
+#    config-url: /v3/api-docs/swagger-config
+
+server:
+  error:
+    whitelabel:
+      enabled: false
+  forward-headers-strategy: framework
+  servlet:
+    context-path: /admin/api
+
+#server:
+#  ssl:
+#    key-store-type: PKCS12
+#    key-store-password: changeit
+#    enabled: true
+#    key-store: classpath:java_ssl.p12

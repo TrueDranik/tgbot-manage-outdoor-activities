@@ -16,9 +16,7 @@ build:
 
 publish:
   stage: publish
-  only:
-    refs:
-      - master
+
   image:
     name: docker:19.03
   script:

@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +38,15 @@ public class ScheduleController {
     @Operation(summary = "Получить список всех расписаний")
     public ResponseEntity<List<ScheduleDto>> getAllSchedule(@ParameterObject ScheduleRequestParams params) {
         return new ResponseEntity<>(scheduleService.getAllSchedule(params), HttpStatus.OK);
+    }
+
+    @GetMapping("/scheduleParams")
+    @Operation(summary = "Get all filtered schedules")
+    public List<ScheduleDto> getAllFilteredSchedule(@RequestParam(value = "active") Boolean isActive,
+                                                    @RequestParam(value = "date") String eventDate,
+                                                    @RequestParam(value = "time") String eventTime) {
+
+        return scheduleService.getAllFilteredSchedule(isActive, LocalDate.parse(eventDate), LocalTime.parse(eventTime));
     }
 
     @GetMapping("/{id}")
