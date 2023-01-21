@@ -38,6 +38,8 @@ public class BookingController {
         return bookingService.getBookingByScheduleIdByPaymentStatus(Long.valueOf(id), paymentStatus);
     }
 
+
+
     @GetMapping("/type")
     public Map<PaymentTypeEnum, String> getPaymentType() {
         return PaymentTypeEnum.getTitles();
