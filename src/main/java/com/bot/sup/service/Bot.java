@@ -4,10 +4,16 @@ import com.bot.sup.api.telegram.command.BaseCommand;
 import com.bot.sup.api.telegram.handler.StateContext;
 import com.bot.sup.cache.*;
 import com.bot.sup.common.CallbackMap;
-import com.bot.sup.common.enums.*;
+import com.bot.sup.common.enums.AboutUsStateEnum;
+import com.bot.sup.common.enums.ActivityFormatStateEnum;
+import com.bot.sup.common.enums.ActivityTypeStateEnum;
+import com.bot.sup.common.enums.ClientRecordStateEnum;
 import com.bot.sup.common.properties.TelegramProperties;
+import com.bot.sup.model.UserState;
 import com.bot.sup.service.callbackquery.Callback;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.EnableCaching;
@@ -36,27 +42,29 @@ import java.util.stream.Collectors;
 public class Bot extends TelegramLongPollingBot {
     private final CallbackMap callbackMap;
     private final MiddlewareDataCache middlewareDataCache;
-    private final InstructorDataCache instructorDataCache;
     private final ActivityFormatDataCache activityFormatDataCache;
     private final ActivityTypeDataCache activityTypeDataCache;
     private final ClientRecordDataCache clientRecordDataCache;
     private final AboutUsDataCache aboutUsDataCache;
     private final StateContext stateContext;
+    private final UserStateCache userStateCache;
     private final List<BaseCommand> commands;
     final TelegramProperties config;
+
+    @Getter
+    @Setter
     private Update userUpdate;
 
     @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
-        InstructorStateEnum instructorStateEnum;
         ActivityFormatStateEnum activityFormatStateEnum;
         ActivityTypeStateEnum activityTypeStateEnum;
         ClientRecordStateEnum clientRecordStateEnum;
         AboutUsStateEnum aboutUsStateEnum;
+        setUserUpdate(update);
 
-        setUpdate(update);
 
         if (update.hasCallbackQuery()) {
             Callback callback = callbackMap.getCallback(update.getCallbackQuery().getData().split("/")[0]);
@@ -91,13 +99,6 @@ public class Bot extends TelegramLongPollingBot {
                         .orElseThrow(() -> new IllegalArgumentException("No such command"));
 
                 execute(baseCommand.getAction(update));
-            } else if (middlewareDataCache.getCurrentData(chatId) instanceof InstructorStateEnum) {
-                instructorStateEnum = instructorDataCache.getInstructorCurrentState(chatId);
-
-                log.info("state = " + instructorStateEnum);
-
-                replyMessage = stateContext.processInputMessage(instructorStateEnum, message);
-                execute(replyMessage);
             } else if (middlewareDataCache.getCurrentData(chatId) instanceof ActivityFormatStateEnum) {
                 activityFormatStateEnum = activityFormatDataCache.getActivityFormatCurrentState(chatId);
 
@@ -124,6 +125,14 @@ public class Bot extends TelegramLongPollingBot {
 
                 replyMessage = stateContext.processInputMessage(aboutUsStateEnum, message);
                 execute(replyMessage);
+            } else {
+                UserState userState = userStateCache.getByTelegramId(chatId);
+                Enum<?> state = userState.getState();
+
+                log.info("state = {}", state);
+
+                replyMessage = stateContext.processInputMessage(state, message);
+                execute(replyMessage);
             }
         }
     }
@@ -148,14 +157,6 @@ public class Bot extends TelegramLongPollingBot {
                 .commands(botCommands)
                 .build();
         execute(myCommands);
-    }
-
-    public void setUpdate(Update userUpdate) {
-        this.userUpdate = userUpdate;
-    }
-
-    public Update getUpdate() {
-        return userUpdate;
     }
 
     @Override
