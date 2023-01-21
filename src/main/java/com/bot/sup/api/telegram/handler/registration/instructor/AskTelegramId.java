@@ -1,6 +1,5 @@
 package com.bot.sup.api.telegram.handler.registration.instructor;
 
-import com.bot.sup.cache.InstructorDataCache;
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.enums.InstructorStateEnum;
 import com.bot.sup.common.properties.message.InstructorMessageProperties;
@@ -10,6 +9,7 @@ import com.bot.sup.service.MessageService;
 import com.bot.sup.service.instructor.InstructorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -25,12 +25,10 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class AskTelegramId implements InstructorMessageProcessor {
-    private final InstructorDataCache instructorDataCache;
     private final MessageService messageService;
     private final InstructorMessageProperties instructorMessageProperties;
     private final InstructorRepository instructorRepository;
     private final InstructorService instructorService;
-
 
     @Override
     public BotApiMethod<?> processInputMessage(Message message, Object instructor) {
@@ -44,32 +42,23 @@ public class AskTelegramId implements InstructorMessageProcessor {
         log.info("instructor TelegramId = " + message.getForwardFrom().getId());
         log.info("User name = " + message.getForwardFrom().getUserName());
 
-//        instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.SAVE_INSTRUCTOR);
-//        return messageService.buildReplyMessage(chatId, instructorMessageProperties.getRegistrationDone());
-
-        if (forUpdate(message.getChatId())) {
-            instructorDataCache.removeInstructorForUpdate(chatId);
-        } else {
-            instructorService.save(((Instructor) instructor));
-        }
+        instructorService.save((Instructor) instructor);
 
         return messageService.getReplyMessageWithKeyboard(chatId, instructorMessageProperties.getRegistrationDone() +
                 instructorInfo(((Instructor) instructor)), keyboardMenu());
-
     }
 
     @Override
     public BotApiMethod<?> processInvalidInputMessage(Long chatId) {
-        instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.ASK_TELEGRAM_ID);
         return messageService.buildReplyMessage(chatId, instructorMessageProperties.getTelegramIdAlreadyTaken());
     }
 
+    @Cacheable("states")
     @Override
     public boolean isMessageInvalid(Message message) {
         Optional<User> forwardFrom = Optional.ofNullable(message.getForwardFrom());
         return (forwardFrom.isPresent()
-                && instructorRepository.existsByTelegramId(forwardFrom.get().getId())
-                && !forUpdate(message.getChatId()));// || forwardFrom.isEmpty();
+                && instructorRepository.existsByTelegramId(forwardFrom.get().getId()));
     }
 
     @Override
@@ -95,11 +84,6 @@ public class AskTelegramId implements InstructorMessageProcessor {
     private String instructorInfo(Instructor instructor) {
         return "ФИ: " + instructor.getFirstName() + " " + instructor.getLastName()
                 + "\nНомер телефона: " + instructor.getPhoneNumber()
-                + "\nИмя пользователя: " + instructor.getUsername();
-    }
-
-    public boolean forUpdate(Long chatId) {
-        Long instructorForUpdateId = instructorDataCache.getInstructorForUpdate(chatId);
-        return instructorForUpdateId != null;
+                + "\nИмя пользователя: @" + instructor.getUsername();
     }
 }

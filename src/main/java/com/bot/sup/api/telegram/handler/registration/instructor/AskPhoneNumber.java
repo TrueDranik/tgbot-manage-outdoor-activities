@@ -1,6 +1,6 @@
 package com.bot.sup.api.telegram.handler.registration.instructor;
 
-import com.bot.sup.cache.InstructorDataCache;
+import com.bot.sup.cache.UserStateCache;
 import com.bot.sup.common.enums.InstructorStateEnum;
 import com.bot.sup.common.properties.message.InstructorMessageProperties;
 import com.bot.sup.model.entity.Instructor;
@@ -16,26 +16,29 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 @Component
 @RequiredArgsConstructor
 public class AskPhoneNumber implements InstructorMessageProcessor {
-    private final InstructorDataCache instructorDataCache;
     private final MessageService messageService;
     private final InstructorMessageProperties instructorMessageProperties;
+    private final UserStateCache userStateCache;
 
     @Override
     public BotApiMethod<?> processInputMessage(Message message, Object instructor) {
         Long chatId = message.getChatId();
         String userAnswer = message.getText();
 
+
         ((Instructor) instructor).setPhoneNumber(userAnswer);
 
         log.info("instructor phone number = " + userAnswer);
 
-        instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.ASK_TELEGRAM_ID);
+        userStateCache.getByTelegramId(chatId).setState(InstructorStateEnum.ASK_TELEGRAM_ID);
+
         return  messageService.buildReplyMessage(chatId, instructorMessageProperties.getGetTelegramId());
     }
 
     @Override
     public BotApiMethod<?> processInvalidInputMessage(Long chatId) {
-        instructorDataCache.setInstructorCurrentState(chatId, InstructorStateEnum.ASK_PHONE_NUMBER);
+        userStateCache.getByTelegramId(chatId).setState(InstructorStateEnum.ASK_PHONE_NUMBER);
+
         return messageService.buildReplyMessage(chatId, instructorMessageProperties.getPhoneNumberNotValid());
     }
 
