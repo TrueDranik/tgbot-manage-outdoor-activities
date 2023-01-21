@@ -6,8 +6,8 @@ telegram:
     route: https://tgsupbot-admin.reliab.tech/#/route
     updateRoute: https://tgsupbot-admin.reliab.tech/#/updateRoute
     updateSchedule: https://tgsupbot-admin.reliab.tech/#/updateDateTimeSchedule
-  botUsername: '@SupAdminTest_bot'
-  botToken: 5655610927:AAG58hHGVMC9OdMkS2lfRYa5DbzxgvXBOa4
+  botUsername: '@DevSup31_bot'
+  botToken: 5905081094:AAGJkLITLpL8e-4aMvTnxd_B2Nmtq8ttN8Q
 
 spring:
   liquibase:
