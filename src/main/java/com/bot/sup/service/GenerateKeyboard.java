@@ -31,7 +31,7 @@ public class GenerateKeyboard {
     private final ScheduleRepository scheduleRepository;
 
     public Integer getMessageId(Long chatId) {
-        Update update = bot.getUpdate();
+        Update update = bot.getUserUpdate();
         if (update.getCallbackQuery().getMessage().getChatId().equals(chatId)) {
             return update.getCallbackQuery().getMessage().getMessageId();
         }
