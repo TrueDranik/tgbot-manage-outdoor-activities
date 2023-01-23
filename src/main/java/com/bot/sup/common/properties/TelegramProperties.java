@@ -21,6 +21,4 @@ public class TelegramProperties {
     private String webAppUpdateRoute;
     @Value("${telegram.url.updateSchedule}")
     private String updateSchedule;
-    @Value("${telegram.url.getClientRecords}")
-    private String webAppClientRecords;
 }
