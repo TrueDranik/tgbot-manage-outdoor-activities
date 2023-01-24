@@ -21,6 +21,7 @@ public class AskInstructorFullName implements InstructorMessageProcessor {
     private final MessageService messageService;
     private final InstructorMessageProperties instructorMessageProperties;
     private final UserStateCache userStateCache;
+
     private String errorMessage = "";
 
     @Override
@@ -53,7 +54,7 @@ public class AskInstructorFullName implements InstructorMessageProcessor {
         String messageText = message.getText();
         String[] split = messageText.split(" ");
         boolean invalidFirstName = split[0].length() < 2 || split[0].length() > 15;
-        boolean invalidLastName = split[1].length() > 15 || split[1].length() > 15;
+        boolean invalidLastName = split[1].length() < 2 || split[1].length() > 15;
 
         boolean validText = !Validation.isValidText(messageText);
         boolean validFio = !StringUtils.hasText(messageText) || invalidFirstName || invalidLastName;

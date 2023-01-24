@@ -1,25 +1,22 @@
 package com.bot.sup.api.telegram.handler.registration.description;
 
+import com.bot.sup.api.telegram.handler.registration.KeyboardUtil;
 import com.bot.sup.common.enums.AboutUsStateEnum;
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.model.entity.AboutUs;
-import com.bot.sup.repository.AboutUsRepository;
+import com.bot.sup.service.AboutUsService;
 import com.bot.sup.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class AskFullDescription implements AboutUsMessageProcessor {
     private final MessageService messageService;
-    private final AboutUsRepository aboutUsRepository;
+    private final AboutUsService aboutUsService;
 
     @Override
     public BotApiMethod<?> processInputMessage(Message message, Object entity) {
@@ -27,9 +24,11 @@ public class AskFullDescription implements AboutUsMessageProcessor {
 
         ((AboutUs) entity).setFullDescription(message.getText());
 
-        aboutUsRepository.save((AboutUs) entity);
+        aboutUsService.save((AboutUs) entity);
 
-        return messageService.getReplyMessageWithKeyboard(chatId, "✅ Успешно обновили информацию!", keyboardMenu());
+        InlineKeyboardMarkup keyboardMarkup = KeyboardUtil.keyboardMarkup(CallbackEnum.MENU.toString(), "Меню");
+
+        return messageService.getReplyMessageWithKeyboard(chatId, "✅ Успешно обновили информацию!", keyboardMarkup);
     }
 
     @Override
@@ -47,20 +46,5 @@ public class AskFullDescription implements AboutUsMessageProcessor {
     @Override
     public AboutUsStateEnum getCurrentState() {
         return AboutUsStateEnum.ASK_FULL_DESCRIPTION;
-    }
-
-    private InlineKeyboardMarkup keyboardMenu() {
-        List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
-
-        buttons.add(List.of(
-                InlineKeyboardButton.builder()
-                        .callbackData(CallbackEnum.MENU.toString())
-                        .text("Меню")
-                        .build()
-        ));
-
-        return InlineKeyboardMarkup.builder()
-                .keyboard(buttons)
-                .build();
     }
 }

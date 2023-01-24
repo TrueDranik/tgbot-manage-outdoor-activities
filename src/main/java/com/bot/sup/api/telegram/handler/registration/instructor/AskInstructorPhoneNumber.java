@@ -25,7 +25,6 @@ public class AskInstructorPhoneNumber implements InstructorMessageProcessor {
         Long chatId = message.getChatId();
         String userAnswer = message.getText();
 
-
         ((Instructor) instructor).setPhoneNumber(userAnswer);
 
         log.info("instructor phone number = " + userAnswer);

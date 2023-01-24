@@ -13,9 +13,9 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 @Component
 @RequiredArgsConstructor
 public class StartActivityTypeProcessing implements ActivityTypeMessageProcessor {
+    private final UserStateCache userStateCache;
     private final MessageService messageService;
     private final ActivityMessageProperties activityMessageProperties;
-    private final UserStateCache userStateCache;
 
     @Override
     public BotApiMethod<?> processInputMessage(Message message, Object entity) {
