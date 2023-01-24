@@ -77,7 +77,8 @@ public class HandleScheduleInfoImpl {
 
         firstRow.add(InlineKeyboardButton.builder()
                 .text(scheduleMessageProperties.getClientInformation())
-                .callbackData(CallbackEnum.SCHEDULE_ALL_CLIENT_INFO + "/" + activityFormatId + "/" + eventDate + "/" + scheduleId)
+                .webApp(new WebAppInfo(telegramProperties.getWebAppClientRecords()))
+                //.callbackData(CallbackEnum.SCHEDULE_ALL_CLIENT_INFO + "/" + activityFormatId + "/" + eventDate + "/" + scheduleId)
                 .build());
         firstRow.add(InlineKeyboardButton.builder()
                 .text(scheduleMessageProperties.getFullDescription())
