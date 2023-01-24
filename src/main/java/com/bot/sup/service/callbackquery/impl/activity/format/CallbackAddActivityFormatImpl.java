@@ -1,10 +1,11 @@
 package com.bot.sup.service.callbackquery.impl.activity.format;
 
 import com.bot.sup.api.telegram.handler.StateContext;
-import com.bot.sup.cache.ActivityFormatDataCache;
-import com.bot.sup.cache.MiddlewareDataCache;
+import com.bot.sup.cache.UserStateCache;
 import com.bot.sup.common.enums.ActivityFormatStateEnum;
 import com.bot.sup.common.enums.CallbackEnum;
+import com.bot.sup.model.UserState;
+import com.bot.sup.model.entity.ActivityFormat;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,25 +19,27 @@ import static com.bot.sup.common.enums.CallbackEnum.ADD_ACTIVITY_FORMAT;
 @RequiredArgsConstructor
 public class CallbackAddActivityFormatImpl implements Callback {
     private final StateContext stateContext;
-    private final ActivityFormatDataCache activityFormatDataCache;
-    private final MiddlewareDataCache middlewareDataCache;
-
-    public static final CallbackEnum ACTIVITIES = ADD_ACTIVITY_FORMAT;
+    private final UserStateCache userStateCache;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
-
-        middlewareDataCache.removeCurrentState(chatId);
         ActivityFormatStateEnum botStateEnum = ActivityFormatStateEnum.FILLING_ACTIVITY_FORMAT;
-        activityFormatDataCache.setActivityFormatCurrentState(chatId, botStateEnum);
-        middlewareDataCache.setValidCurrentState(chatId, botStateEnum);
+        ActivityFormat activityFormat = new ActivityFormat();
+
+        UserState userState = new UserState();
+        userState.setAdminTelegramId(chatId);
+        userState.setState(botStateEnum);
+        userState.setEntity(activityFormat);
+        userState.setForUpdate(false);
+
+        userStateCache.createOrUpdateState(userState);
 
         return stateContext.processInputMessage(botStateEnum, callbackQuery.getMessage());
     }
 
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return ADD_ACTIVITY_FORMAT;
     }
 }

@@ -1,8 +1,6 @@
 package com.bot.sup.service.callbackquery.impl.activity.format;
 
 import com.bot.sup.api.telegram.handler.StateContext;
-import com.bot.sup.cache.ActivityFormatDataCache;
-import com.bot.sup.cache.MiddlewareDataCache;
 import com.bot.sup.common.enums.ActivityFormatStateEnum;
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.service.callbackquery.Callback;
@@ -16,11 +14,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @RequiredArgsConstructor
 public class CallbackActivityFormatChangeDataImpl implements Callback {
     private final StateContext stateContext;
-    private final MiddlewareDataCache middlewareDataCache;
-    private final ActivityFormatDataCache activityFormatDataCache;
-
-
-    public static final CallbackEnum ACTIVITIES = CallbackEnum.ACTIVITY_FORMAT_CHANGE;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
@@ -29,14 +22,13 @@ public class CallbackActivityFormatChangeDataImpl implements Callback {
 
         ActivityFormatStateEnum activityFormatStateEnum = ActivityFormatStateEnum.FILLING_ACTIVITY_FORMAT;
 
-        activityFormatDataCache.saveActivityFormatForUpdate(chatId, Long.valueOf(activityFormatId));
-        middlewareDataCache.setValidCurrentState(chatId, activityFormatStateEnum);
+        // TODO: 23.01.2023 Сделать обновление сущности
 
         return stateContext.processInputMessage(activityFormatStateEnum, callbackQuery.getMessage());
     }
 
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return CallbackEnum.ACTIVITY_FORMAT_CHANGE;
     }
 }
