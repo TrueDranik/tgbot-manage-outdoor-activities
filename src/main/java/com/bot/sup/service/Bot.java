@@ -55,7 +55,7 @@ public class Bot extends TelegramLongPollingBot {
         if (update.hasCallbackQuery()) {
             Callback callback = callbackMap.getCallback(update.getCallbackQuery().getData().split("/")[0]);
 
-            log.info("callback = " + update.getCallbackQuery().getData());
+            log.info("callback = {}", update.getCallbackQuery().getData());
 
             Object callbackQuery = callback.getCallbackQuery(update.getCallbackQuery());
 
@@ -75,9 +75,8 @@ public class Bot extends TelegramLongPollingBot {
         } else if (update.hasMessage()) {
             Long chatId = message.getChatId();
 
-            log.info("chatId from message = " + chatId);
+            log.info("chatId from message = {}", chatId);
 
-            BotApiMethod<?> replyMessage;
             if (message.isCommand()) {
                 BaseCommand baseCommand = commands.stream()
                         .filter(it -> message.getText().equals("/" + it.getBotCommand().getCommand()))
@@ -91,7 +90,7 @@ public class Bot extends TelegramLongPollingBot {
 
                 log.info("state = {}", state);
 
-                replyMessage = stateContext.processInputMessage(state, message);
+                BotApiMethod<?> replyMessage = stateContext.processInputMessage(state, message);
                 execute(replyMessage);
             }
         }
