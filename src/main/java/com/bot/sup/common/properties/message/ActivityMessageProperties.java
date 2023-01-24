@@ -22,7 +22,7 @@ public class ActivityMessageProperties {
     String deleteActivity;
     String registeredActivity;
     String emptyActivity;
-    String inputActivityFormatName;
+    String inputActivityFormatOrTypeName;
     String inputActivityNameIsEmpty;
     String activityNameAlreadyTaken;
 }
