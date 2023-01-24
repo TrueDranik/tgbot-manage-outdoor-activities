@@ -1,7 +1,7 @@
-package com.bot.sup.api.telegram.handler.registration;
+package com.bot.sup.api.telegram.handler.registration.instructor;
 
-import com.bot.sup.api.telegram.handler.registration.instructor.InstructorMessageProcessor;
-import com.bot.sup.api.telegram.handler.registration.instructor.MessageProcessor;
+import com.bot.sup.api.telegram.handler.registration.HandleRegistration;
+import com.bot.sup.api.telegram.handler.registration.MessageProcessor;
 import com.bot.sup.cache.UserStateCache;
 import com.bot.sup.common.enums.InstructorStateEnum;
 import com.bot.sup.model.UserState;
@@ -53,12 +53,12 @@ public class FillingInstructor implements HandleRegistration {
     }
 
     @Transactional
-    public BotApiMethod<?> processInputMessage(Message inputMessage, Long chatId, Instructor instructor, boolean forUpdate) {
+    public BotApiMethod<?> processInputMessage(Message message, Long chatId, Instructor instructor, boolean forUpdate) {
         InstructorStateEnum instructorCurrentState = (InstructorStateEnum) userStateCache.getByTelegramId(chatId).getState();
         MessageProcessor messageProcessor = instructorMessageProcessorMap.get(instructorCurrentState);
 
-        if (messageProcessor.isMessageInvalid(inputMessage)) {
-            return messageProcessor.processInvalidInputMessage(inputMessage.getChatId());
+        if (messageProcessor.isMessageInvalid(message)) {
+            return messageProcessor.processInvalidInputMessage(chatId);
         }
 
         if (forUpdate) {
@@ -67,7 +67,7 @@ public class FillingInstructor implements HandleRegistration {
             userStateCache.getByTelegramId(chatId).setEntity(instructor);
         }
 
-        return messageProcessor.processInputMessage(inputMessage, instructor);
+        return messageProcessor.processInputMessage(message, instructor);
     }
 
     @Override

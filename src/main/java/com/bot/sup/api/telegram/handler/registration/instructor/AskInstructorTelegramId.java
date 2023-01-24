@@ -24,7 +24,7 @@ import java.util.Optional;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AskTelegramId implements InstructorMessageProcessor {
+public class AskInstructorTelegramId implements InstructorMessageProcessor {
     private final MessageService messageService;
     private final InstructorMessageProperties instructorMessageProperties;
     private final InstructorRepository instructorRepository;

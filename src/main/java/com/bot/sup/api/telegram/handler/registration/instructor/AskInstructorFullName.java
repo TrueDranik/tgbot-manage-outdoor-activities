@@ -17,7 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AskFullName implements InstructorMessageProcessor {
+public class AskInstructorFullName implements InstructorMessageProcessor {
     private final MessageService messageService;
     private final InstructorMessageProperties instructorMessageProperties;
     private final UserStateCache userStateCache;
