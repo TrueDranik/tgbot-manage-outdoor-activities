@@ -2,12 +2,8 @@ package com.bot.sup.service;
 
 import com.bot.sup.api.telegram.command.BaseCommand;
 import com.bot.sup.api.telegram.handler.StateContext;
-import com.bot.sup.cache.*;
+import com.bot.sup.cache.UserStateCache;
 import com.bot.sup.common.CallbackMap;
-import com.bot.sup.common.enums.AboutUsStateEnum;
-import com.bot.sup.common.enums.ActivityFormatStateEnum;
-import com.bot.sup.common.enums.ActivityTypeStateEnum;
-import com.bot.sup.common.enums.ClientRecordStateEnum;
 import com.bot.sup.common.properties.TelegramProperties;
 import com.bot.sup.model.UserState;
 import com.bot.sup.service.callbackquery.Callback;
@@ -35,17 +31,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Component
-@RequiredArgsConstructor
 @Slf4j
+@Component
 @EnableCaching
+@RequiredArgsConstructor
 public class Bot extends TelegramLongPollingBot {
     private final CallbackMap callbackMap;
-    private final MiddlewareDataCache middlewareDataCache;
-    private final ActivityFormatDataCache activityFormatDataCache;
-    private final ActivityTypeDataCache activityTypeDataCache;
-    private final ClientRecordDataCache clientRecordDataCache;
-    private final AboutUsDataCache aboutUsDataCache;
     private final StateContext stateContext;
     private final UserStateCache userStateCache;
     private final List<BaseCommand> commands;
@@ -59,12 +50,7 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
-        ActivityFormatStateEnum activityFormatStateEnum;
-        ActivityTypeStateEnum activityTypeStateEnum;
-        ClientRecordStateEnum clientRecordStateEnum;
-        AboutUsStateEnum aboutUsStateEnum;
         setUserUpdate(update);
-
 
         if (update.hasCallbackQuery()) {
             Callback callback = callbackMap.getCallback(update.getCallbackQuery().getData().split("/")[0]);
@@ -99,32 +85,6 @@ public class Bot extends TelegramLongPollingBot {
                         .orElseThrow(() -> new IllegalArgumentException("No such command"));
 
                 execute(baseCommand.getAction(update));
-            } else if (middlewareDataCache.getCurrentData(chatId) instanceof ActivityFormatStateEnum) {
-                activityFormatStateEnum = activityFormatDataCache.getActivityFormatCurrentState(chatId);
-
-                log.info("state = " + activityFormatStateEnum);
-
-                replyMessage = stateContext.processInputMessage(activityFormatStateEnum, message);
-                execute(replyMessage);
-            } else if (middlewareDataCache.getCurrentData(chatId) instanceof ActivityTypeStateEnum) {
-                activityTypeStateEnum = activityTypeDataCache.getActivityTypeCurrentState(chatId);
-
-                log.info("state = " + activityTypeStateEnum);
-
-                replyMessage = stateContext.processInputMessage(activityTypeStateEnum, message);
-                execute(replyMessage);
-            } else if (middlewareDataCache.getCurrentData(chatId) instanceof ClientRecordStateEnum) {
-                clientRecordStateEnum = clientRecordDataCache.getClientRecordCurrentState(chatId);
-
-                log.info("state = " + clientRecordStateEnum);
-
-                replyMessage = stateContext.processInputMessage(clientRecordStateEnum, message);
-                execute(replyMessage);
-            } else if (middlewareDataCache.getCurrentData(chatId) instanceof AboutUsStateEnum) {
-                aboutUsStateEnum = aboutUsDataCache.getAboutUsCurrentState(chatId);
-
-                replyMessage = stateContext.processInputMessage(aboutUsStateEnum, message);
-                execute(replyMessage);
             } else {
                 UserState userState = userStateCache.getByTelegramId(chatId);
                 Enum<?> state = userState.getState();
