@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import util.UserStateUtil;
 
 import static com.bot.sup.common.enums.CallbackEnum.ADD_ACTIVITY_FORMAT;
 
@@ -27,12 +28,7 @@ public class CallbackAddActivityFormatImpl implements Callback {
         ActivityFormatStateEnum botStateEnum = ActivityFormatStateEnum.FILLING_ACTIVITY_FORMAT;
         ActivityFormat activityFormat = new ActivityFormat();
 
-        UserState userState = new UserState();
-        userState.setAdminTelegramId(chatId);
-        userState.setState(botStateEnum);
-        userState.setEntity(activityFormat);
-        userState.setForUpdate(false);
-
+        UserState userState = UserStateUtil.getUserState(chatId, botStateEnum, activityFormat, false);
         userStateCache.createOrUpdateState(userState);
 
         return stateContext.processInputMessage(botStateEnum, callbackQuery.getMessage());
