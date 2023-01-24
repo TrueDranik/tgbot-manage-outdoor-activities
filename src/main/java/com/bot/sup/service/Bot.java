@@ -29,7 +29,6 @@ import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScope
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -107,8 +106,7 @@ public class Bot extends TelegramLongPollingBot {
     @SneakyThrows
     public void initCommands() {
         List<BotCommand> botCommands = commands.stream()
-                .map(BaseCommand::getBotCommand)
-                .collect(Collectors.toList());
+                .map(BaseCommand::getBotCommand).toList();
 
         SetMyCommands myCommands = SetMyCommands
                 .builder()
