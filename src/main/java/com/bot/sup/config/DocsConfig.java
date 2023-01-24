@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 @Configuration
 public class DocsConfig {
-    @Value("${app.docs.title:Applicant Store API Docs}")
+    @Value("${app.docs.title:Sup BOT Admin API Docs}")
     private String apiTitle;
 
     @Value("${app.docs.version:v0.5}")

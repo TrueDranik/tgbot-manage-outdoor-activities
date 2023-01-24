@@ -6,11 +6,8 @@ telegram:
     route: https://tgsupbot-admin.reliab.tech/#/route
     updateRoute: https://tgsupbot-admin.reliab.tech/#/updateRoute
     updateSchedule: https://tgsupbot-admin.reliab.tech/#/updateDateTimeSchedule
-    getClientRecords: https://tgsupbot-admin-dev.reliab.tech/#/clientsRecords
-  botUsername: '@SupAdminTest_bot'
-  botToken: 5655610927:AAG58hHGVMC9OdMkS2lfRYa5DbzxgvXBOa4
-#  botUsername: 'https://t.me/supbotabmtestbot'
-#  botToken: 5854653645:AAFGWfMtsB9wbz_SXyLTj76nwnJZ8REIXq4
+  botUsername: '@DevSup31_bot'
+  botToken: 5905081094:AAGJkLITLpL8e-4aMvTnxd_B2Nmtq8ttN8Q
 
 spring:
   liquibase:
@@ -21,7 +18,7 @@ spring:
   jpa:
     generate-ddl: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
     properties:
       #      hibernate:
       #        enable_lazy_load_no_trans: 'true'
@@ -30,6 +27,7 @@ spring:
           query:
             timeout: '0'
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
   datasource:
     driver-class-name: org.postgresql.Driver
     hikari:

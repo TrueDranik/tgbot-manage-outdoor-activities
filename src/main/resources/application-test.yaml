@@ -6,8 +6,8 @@ telegram:
     route: https://tgsupbot-admin.reliab.tech/#/route
     updateRoute: https://tgsupbot-admin.reliab.tech/#/updateRoute
     updateSchedule: https://tgsupbot-admin.reliab.tech/#/updateDateTimeSchedule
-  botUsername: 'https://t.me/sup31AdminTest_bot'
-  botToken: 5896715348:AAH8qH5j8rJuovHVo3auHcru3rUFuiNTY7A
+  botUsername: '@SupAdminTest_bot'
+  botToken: 5655610927:AAG58hHGVMC9OdMkS2lfRYa5DbzxgvXBOa4
 
 spring:
   liquibase:
@@ -28,11 +28,11 @@ spring:
             timeout: '0'
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   datasource:
-    password: postgres_sub
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: '5'
     username: postgres_sub
+    password: postgres_sub
     url: jdbc:postgresql://10.120.10.6:5434/postgres_sub_test
   jackson:
     serialization:
@@ -58,7 +58,6 @@ server:
   forward-headers-strategy: framework
   servlet:
     context-path: /admin/api
-
 
 #server:
 #  ssl:

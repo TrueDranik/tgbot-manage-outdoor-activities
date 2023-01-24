@@ -1,7 +1,7 @@
 package com.bot.sup.api.telegram.command;
 
 import com.bot.sup.api.telegram.handler.impl.HandleMainMenuImpl;
-import com.bot.sup.cache.MiddlewareDataCache;
+import com.bot.sup.cache.UserStateCache;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 public class StartCommand implements BaseCommand {
     private final HandleMainMenuImpl handleMainMenu;
     private final MainMessageProperties mainMessageProperties;
-    private final MiddlewareDataCache middlewareDataCache;
+    private final UserStateCache userStateCache;
 
     @Override
     public BotCommand getBotCommand() {
@@ -28,7 +28,7 @@ public class StartCommand implements BaseCommand {
 
     @Override
     public BotApiMethod<?> getAction(Update update) {
-        middlewareDataCache.removeCurrentState(update.getMessage().getChatId());
+        userStateCache.deleteFromCache(update.getMessage().getChatId());
 
         return SendMessage.builder()
                 .chatId(update.getMessage().getChatId())

@@ -1,6 +1,5 @@
 package com.bot.sup.model.dto;
 
-import com.bot.sup.model.entity.Client;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,4 +18,5 @@ public class BookingUpdateDto {
     private String paymentType;
     private Long scheduleId;
     private LocalDate insTime;
+    private boolean isActive;
 }
