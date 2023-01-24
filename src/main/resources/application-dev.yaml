@@ -6,6 +6,7 @@ telegram:
     route: https://tgsupbot-admin.reliab.tech/#/route
     updateRoute: https://tgsupbot-admin.reliab.tech/#/updateRoute
     updateSchedule: https://tgsupbot-admin.reliab.tech/#/updateDateTimeSchedule
+    getClientRecords: https://tgsupbot-admin-dev.reliab.tech/#/clientsRecords
   botUsername: '@DevSup31_bot'
   botToken: 5905081094:AAGJkLITLpL8e-4aMvTnxd_B2Nmtq8ttN8Q
 
