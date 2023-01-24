@@ -7,6 +7,9 @@ stages:
 
 build:
   stage: build
+  only:
+    - master
+    - dev
   script:
     - 'mvn clean package ; pwd ; ls ; ls -l target'
   artifacts:
@@ -16,7 +19,9 @@ build:
 
 publish:
   stage: publish
-
+  only:
+    - master
+    - dev
   image:
     name: docker:19.03
   script:
