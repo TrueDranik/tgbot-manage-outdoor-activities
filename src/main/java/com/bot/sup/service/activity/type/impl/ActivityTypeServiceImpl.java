@@ -22,6 +22,10 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
         activityTypeRepository.save(activityType);
     }
 
+    public boolean existsByNameEqualsIgnoreCase(String userAnswer){
+        return activityTypeRepository.existsByNameEqualsIgnoreCase(userAnswer);
+    }
+
     @Override
     public List<ActivityType> getAllActivityType() {
         return new ArrayList<>(activityTypeRepository.findAll());
@@ -54,7 +58,7 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
         activityTypeRepository.delete(findActivityTypeById(id));
     }
 
-    private ActivityType findActivityTypeById(Long id) {
+    public ActivityType findActivityTypeById(Long id) {
         return activityTypeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Activity type with id[" + id + "] not found"));
     }

@@ -22,6 +22,10 @@ public class ActivityFormatServiceImpl implements ActivityFormatService {
         activityFormatRepository.save(activityFormat);
     }
 
+    public boolean existsByNameEqualsIgnoreCase(String userAnswer){
+        return activityFormatRepository.existsByNameEqualsIgnoreCase(userAnswer);
+    }
+
     @Override
     public List<ActivityFormatDto> getAllActivityFormat() {
         List<ActivityFormat> activityFormats = activityFormatRepository.findAll();
@@ -65,7 +69,7 @@ public class ActivityFormatServiceImpl implements ActivityFormatService {
         activityFormatRepository.delete(activityFormat);
     }
 
-    private ActivityFormat findActivityFormatById(Long id) {
+    public ActivityFormat findActivityFormatById(Long id) {
         return activityFormatRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Activity format with id[" + id + "] not found"));
     }

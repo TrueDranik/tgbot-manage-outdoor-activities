@@ -10,13 +10,22 @@ import com.bot.sup.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
     private final BookingMapper bookingMapper;
     private final ClientMapper clientMapper;
-
     private final ClientRepository clientRepository;
+
+    public void save(Client client){
+        clientRepository.save(client);
+    }
+
+    public Optional<Client> findByTelegramId(Long telegramId){
+        return clientRepository.findByTelegramId(telegramId);
+    }
 
     @Override
     public ClientDto createClient(BookingCreateDto bookingCreateDto) {
