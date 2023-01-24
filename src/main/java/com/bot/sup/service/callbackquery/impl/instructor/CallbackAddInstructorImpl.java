@@ -12,11 +12,12 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import util.UserStateUtil;
 
 import static com.bot.sup.common.enums.CallbackEnum.ADD_INSTRUCTOR;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class CallbackAddInstructorImpl implements Callback {
     private final StateContext stateContext;
     private final UserStateCache userStateCache;
@@ -27,12 +28,7 @@ public class CallbackAddInstructorImpl implements Callback {
         InstructorStateEnum botStateEnum = InstructorStateEnum.FILLING_INSTRUCTOR;
         Instructor instructor = new Instructor();
 
-        UserState userState = new UserState();
-        userState.setAdminTelegramId(chatId);
-        userState.setState(botStateEnum);
-        userState.setEntity(instructor);
-        userState.setForUpdate(false);
-
+        UserState userState = UserStateUtil.getUserState(chatId, botStateEnum, instructor, false);
         userStateCache.createOrUpdateState(userState);
 
         return stateContext.processInputMessage(botStateEnum, callbackQuery.getMessage());

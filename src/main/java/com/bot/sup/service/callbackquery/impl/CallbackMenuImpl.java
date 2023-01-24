@@ -1,6 +1,7 @@
 package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.api.telegram.handler.impl.HandleMainMenuImpl;
+import com.bot.sup.cache.UserStateCache;
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.service.callbackquery.Callback;
@@ -16,11 +17,12 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 public class CallbackMenuImpl implements Callback {
     private final HandleMainMenuImpl handleMainMenu;
     private final MainMessageProperties mainMessageProperties;
-
-    public static final CallbackEnum ACTIVITIES = CallbackEnum.MENU;
+    private final UserStateCache userStateCache;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
+        userStateCache.deleteFromCache(callbackQuery.getMessage().getChatId());
+
         return EditMessageText.builder().messageId(callbackQuery.getMessage().getMessageId())
                 .replyMarkup(handleMainMenu.createInlineKeyboard())
                 .chatId(callbackQuery.getMessage().getChatId().toString())
@@ -31,6 +33,6 @@ public class CallbackMenuImpl implements Callback {
 
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return CallbackEnum.MENU;
     }
 }

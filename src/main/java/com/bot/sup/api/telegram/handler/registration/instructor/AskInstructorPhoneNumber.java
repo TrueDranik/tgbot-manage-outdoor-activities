@@ -15,7 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AskPhoneNumber implements InstructorMessageProcessor {
+public class AskInstructorPhoneNumber implements InstructorMessageProcessor {
     private final MessageService messageService;
     private final InstructorMessageProperties instructorMessageProperties;
     private final UserStateCache userStateCache;
@@ -25,20 +25,17 @@ public class AskPhoneNumber implements InstructorMessageProcessor {
         Long chatId = message.getChatId();
         String userAnswer = message.getText();
 
-
         ((Instructor) instructor).setPhoneNumber(userAnswer);
 
         log.info("instructor phone number = " + userAnswer);
 
         userStateCache.getByTelegramId(chatId).setState(InstructorStateEnum.ASK_TELEGRAM_ID);
 
-        return  messageService.buildReplyMessage(chatId, instructorMessageProperties.getGetTelegramId());
+        return messageService.buildReplyMessage(chatId, instructorMessageProperties.getGetTelegramId());
     }
 
     @Override
     public BotApiMethod<?> processInvalidInputMessage(Long chatId) {
-        userStateCache.getByTelegramId(chatId).setState(InstructorStateEnum.ASK_PHONE_NUMBER);
-
         return messageService.buildReplyMessage(chatId, instructorMessageProperties.getPhoneNumberNotValid());
     }
 

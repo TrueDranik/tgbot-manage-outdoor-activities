@@ -1,9 +1,12 @@
 package util;
 
+import lombok.experimental.UtilityClass;
+
 import java.io.ByteArrayOutputStream;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
+@UtilityClass
 public class ImageUtil {
     public static byte[] compressImage(byte[] data) {
 
@@ -20,7 +23,7 @@ public class ImageUtil {
         }
         try {
             outputStream.close();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         return outputStream.toByteArray();
     }
@@ -36,7 +39,7 @@ public class ImageUtil {
                 outputStream.write(tmp, 0, count);
             }
             outputStream.close();
-        } catch (Exception exception) {
+        } catch (Exception ignored) {
         }
         return outputStream.toByteArray();
     }
