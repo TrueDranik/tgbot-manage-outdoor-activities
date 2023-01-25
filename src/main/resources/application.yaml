@@ -1,14 +1,13 @@
 telegram:
   url:
-    constructor: https://tgsupbot-admin-dev.reliab.tech/#/creationSchedule
-    activity: https://tgsupbot-admin-dev.reliab.tech/#/activity
-    updateActivity: https://tgsupbot-admin-dev.reliab.tech/#/updateActivity
-    route: https://tgsupbot-admin-dev.reliab.tech/#/route
-    updateRoute: https://tgsupbot-admin-dev.reliab.tech/#/updateRoute
-    updateSchedule: https://tgsupbot-admin-dev.reliab.tech/#/updateDateTimeSchedule
-    getClientRecords: https://tgsupbot-admin-dev.reliab.tech/#/clientsRecords
-  botUsername: 'https://t.me/sup31AdminTest_bot'
-  botToken: 5896715348:AAH8qH5j8rJuovHVo3auHcru3rUFuiNTY7A
+    constructor: https://tgsupbot-admin.reliab.tech/#/creationSchedule
+    activity: https://tgsupbot-admin.reliab.tech/#/activity
+    updateActivity: https://tgsupbot-admin.reliab.tech/#/updateActivity
+    route: https://tgsupbot-admin.reliab.tech/#/route
+    updateRoute: https://tgsupbot-admin.reliab.tech/#/updateRoute
+    updateSchedule: https://tgsupbot-admin.reliab.tech/#/updateDateTimeSchedule
+  botUsername: '@sup31_bot'
+  botToken: 5617783598:AAEVI_edk9ptSp6aFrjRjZ8XeMMdn9m3PEc
 
 spring:
   liquibase:
@@ -21,8 +20,6 @@ spring:
     hibernate:
       ddl-auto: none
     properties:
-      #      hibernate:
-      #        enable_lazy_load_no_trans: 'true'
       javax:
         persistence:
           query:
@@ -34,7 +31,8 @@ spring:
     hikari:
       maximum-pool-size: '5'
     username: postgres_sub
-    url: jdbc:postgresql://10.120.10.6:5434/postgres_sub_test
+    url: jdbc:postgresql://10.120.10.6:5433/postgres_sub
+
   jackson:
     serialization:
       FAIL_ON_EMPTY_BEANS: 'false'
@@ -43,27 +41,6 @@ spring:
       matching-strategy: ant_path_matcher
 
 springdoc:
-  api-docs:
-    path: /v3/api-docs
   swagger-ui:
     enabled: true
-    path: /swagger-ui.html
-    csrf:
-      enabled: false
-#    config-url: /v3/api-docs/swagger-config
-
-server:
-  error:
-    whitelabel:
-      enabled: false
-  forward-headers-strategy: framework
-  servlet:
-    context-path: /admin/api
-
-
-#server:
-#  ssl:
-#    key-store-type: PKCS12
-#    key-store-password: changeit
-#    enabled: true
-#    key-store: classpath:java_ssl.p12
+    path: admin/api/swagger-ui.html
