@@ -1,7 +1,6 @@
 package com.bot.sup.api.rest;
 
 import com.bot.sup.model.ActivityRequestParams;
-import com.bot.sup.model.dto.ActivityCreateDto;
 import com.bot.sup.model.dto.ActivityDto;
 import com.bot.sup.service.activity.ActivityService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,11 +9,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin("*")
 @RequiredArgsConstructor
@@ -26,36 +23,33 @@ public class ActivityController {
 
     @GetMapping
     @Operation(summary = "Получить список всех активностей")
-    public ResponseEntity<List<ActivityDto>> getAllActivity(@ParameterObject ActivityRequestParams params) {
-        return new ResponseEntity<>(activityService.getAllActivity(params), HttpStatus.OK);
+    public List<ActivityDto> getAllActivity(@ParameterObject ActivityRequestParams params) {
+        return activityService.getAllActivity(params);
     }
 
     @GetMapping("{id}")
     @Operation(summary = "Получить активность по id")
-    public ResponseEntity<ActivityDto> getActivityById(@Parameter(description = "Id") @PathVariable(name = "id") Long id) {
-        Optional<ActivityDto> activity = Optional.ofNullable(activityService.getActivityById(id));
-
-        return activity.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+    public ActivityDto getActivityById(@Parameter(description = "Id") @PathVariable(name = "id") Long id) {
+        return activityService.getActivityById(id);
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Создать новую активность")
-    public ResponseEntity<ActivityDto> createActivity(@RequestBody ActivityCreateDto createDto) {
-        return new ResponseEntity<>(activityService.createActivity(createDto), HttpStatus.CREATED);
+    public ActivityDto createActivity(@RequestBody ActivityDto activityDto) {
+        return activityService.createActivity(activityDto);
     }
 
     @PutMapping("{id}")
     @Operation(summary = "Изменить существующую активность")
-    public ResponseEntity<ActivityDto> updateActivity(@PathVariable(name = "id") Long id,
-                                                   @RequestBody ActivityCreateDto createDto) {
-        return new ResponseEntity<>(activityService.updateActivity(id, createDto), HttpStatus.OK);
+    public ActivityDto updateActivity(@PathVariable(name = "id") Long id,
+                                      @RequestBody ActivityDto activityDto) {
+        return activityService.updateActivity(id, activityDto);
     }
 
     @DeleteMapping("{id}")
     @Operation(summary = "Изменить активность")
-    public ResponseEntity<ActivityDto> deleteActivity(@PathVariable(name = "id") Long id) {
+    public void deleteActivity(@PathVariable(name = "id") Long id) {
         activityService.deleteActivity(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
