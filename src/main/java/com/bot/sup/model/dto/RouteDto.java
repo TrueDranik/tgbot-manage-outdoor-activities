@@ -15,4 +15,5 @@ public class RouteDto {
     private String mapLink;
     private String length;
     private Boolean isActive;
+    private Long imageDataId;
 }
