@@ -17,6 +17,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("select b from Booking b where b.schedule.id = :scheduleId and b.paymentStatus = :paymentStatus")
     List<Booking> findBookingByScheduleIdByPaymentStatus(@Param("scheduleId") Long scheduleId, @Param("paymentStatus") String paymentStatus);
 
+    @Query("select b from Booking b where b.schedule.id = :scheduleId and  b.isActive = true ")
+    List<Booking> findBookingByScheduleIdAndActiveIsTrue(@Param("scheduleId") Long scheduleId);
+
 
     void delete(Booking entity);
 

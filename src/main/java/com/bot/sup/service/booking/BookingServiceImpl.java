@@ -1,8 +1,6 @@
 package com.bot.sup.service.booking;
 
 import com.bot.sup.mapper.BookingMapper;
-import com.bot.sup.mapper.ClientMapper;
-import com.bot.sup.mapper.ScheduleMapper;
 import com.bot.sup.model.dto.BookingCreateDto;
 import com.bot.sup.model.dto.BookingDto;
 import com.bot.sup.model.dto.BookingUpdateDto;
@@ -43,14 +41,14 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Integer getCountFreePlaces(Long scheduleId) {
-        List<Booking> bookings = bookingRepository.findBookingByScheduleId(scheduleId);
+        List<Booking> activeBookings = bookingRepository.findBookingByScheduleIdAndActiveIsTrue(scheduleId);
         Schedule schedule = scheduleRepository.getSchedulesById(scheduleId);
-        if (bookings.isEmpty()) {
+        if (activeBookings.isEmpty()) {
             return schedule.getParticipants();
         }
 
         int countInvatedUsers = 0;
-        for (Booking booking : bookings) {
+        for (Booking booking : activeBookings) {
             countInvatedUsers += booking.getInvitedUsers() + booking.getInvitedChildren();
         }
 
@@ -72,8 +70,7 @@ public class BookingServiceImpl implements BookingService {
             booking.setInsTime(LocalDate.now());
             booking.setModifTime(LocalDate.now());
             bookingRepository.save(booking);
-            BookingDto bookingDto = bookingMapper.domainToDto(booking);
-            return bookingDto;
+            return bookingMapper.domainToDto(booking);
         }
         throw new EntityNotFoundException("Client with phone number " + bookingcreateDto.getPhoneNumber() + " not found");
     }
@@ -89,8 +86,7 @@ public class BookingServiceImpl implements BookingService {
         Schedule schedule = scheduleRepository.getSchedulesById(bookingUpdateDto.getScheduleId());
         bookingToUpdate.setSchedule(schedule);
         bookingRepository.save(bookingToUpdate);
-        BookingDto bookingDto = bookingMapper.domainToDto(bookingToUpdate);
-        return bookingDto;
+        return bookingMapper.domainToDto(bookingToUpdate);
     }
 
 }
