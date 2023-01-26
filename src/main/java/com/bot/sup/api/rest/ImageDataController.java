@@ -32,7 +32,7 @@ public class ImageDataController {
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<byte[]> getImageByName(@PathVariable("name") String name) throws IOException {
+    public ResponseEntity<byte[]> getImageByName(@PathVariable("name") String name) {
         byte[] image = imageDataService.getImage(name);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -41,8 +41,8 @@ public class ImageDataController {
     }
 
     @GetMapping("/download/{id}")
-    public ResponseEntity<ByteArrayResource> download(@PathVariable Long id) throws IOException {
-        ImageData image = imageDataService.getImageById(id);
+    public ResponseEntity<ByteArrayResource> download(@PathVariable Long id) {
+        ImageData image = imageDataService.findImageById(id);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=%s".formatted(image.getName()));
