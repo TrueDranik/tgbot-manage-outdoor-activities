@@ -31,7 +31,7 @@ public class AskTypeName implements ActivityTypeMessageProcessor {
         activityTypeService.save((ActivityType) activityType);
 
         InlineKeyboardMarkup keyboardMarkup = KeyboardUtil
-                .keyboardMarkup(CallbackEnum.SUP_ACTIVITY_FORMAT.toString(), mainMessageProperties.getDone());
+                .keyboardMarkup(CallbackEnum.SUP_ACTIVITY_TYPE.toString(), mainMessageProperties.getDone());
         return messageService.getReplyMessageWithKeyboard(chatId,
                 String.format(activityMessageProperties.getRegisteredActivity(), ((ActivityType) activityType).getName()),
                 keyboardMarkup);
