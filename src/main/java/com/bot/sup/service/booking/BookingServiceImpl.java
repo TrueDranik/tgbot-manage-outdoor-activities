@@ -1,9 +1,11 @@
 package com.bot.sup.service.booking;
 
+import com.bot.sup.common.enums.PaymentStatusEnum;
 import com.bot.sup.mapper.BookingMapper;
 import com.bot.sup.model.dto.BookingCreateDto;
 import com.bot.sup.model.dto.BookingDto;
 import com.bot.sup.model.dto.BookingUpdateDto;
+import com.bot.sup.model.dto.BookingsSortedByPaymentStatusDto;
 import com.bot.sup.model.entity.Booking;
 import com.bot.sup.model.entity.Client;
 import com.bot.sup.model.entity.Schedule;
@@ -60,7 +62,7 @@ public class BookingServiceImpl implements BookingService {
         Client client = clientRepository.findByPhoneNumber(bookingcreateDto.getPhoneNumber());
         if (client != null) {
             Integer freePlace = getCountFreePlaces((bookingcreateDto.getScheduleId()));
-            if(freePlace <= 0){
+            if (freePlace <= 0) {
                 throw new IllegalArgumentException("Free place is 0");
             }
             Schedule schedule = scheduleRepository.getSchedulesById(bookingcreateDto.getScheduleId());
@@ -86,7 +88,20 @@ public class BookingServiceImpl implements BookingService {
         Schedule schedule = scheduleRepository.getSchedulesById(bookingUpdateDto.getScheduleId());
         bookingToUpdate.setSchedule(schedule);
         bookingRepository.save(bookingToUpdate);
+
         return bookingMapper.domainToDto(bookingToUpdate);
+    }
+
+    @Override
+    public BookingsSortedByPaymentStatusDto getAllBookingsByScheduleIdByPaymentStatus(Long scheduleId) {
+        BookingsSortedByPaymentStatusDto sortedByPaymentStatusDto = new BookingsSortedByPaymentStatusDto();
+        sortedByPaymentStatusDto.setPaidBookings(getBookingByScheduleIdByPaymentStatus(scheduleId, PaymentStatusEnum.PAID.name()));
+        sortedByPaymentStatusDto.setNotPaidBookings(getBookingByScheduleIdByPaymentStatus(scheduleId, PaymentStatusEnum.NOT_PAID.name()));
+        sortedByPaymentStatusDto.setReturnedBookings(getBookingByScheduleIdByPaymentStatus(scheduleId, PaymentStatusEnum.RETURNED.name()));
+        sortedByPaymentStatusDto.setRefundRequestedBookings(getBookingByScheduleIdByPaymentStatus(scheduleId, PaymentStatusEnum.REFUND_REQUESTED.name()));
+        sortedByPaymentStatusDto.setCancelWithoutRefundBookings(getBookingByScheduleIdByPaymentStatus(scheduleId, PaymentStatusEnum.CANCEL_WITHOUT_REFUND.name()));
+
+        return sortedByPaymentStatusDto;
     }
 
 }

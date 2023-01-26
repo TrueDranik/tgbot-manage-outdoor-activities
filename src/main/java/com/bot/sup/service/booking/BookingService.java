@@ -3,6 +3,7 @@ package com.bot.sup.service.booking;
 import com.bot.sup.model.dto.BookingCreateDto;
 import com.bot.sup.model.dto.BookingDto;
 import com.bot.sup.model.dto.BookingUpdateDto;
+import com.bot.sup.model.dto.BookingsSortedByPaymentStatusDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,5 +19,7 @@ public interface BookingService {
     BookingDto createBooking (BookingCreateDto bookingCreateDto);
 
     BookingDto updateBooking (BookingUpdateDto bookingUpdateDto);
+
+    BookingsSortedByPaymentStatusDto getAllBookingsByScheduleIdByPaymentStatus(Long scheduleId);
 
 }
