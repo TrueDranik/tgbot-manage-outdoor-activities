@@ -1,14 +1,14 @@
 telegram:
   url:
-    constructor: https://tgsupbot-admin.reliab.tech/#/creationSchedule
-    activity: https://tgsupbot-admin.reliab.tech/#/activity
-    updateActivity: https://tgsupbot-admin.reliab.tech/#/updateActivity
-    route: https://tgsupbot-admin.reliab.tech/#/route
-    updateRoute: https://tgsupbot-admin.reliab.tech/#/updateRoute
-    updateSchedule: https://tgsupbot-admin.reliab.tech/#/updateDateTimeSchedule
+    constructor: https://tgsupbot-admin-dev.reliab.tech/#/creationSchedule
+    activity: https://tgsupbot-admin-dev.reliab.tech/#/activity
+    updateActivity: https://tgsupbot-admin-dev.reliab.tech/#/updateActivity
+    route: https://tgsupbot-admin-dev.reliab.tech/#/route
+    updateRoute: https://tgsupbot-admin-dev.reliab.tech/#/updateRoute
+    updateSchedule: https://tgsupbot-admin-dev.reliab.tech/#/updateDateTimeSchedule
     getClientRecords: https://tgsupbot-admin-dev.reliab.tech/#/clientsRecords
-  botUsername: '@DevSup31_bot'
-  botToken: 5905081094:AAGJkLITLpL8e-4aMvTnxd_B2Nmtq8ttN8Q
+  botUsername: '@Dbydhd_bot'
+  botToken: 5713362745:AAFhdPygZuBXLPHKG3rtR8DaQyn2jOG7M3E
 
 spring:
   liquibase:
@@ -60,7 +60,17 @@ server:
   forward-headers-strategy: framework
   servlet:
     context-path: /admin/api
+management:
+  endpoint:
+    health:
+      sensitive: false
+      show-details: always
+  health:
+    db:
 
+      enabled: true
+    defaults:
+      enabled: true
 #server:
 #  ssl:
 #    key-store-type: PKCS12
