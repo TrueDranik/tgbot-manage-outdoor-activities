@@ -23,8 +23,6 @@ public class CallbackActivityFormatImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
 
-    public static final CallbackEnum ACTIVITIES = SUP_ACTIVITY_FORMAT;
-
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.getMessage().getChatId();
@@ -62,6 +60,6 @@ public class CallbackActivityFormatImpl implements Callback {
 
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return SUP_ACTIVITY_FORMAT;
     }
 }

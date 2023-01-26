@@ -21,7 +21,7 @@ public class CallbackMenuImpl implements Callback {
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
-        userStateCache.deleteFromCache(callbackQuery.getMessage().getChatId());
+        userStateCache.deleteFromCache(callbackQuery.getMessage().getChatId()); // TODO: 26.01.2023 мб вынести в отдельный метод или использовать @Cachable
 
         return EditMessageText.builder().messageId(callbackQuery.getMessage().getMessageId())
                 .replyMarkup(handleMainMenu.createInlineKeyboard())

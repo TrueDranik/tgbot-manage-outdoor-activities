@@ -15,13 +15,11 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class CallbackInstructorsImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
     private final InstructorMessageProperties instructorMessageProperties;
-
-    public static final CallbackEnum ACTIVITIES = CallbackEnum.INSTRUCTORS;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
@@ -61,6 +59,6 @@ public class CallbackInstructorsImpl implements Callback {
 
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return CallbackEnum.INSTRUCTORS;
     }
 }

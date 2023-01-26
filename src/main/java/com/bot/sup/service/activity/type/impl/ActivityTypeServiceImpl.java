@@ -27,6 +27,11 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
         return activityTypeRepository.existsByNameEqualsIgnoreCase(userAnswer);
     }
 
+    public List<ActivityType> findAll() {
+        return activityTypeRepository.findAll();
+    }
+
+
     @Override
     public List<ActivityTypeDto> getAllActivityType() {
         List<ActivityType> activityTypes = activityTypeRepository.findAll();

@@ -4,9 +4,9 @@ import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.Client;
-import com.bot.sup.repository.BookingRepository;
-import com.bot.sup.repository.ClientRepository;
+import com.bot.sup.service.booking.BookingServiceImpl;
 import com.bot.sup.service.callbackquery.Callback;
+import com.bot.sup.service.client.ClientServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -24,12 +24,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CallbackScheduleAllClientInfoImpl implements Callback {
-    private final ClientRepository clientRepository;
-    private final BookingRepository bookingRepository;
+    private final ClientServiceImpl clientService;
+    private final BookingServiceImpl bookingService;
     private final MainMessageProperties mainMessageProperties;
     private final ScheduleMessageProperties scheduleMessageProperties;
-
-    private static final CallbackEnum ACTIVITIES = CallbackEnum.SCHEDULE_ALL_CLIENT_INFO;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
@@ -37,11 +35,8 @@ public class CallbackScheduleAllClientInfoImpl implements Callback {
         String eventDate = callbackQuery.getData().split("/")[2];
         String scheduleId = callbackQuery.getData().split("/")[3];
 
-        List<Client> clientByScheduleId = clientRepository.findClientByScheduleId(Long.valueOf(scheduleId));
-        Long sumBookingClients = bookingRepository.findSumBookingClientByScheduleId(Long.valueOf(scheduleId));
-//        int numberClients = clientByScheduleId.size();
-
-//        Long sum = sumBookingClients == null ? numberClients : sumBookingClients + numberClients;
+        List<Client> clientByScheduleId = clientService.findClientByScheduleId(Long.valueOf(scheduleId));
+        Long sumBookingClients = bookingService.findSumBookingClientByScheduleId(Long.valueOf(scheduleId));
 
         if (callbackQuery.getMessage().hasPhoto()) {
             return SendMessage.builder()
@@ -102,6 +97,6 @@ public class CallbackScheduleAllClientInfoImpl implements Callback {
 
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return CallbackEnum.SCHEDULE_ALL_CLIENT_INFO;
     }
 }

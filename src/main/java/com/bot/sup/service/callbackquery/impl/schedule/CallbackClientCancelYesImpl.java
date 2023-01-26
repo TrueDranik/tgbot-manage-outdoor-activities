@@ -4,8 +4,8 @@ import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.Client;
-import com.bot.sup.repository.ClientRepository;
 import com.bot.sup.service.callbackquery.Callback;
+import com.bot.sup.service.client.ClientServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,17 +17,15 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import javax.persistence.EntityNotFoundException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class CallbackClientCancelYesImpl implements Callback {
-    private final ClientRepository clientRepository;
+    private final ClientServiceImpl clientService;
     private final MainMessageProperties mainMessageProperties;
     private final ScheduleMessageProperties scheduleMessageProperties;
-
-    private static final CallbackEnum ACTIVITIES = CallbackEnum.CLIENT_CANCEL_YES;
 
     @Transactional
     @Override
@@ -37,12 +35,11 @@ public class CallbackClientCancelYesImpl implements Callback {
         String scheduleId = callbackQuery.getData().split("/")[3];
         String clientId = callbackQuery.getData().split("/")[4];
 
-        Optional<Client> client = Optional.ofNullable(clientRepository.findById(Long.valueOf(clientId))
-                .orElseThrow(() -> new EntityNotFoundException("Clint with id[" + clientId + "] not found")));
-        String userId = String.format("<a href=\"tg://user?id=%d\">%s %s</a>", client.get().getTelegramId(),
-                client.get().getFirstName(), client.get().getLastName());
+        Client client = clientService.findById(Long.valueOf(clientId));
+        String userId = String.format("<a href=\"tg://user?id=%d\">%s %s</a>", client.getTelegramId(),
+                client.getFirstName(), client.getLastName());
 
-        clientRepository.deleteClientFromSchedule(Long.valueOf(clientId));
+        clientService.deleteClientFromScheduleByClientId(Long.valueOf(clientId));
 
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
@@ -68,6 +65,6 @@ public class CallbackClientCancelYesImpl implements Callback {
 
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return CallbackEnum.CLIENT_CANCEL_YES;
     }
 }

@@ -3,8 +3,8 @@ package com.bot.sup.service.callbackquery.impl.schedule;
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.Schedule;
-import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
+import com.bot.sup.service.schedule.impl.ScheduleServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -15,16 +15,14 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import javax.persistence.EntityNotFoundException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class CallbackScheduleCancelImpl implements Callback {
-    private final ScheduleRepository scheduleRepository;
+    private final ScheduleServiceImpl scheduleService;
     private final ScheduleMessageProperties scheduleMessageProperties;
-
-    private static final CallbackEnum ACTIVITIES = CallbackEnum.SCHEDULE_CANCEL;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
@@ -32,13 +30,11 @@ public class CallbackScheduleCancelImpl implements Callback {
         String eventDate = callbackQuery.getData().split("/")[2];
         String scheduleId = callbackQuery.getData().split("/")[3];
 
-
-        Optional<Schedule> schedule = Optional.ofNullable(scheduleRepository.findById(Long.parseLong(scheduleId))
-                .orElseThrow(() -> new EntityNotFoundException("Schedule with id[" + scheduleId + "] not found")));
+        Schedule schedule = scheduleService.findScheduleById(Long.valueOf(scheduleId));
 
         return SendMessage.builder()
                 .chatId(callbackQuery.getMessage().getChatId())
-                .text(String.format(scheduleMessageProperties.getConfirmCancelEvent(), schedule.get().getActivity().getName()))
+                .text(String.format(scheduleMessageProperties.getConfirmCancelEvent(), schedule.getActivity().getName()))
                 .parseMode(ParseMode.MARKDOWN)
                 .replyMarkup(createInlineKeyboard(activityFormatId, eventDate, scheduleId))
                 .build();
@@ -63,6 +59,6 @@ public class CallbackScheduleCancelImpl implements Callback {
 
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return CallbackEnum.SCHEDULE_CANCEL;
     }
 }

@@ -24,8 +24,6 @@ public class CallbackActivitiesImpl implements Callback {
     private final ActivityMessageProperties activityMessageProperties;
     private final MainMessageProperties mainMessageProperties;
 
-    public static final CallbackEnum ACTIVITIES = SUP_ACTIVITIES;
-
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
@@ -64,6 +62,6 @@ public class CallbackActivitiesImpl implements Callback {
 
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return SUP_ACTIVITIES;
     }
 }

@@ -35,17 +35,37 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleMapper scheduleMapper;
     private final ScheduleCreateMapper scheduleCreateMapper;
 
+    public void saveSelectedSchedule(SelectedSchedule selectedSchedule) {
+        selectedScheduleRepository.save(selectedSchedule);
+    }
+
+    public void deleteSelectedScheduleByTelegramId(Long telegramId) {
+        selectedScheduleRepository.deleteByTelegramId(telegramId);
+    }
+
+    public List<Schedule> getSchedulesByActivityFormatId(Long activityFormatId) {
+        return scheduleRepository.getSchedulesByActivity_ActivityFormat_Id(activityFormatId);
+    }
+
+    public List<Schedule> findScheduleByActivityFormatIdAndEventDate(Long activityFormatId, LocalDate eventDate) {
+        return scheduleRepository
+                .selectScheduleByActivityFormatIdAndEventDate(activityFormatId, eventDate);
+    }
+
+    public SelectedSchedule findSelectedScheduleByTelegramId(Long telegramId) {
+        return selectedScheduleRepository.findByTelegramId(telegramId)
+                .orElseThrow(() -> new EntityNotFoundException("User with Telegram id[" + telegramId + "] didn't selected schedule"));
+    }
+
     @Override
     public ScheduleDto getScheduleByTelegramId(Long telegramId) {
-        Optional<SelectedSchedule> byTelegramId = Optional.ofNullable(selectedScheduleRepository.findByTelegramId(telegramId)
-                .orElseThrow(() -> new EntityNotFoundException("User with Telegram id[" + telegramId + "] didn't selected schedule")));
+        Optional<SelectedSchedule> byTelegramId = Optional.ofNullable(findSelectedScheduleByTelegramId(telegramId));
 
         Schedule schedule = null;
         if (byTelegramId.isPresent()) {
             Long scheduleId = byTelegramId.get().getCurrentScheduleId();
 
-            schedule = scheduleRepository.findById(scheduleId)
-                    .orElseThrow(() -> new EntityNotFoundException("Schedule with id[" + scheduleId + "not found"));
+            schedule = findScheduleById(scheduleId);
         }
 
         return scheduleMapper.domainToDto(schedule);
@@ -120,7 +140,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     }
 
-    private Schedule findScheduleById(Long id) {
+    public Schedule findScheduleById(Long id) {
         return scheduleRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Schedule with id[" + id + "] not found"));
     }
