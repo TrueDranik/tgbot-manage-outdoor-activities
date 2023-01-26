@@ -1,4 +1,4 @@
-package util;
+package com.bot.sup.util;
 
 import com.bot.sup.model.UserState;
 import lombok.experimental.UtilityClass;

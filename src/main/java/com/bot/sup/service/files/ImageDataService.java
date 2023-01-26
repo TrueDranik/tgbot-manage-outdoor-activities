@@ -6,7 +6,7 @@ import com.bot.sup.repository.ImageDataRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import util.ImageUtil;
+import com.bot.sup.util.ImageUtil;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;

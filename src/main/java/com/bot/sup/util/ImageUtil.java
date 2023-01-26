@@ -1,4 +1,4 @@
-package util;
+package com.bot.sup.util;
 
 import lombok.experimental.UtilityClass;
 
