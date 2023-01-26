@@ -4,7 +4,7 @@ import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.ActivityType;
-import com.bot.sup.repository.ActivityTypeRepository;
+import com.bot.sup.service.activity.type.impl.ActivityTypeServiceImpl;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,21 +15,21 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class CallbackListActivityTypeImpl implements Callback {
-    private final ActivityTypeRepository activityTypeRepository;
+    private final ActivityTypeServiceImpl activityTypeService;
     private final MainMessageProperties mainMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
-
-    private static final CallbackEnum ACTIVITIES = CallbackEnum.LIST_ACTIVITY_TYPE;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         List<List<InlineKeyboardButton>> buttonActivityType = new ArrayList<>();
-        List<ActivityType> activityTypes = activityTypeRepository.findAll();
+        List<ActivityType> activityTypes = activityTypeService.findAll();
 
         if (activityTypes.isEmpty()) {
             buttonActivityType.add(Collections.singletonList(
@@ -92,6 +92,6 @@ public class CallbackListActivityTypeImpl implements Callback {
 
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return CallbackEnum.LIST_ACTIVITY_TYPE;
     }
 }

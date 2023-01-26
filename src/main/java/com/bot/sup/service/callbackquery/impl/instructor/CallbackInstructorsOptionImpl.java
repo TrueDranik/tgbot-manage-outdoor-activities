@@ -3,8 +3,8 @@ package com.bot.sup.service.callbackquery.impl.instructor;
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.Instructor;
-import com.bot.sup.repository.InstructorRepository;
 import com.bot.sup.service.callbackquery.Callback;
+import com.bot.sup.service.instructor.InstructorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -14,25 +14,23 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import javax.persistence.EntityNotFoundException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static com.bot.sup.common.enums.CallbackEnum.INSTRUCTOR_OPTION;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class CallbackInstructorsOptionImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
-    private final InstructorRepository instructorRepository;
-
-    public static final CallbackEnum ACTIVITIES = INSTRUCTOR_OPTION;
+    private final InstructorService instructorService;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.getMessage().getChatId();
         String instructorId = callbackQuery.getData().split("/")[1];
-        Optional<Instructor> instructor = Optional.ofNullable(instructorRepository.findByTelegramId(Long.parseLong(instructorId))
-                .orElseThrow(() -> new EntityNotFoundException("Instructor with id[" + instructorId + "] not found")));
+        Optional<Instructor> instructor = Optional.ofNullable(instructorService.findByTelegramId(Long.valueOf(instructorId)));
 
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
@@ -80,6 +78,6 @@ public class CallbackInstructorsOptionImpl implements Callback {
 
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return INSTRUCTOR_OPTION;
     }
 }

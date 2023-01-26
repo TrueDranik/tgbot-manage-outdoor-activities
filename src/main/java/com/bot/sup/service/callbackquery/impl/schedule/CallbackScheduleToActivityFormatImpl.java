@@ -1,11 +1,10 @@
 package com.bot.sup.service.callbackquery.impl.schedule;
 
 import com.bot.sup.common.enums.CallbackEnum;
-import com.bot.sup.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.ActivityFormat;
-import com.bot.sup.repository.ActivityFormatRepository;
+import com.bot.sup.service.activity.format.impl.ActivityFormatServiceImpl;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,19 +19,16 @@ import java.util.List;
 
 import static com.bot.sup.common.enums.CallbackEnum.SCHEDULE_TO_ACTIVITYFORMAT;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class CallbackScheduleToActivityFormatImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
     private final ScheduleMessageProperties scheduleMessageProperties;
-    private final ActivityMessageProperties activityMessageProperties;
-    private final ActivityFormatRepository activityFormatRepository;
-
-    public static final CallbackEnum ACTIVITIES = SCHEDULE_TO_ACTIVITYFORMAT;
+    private final ActivityFormatServiceImpl activityFormatService;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
-        List<ActivityFormat> activityFormats = activityFormatRepository.findAll();
+        List<ActivityFormat> activityFormats = activityFormatService.findAll();
         Long chatId = callbackQuery.getMessage().getChatId();
 
         return EditMessageText.builder()
@@ -79,6 +75,6 @@ public class CallbackScheduleToActivityFormatImpl implements Callback {
 
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return SCHEDULE_TO_ACTIVITYFORMAT;
     }
 }

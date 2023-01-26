@@ -26,7 +26,7 @@ public class CallbackAddActivityFormatImpl implements Callback {
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
         ActivityFormatStateEnum botStateEnum = ActivityFormatStateEnum.FILLING_ACTIVITY_FORMAT;
-        ActivityFormat activityFormat = new ActivityFormat();
+        ActivityFormat activityFormat = new ActivityFormat(); // TODO: 26.01.2023
 
         UserState userState = UserStateUtil.getUserState(chatId, botStateEnum, activityFormat, false);
         userStateCache.createOrUpdateState(userState);

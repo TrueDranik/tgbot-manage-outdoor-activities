@@ -24,8 +24,6 @@ public class CallbackScheduleImpl implements Callback {
     private final ScheduleMessageProperties scheduleMessageProperties;
     private final ActivityMessageProperties activityMessageProperties;
 
-    private static final CallbackEnum ACTIVITIES = CallbackEnum.SCHEDULE;
-
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         return EditMessageText.builder()
@@ -56,6 +54,6 @@ public class CallbackScheduleImpl implements Callback {
 
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return CallbackEnum.SCHEDULE;
     }
 }

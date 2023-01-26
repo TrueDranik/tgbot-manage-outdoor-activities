@@ -3,7 +3,7 @@ package com.bot.sup.service.callbackquery.impl.activity.type;
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.ActivityType;
-import com.bot.sup.repository.ActivityTypeRepository;
+import com.bot.sup.service.activity.type.impl.ActivityTypeServiceImpl;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,28 +14,28 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.bot.sup.common.enums.CallbackEnum.ACTIVITY_TYPE_OPTION;
 
 @Service
 @RequiredArgsConstructor
 public class CallbackActivityTypeOptionImpl implements Callback {
-    private final ActivityTypeRepository activityTypeRepository;
     private final MainMessageProperties mainMessageProperties;
-
-    private static final CallbackEnum ACTIVITIES = ACTIVITY_TYPE_OPTION;
+    private final ActivityTypeServiceImpl activityTypeService;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
         String activityTypeId = callbackQuery.getData().split("/")[1];
-        Optional<ActivityType> activityType = activityTypeRepository.findById(Long.parseLong(activityTypeId));
+
+        ActivityType activityType = activityTypeService.findActivityTypeById(Long.valueOf(activityTypeId));
 
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
-                .text(activityType.get().getName())
+                .text(activityType.getName())
                 .replyMarkup(setUpKeyboard(activityTypeId))
                 .build();
     }
@@ -69,6 +69,6 @@ public class CallbackActivityTypeOptionImpl implements Callback {
 
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return ACTIVITY_TYPE_OPTION;
     }
 }

@@ -3,7 +3,7 @@ package com.bot.sup.service.callbackquery.impl.activity.format;
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.ActivityFormat;
-import com.bot.sup.repository.ActivityFormatRepository;
+import com.bot.sup.service.activity.format.impl.ActivityFormatServiceImpl;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,9 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static com.bot.sup.common.enums.CallbackEnum.ACTIVITY_FORMAT_OPTION;
 
@@ -21,16 +23,16 @@ import static com.bot.sup.common.enums.CallbackEnum.ACTIVITY_FORMAT_OPTION;
 @Service
 public class CallbackActivityFormatOptionImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
-    private final ActivityFormatRepository activityFormatRepository;
-
-    public static final CallbackEnum ACTIVITIES = ACTIVITY_FORMAT_OPTION;
+    private final ActivityFormatServiceImpl activityFormatService;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.getMessage().getChatId();
         String activityFormatId = callbackQuery.getData().split("/")[1];
-        Optional<ActivityFormat> activityFormat = activityFormatRepository.findById(Long.parseLong(activityFormatId));
+
+        Optional<ActivityFormat> activityFormat = Optional.ofNullable(activityFormatService.findActivityFormatById(chatId));
         String activityFormatName = activityFormat.isEmpty() ? "Формат активности не найден" : activityFormat.get().getName();
+
         return EditMessageText.builder()
                 .messageId(callbackQuery.getMessage().getMessageId())
                 .chatId(chatId)
@@ -68,6 +70,6 @@ public class CallbackActivityFormatOptionImpl implements Callback {
 
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return ACTIVITY_FORMAT_OPTION;
     }
 }

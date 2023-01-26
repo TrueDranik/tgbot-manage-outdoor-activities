@@ -6,8 +6,8 @@ import com.bot.sup.model.entity.Activity;
 import com.bot.sup.model.entity.ActivityType;
 import com.bot.sup.model.entity.Route;
 import com.bot.sup.model.entity.Schedule;
-import com.bot.sup.repository.ScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
+import com.bot.sup.service.schedule.impl.ScheduleServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -30,9 +30,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CallbackScheduleDescriptionImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
-    private final ScheduleRepository scheduleRepository;
-
-    private static final CallbackEnum ACTIVITIES = CallbackEnum.SCHEDULE_DESCRIPTION;
+    private final ScheduleServiceImpl scheduleService;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
@@ -69,8 +67,9 @@ public class CallbackScheduleDescriptionImpl implements Callback {
                 .build();
     }
 
+    // TODO: 26.01.2023
     private String description(String scheduleId) {
-        Optional<Schedule> schedule = scheduleRepository.findById(Long.parseLong(scheduleId));
+        Optional<Schedule> schedule = Optional.ofNullable(scheduleService.findScheduleById(Long.valueOf(scheduleId)));
         Activity activity = schedule.get().getActivity();
         Route route = schedule.get().getRoute();
 
@@ -110,6 +109,6 @@ public class CallbackScheduleDescriptionImpl implements Callback {
 
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return CallbackEnum.SCHEDULE_DESCRIPTION;
     }
 }

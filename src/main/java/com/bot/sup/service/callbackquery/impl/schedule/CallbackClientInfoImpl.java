@@ -5,9 +5,9 @@ import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.Booking;
 import com.bot.sup.model.entity.Client;
-import com.bot.sup.repository.BookingRepository;
-import com.bot.sup.repository.ClientRepository;
+import com.bot.sup.service.booking.BookingServiceImpl;
 import com.bot.sup.service.callbackquery.Callback;
+import com.bot.sup.service.client.ClientServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -18,20 +18,16 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CallbackClientInfoImpl implements Callback {
-    private final ClientRepository clientRepository;
-    private final BookingRepository bookingRepository;
+    private final ClientServiceImpl clientService;
+    private final BookingServiceImpl bookingService;
     private final MainMessageProperties mainMessageProperties;
     private final ScheduleMessageProperties scheduleMessageProperties;
-
-    private static final CallbackEnum ACTIVITIES = CallbackEnum.CLIENT_INFO;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
@@ -40,24 +36,21 @@ public class CallbackClientInfoImpl implements Callback {
         String scheduleId = callbackQuery.getData().split("/")[3];
         String clientId = callbackQuery.getData().split("/")[4];
 
-        Optional<Client> client = Optional.ofNullable(clientRepository.findById(Long.valueOf(clientId))
-                .orElseThrow(() -> new EntityNotFoundException("Client with id[" + clientId + "] not found")));
+        Client client = clientService.findById(Long.valueOf(clientId));
+        Booking invitedUsers = bookingService.findBookingByClientAndByScheduleId(Long.valueOf(scheduleId), Long.valueOf(clientId));
 
-        Optional<Booking> invitedUsers = Optional.ofNullable(bookingRepository
-                .findBookingByClientIByScheduleId(Long.valueOf(scheduleId), Long.valueOf(clientId))
-                .orElseThrow(() -> new EntityNotFoundException("Invited users with client id[" + clientId + "] not found")));
-        String paymentStatus = invitedUsers.get().getPaymentStatus();
-        String userId = String.format("<a href=\"tg://user?id=%s\"> (профиль)</a>", client.get().getTelegramId().toString());
+        String paymentStatus = invitedUsers.getPaymentStatus();
+        String userId = String.format("<a href=\"tg://user?id=%s\"> (профиль)</a>", client.getTelegramId().toString());
 
-        int invitedUsers1 = invitedUsers.get().getInvitedUsers() - 1;
+        int invitedUsers1 = invitedUsers.getInvitedUsers() - 1;
 
         String s = invitedUsers1 > 0 ? scheduleMessageProperties.getInvitedFriends() + invitedUsers1 + "\n" : "";
 
         return EditMessageText.builder()
                 .chatId(callbackQuery.getMessage().getChatId())
                 .messageId(callbackQuery.getMessage().getMessageId())
-                .text(client.get().getFirstName() + " " + client.get().getLastName() + userId + "\n"
-                        + "☎️" + client.get().getPhoneNumber() + "\n"
+                .text(client.getFirstName() + " " + client.getLastName() + userId + "\n"
+                        + "☎️" + client.getPhoneNumber() + "\n"
                         + s
                         + "\uD83D\uDCB8 Статус оплаты: " + paymentStatus)
                 .parseMode(ParseMode.HTML)
@@ -65,18 +58,18 @@ public class CallbackClientInfoImpl implements Callback {
                 .build();
     }
 
-    private InlineKeyboardMarkup createInlineKeyboard(Optional<Client> client, String activityFormatId, String eventDate, String scheduleId) {
+    private InlineKeyboardMarkup createInlineKeyboard(Client client, String activityFormatId, String eventDate, String scheduleId) {
         List<InlineKeyboardButton> firstRow = new ArrayList<>();
         List<InlineKeyboardButton> secondRow = new ArrayList<>();
 
         firstRow.add(InlineKeyboardButton.builder()
                 .text(scheduleMessageProperties.getConnect())
-                .url("https://t.me/" + client.get().getUsername())
+                .url("https://t.me/" + client.getUsername())
                 .build());
         firstRow.add(InlineKeyboardButton.builder()
                 .text(scheduleMessageProperties.getCancelReservation())
                 .callbackData(CallbackEnum.SCHEDULE_CLIENT_CANCEL + "/" + activityFormatId + "/" + eventDate + "/"
-                        + scheduleId + "/" + client.get().getId())
+                        + scheduleId + "/" + client.getId())
                 .build());
 
         secondRow.add(InlineKeyboardButton.builder()
@@ -92,6 +85,6 @@ public class CallbackClientInfoImpl implements Callback {
 
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return CallbackEnum.CLIENT_INFO;
     }
 }
