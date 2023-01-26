@@ -27,6 +27,10 @@ public class ActivityFormatServiceImpl implements ActivityFormatService {
         return activityFormatRepository.existsByNameEqualsIgnoreCase(userAnswer);
     }
 
+    public List<ActivityFormat> findAll() {
+        return activityFormatRepository.findAll();
+    }
+
     @Override
     public List<ActivityFormatDto> getAllActivityFormat() {
         List<ActivityFormat> activityFormats = activityFormatRepository.findAll();

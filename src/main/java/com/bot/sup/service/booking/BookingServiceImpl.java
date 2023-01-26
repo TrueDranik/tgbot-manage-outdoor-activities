@@ -27,6 +27,16 @@ public class BookingServiceImpl implements BookingService {
 
     private final ClientRepository clientRepository;
 
+    public Booking findBookingByClientAndByScheduleId(Long scheduleId, Long clientId) {
+        return bookingRepository
+                .findBookingByClientAndByScheduleId(scheduleId, clientId)
+                .orElseThrow(() -> new EntityNotFoundException("Invited users with client id[" + clientId + "] not found"));
+    }
+
+    public Long findSumBookingClientByScheduleId(Long scheduleId) {
+        return bookingRepository.findSumBookingClientByScheduleId(scheduleId);
+    }
+
     @Override
     public List<BookingDto> getBookingByScheduleId(Long scheduleId) {
         List<Booking> bookings = bookingRepository.findBookingByScheduleId(scheduleId);
@@ -60,7 +70,7 @@ public class BookingServiceImpl implements BookingService {
         Client client = clientRepository.findByPhoneNumber(bookingcreateDto.getPhoneNumber());
         if (client != null) {
             Integer freePlace = getCountFreePlaces((bookingcreateDto.getScheduleId()));
-            if(freePlace <= 0){
+            if (freePlace <= 0) {
                 throw new IllegalArgumentException("Free place is 0");
             }
             Schedule schedule = scheduleRepository.getSchedulesById(bookingcreateDto.getScheduleId());
