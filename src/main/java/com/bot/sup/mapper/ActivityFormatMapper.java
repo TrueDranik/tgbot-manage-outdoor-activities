@@ -1,13 +1,13 @@
 package com.bot.sup.mapper;
 
-import com.bot.sup.model.dto.ActivityFormatCreateDto;
 import com.bot.sup.model.dto.ActivityFormatDto;
 import com.bot.sup.model.entity.ActivityFormat;
 import org.mapstruct.Mapper;
-
-import java.util.List;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface ActivityFormatMapper extends BaseMapper<ActivityFormat, ActivityFormatCreateDto> {
-    List<ActivityFormatDto> ActivityFormatToDto(List<ActivityFormat> domains);
+public interface ActivityFormatMapper extends BaseMapper<ActivityFormat, ActivityFormatDto> {
+    @Override
+    @Mapping(target = "id", ignore = true)
+    ActivityFormat dtoToDomain(ActivityFormatDto activityFormatDto);
 }

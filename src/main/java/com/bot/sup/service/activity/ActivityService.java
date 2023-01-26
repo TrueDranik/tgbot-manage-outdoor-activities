@@ -1,7 +1,6 @@
 package com.bot.sup.service.activity;
 
 import com.bot.sup.model.ActivityRequestParams;
-import com.bot.sup.model.dto.ActivityCreateDto;
 import com.bot.sup.model.dto.ActivityDto;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +12,9 @@ public interface ActivityService {
 
     ActivityDto getActivityById(Long id);
 
-    ActivityDto createActivity(ActivityCreateDto activityCreateDto);
+    ActivityDto createActivity(ActivityDto activityCreateDto);
 
-    ActivityDto updateActivity(Long id, ActivityCreateDto activityCreateDto);
+    ActivityDto updateActivity(Long id, ActivityDto activityCreateDto);
 
     void deleteActivity(Long id);
 }

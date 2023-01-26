@@ -22,18 +22,13 @@ public class ImageDataController {
     private final ImageDataService imageDataService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ImageDataCreateDto> uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
-        ImageDataCreateDto imageDataCreateDto = imageDataService.uploadImage(file);
-
-        return new ResponseEntity<>(imageDataCreateDto, HttpStatus.OK);
+    public ImageDataCreateDto uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
+        return imageDataService.uploadImage(file);
     }
 
     @GetMapping("/info/{name}")
-    public ResponseEntity<?> getImageInfoByName(@PathVariable("name") String name) {
-        ImageData image = imageDataService.getInfoByImageByName(name);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(image);
+    public ImageData getImageInfoByName(@PathVariable("name") String name) {
+        return imageDataService.getInfoByImageByName(name);
     }
 
     @GetMapping("/{name}")

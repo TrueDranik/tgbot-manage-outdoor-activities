@@ -18,9 +18,9 @@ public interface ScheduleService {
 
     ScheduleDto getScheduleById(Long id);
 
-    List<ScheduleDto> createSchedule(List<ScheduleCreateDto> createDto);
+    List<ScheduleCreateDto> createSchedule(List<ScheduleCreateDto> createDto);
 
-    ScheduleDto updateSchedule(Long id, ScheduleCreateDto scheduleCreateDto);
+    ScheduleCreateDto updateSchedule(Long id, ScheduleCreateDto scheduleCreateDto);
 
     List<ScheduleDto> getAllFilteredSchedule(ScheduleParams scheduleParams);
 

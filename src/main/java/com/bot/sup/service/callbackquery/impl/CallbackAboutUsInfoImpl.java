@@ -22,8 +22,6 @@ import java.util.Optional;
 public class CallbackAboutUsInfoImpl implements Callback {
     private final AboutUsRepository aboutUsRepository;
 
-    public static final CallbackEnum ACTIVITIES = CallbackEnum.ABOUT_US_INFO;
-
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
@@ -60,6 +58,6 @@ public class CallbackAboutUsInfoImpl implements Callback {
 
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return CallbackEnum.ABOUT_US_INFO;
     }
 }

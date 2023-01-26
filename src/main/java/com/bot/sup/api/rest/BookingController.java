@@ -38,8 +38,6 @@ public class BookingController {
         return bookingService.getBookingByScheduleIdByPaymentStatus(Long.valueOf(id), paymentStatus);
     }
 
-
-
     @GetMapping("/type")
     public Map<PaymentTypeEnum, String> getPaymentType() {
         return PaymentTypeEnum.getTitles();
@@ -68,5 +66,4 @@ public class BookingController {
     public BookingDto updateBooking(@RequestBody BookingUpdateDto bookingUpdateDto) {
         return bookingService.updateBooking(bookingUpdateDto);
     }
-
 }

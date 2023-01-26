@@ -1,17 +1,14 @@
 package com.bot.sup.api.rest;
 
-import com.bot.sup.model.dto.RouteCreateDto;
 import com.bot.sup.model.dto.RouteDto;
 import com.bot.sup.service.route.RouteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
@@ -23,36 +20,32 @@ public class RouteController {
 
     @GetMapping
     @Operation(summary = "Получить список всех маршрутов")
-    public ResponseEntity<List<RouteDto>> getAllRoute() {
-        return new ResponseEntity<>(routeService.getAllRoute(), HttpStatus.OK);
+    public List<RouteDto> getAllRoute() {
+        return routeService.getAllRoute();
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Получить маршрут по id")
-    public ResponseEntity<RouteDto> getRouteById(@PathVariable(name = "id") Long id) {
-
-        Optional<RouteDto> route = Optional.ofNullable(routeService.getRouteById(id));
-
-        return route.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+    public RouteDto getRouteById(@PathVariable(name = "id") Long id) {
+        return routeService.getRouteById(id);
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Создать новый маршрут")
-    public ResponseEntity<RouteDto> createRoute(@RequestBody RouteCreateDto routeCreateDto) {
-        return new ResponseEntity<>(routeService.createRoute(routeCreateDto), HttpStatus.CREATED);
+    public RouteDto createRoute(@RequestBody RouteDto routeCreateDto) {
+        return routeService.createRoute(routeCreateDto);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Изменить существующий маршрут")
-    public ResponseEntity<RouteDto> updateRoute(@PathVariable(name = "id") Long id, @RequestBody RouteCreateDto routeCreateDto) {
-        return new ResponseEntity<>(routeService.updateRoute(id, routeCreateDto), HttpStatus.OK);
+    public RouteDto updateRoute(@PathVariable(name = "id") Long id, @RequestBody RouteDto routeCreateDto) {
+        return routeService.updateRoute(id, routeCreateDto);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Удалить маршрут по id")
-    public ResponseEntity<RouteDto> deleteRoute(@PathVariable(name = "id") Long id) {
+    public void deleteRoute(@PathVariable(name = "id") Long id) {
         routeService.deleteRoute(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
