@@ -24,10 +24,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>, JpaSp
             "WHERE a.activityFormat.id = ?1 and s.eventDate = ?2")
     List<Schedule> selectScheduleByActivityFormatIdAndEventDate(Long id, LocalDate eventDate);
 
-    void deleteScheduleById(Long id);
-
-    void deleteById(Long id);
-
     @Modifying
     @Query("update Schedule s set s.isActive = false where s.activity.id = :id ")
     void setScheduleInactiveByActivityId(Long id);

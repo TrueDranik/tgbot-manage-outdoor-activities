@@ -21,8 +21,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("select b from Booking b where b.schedule.id = :scheduleId and  b.isActive = true ")
     List<Booking> findBookingByScheduleIdAndActiveIsTrue(@Param("scheduleId") Long scheduleId);
 
-    void delete(Booking entity);
-
     @Query(value = "SELECT SUM(invited_users) " +
             "FROM booking b " +
             "inner join client c on c.id = b.client_id " +
