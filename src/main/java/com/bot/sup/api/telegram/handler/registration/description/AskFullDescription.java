@@ -1,7 +1,7 @@
 package com.bot.sup.api.telegram.handler.registration.description;
 
 import com.bot.sup.api.telegram.handler.registration.KeyboardUtil;
-import com.bot.sup.common.enums.AboutUsStateEnum;
+import com.bot.sup.common.enums.states.AboutUsStateEnum;
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.model.entity.AboutUs;
 import com.bot.sup.service.AboutUsService;

@@ -1,7 +1,7 @@
 package com.bot.sup.api.telegram.handler.registration.activity.format;
 
 import com.bot.sup.cache.UserStateCache;
-import com.bot.sup.common.enums.ActivityFormatStateEnum;
+import com.bot.sup.common.enums.states.ActivityFormatStateEnum;
 import com.bot.sup.common.properties.message.ActivityMessageProperties;
 import com.bot.sup.model.UserState;
 import com.bot.sup.service.MessageService;

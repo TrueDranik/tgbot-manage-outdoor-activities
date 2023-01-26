@@ -2,7 +2,7 @@ package com.bot.sup.api.telegram.handler.registration.client;
 
 import com.bot.sup.api.telegram.handler.registration.KeyboardUtil;
 import com.bot.sup.common.enums.CallbackEnum;
-import com.bot.sup.common.enums.ClientRecordStateEnum;
+import com.bot.sup.common.enums.states.ClientRecordStateEnum;
 import com.bot.sup.model.entity.Client;
 import com.bot.sup.service.MessageService;
 import com.bot.sup.service.client.ClientServiceImpl;

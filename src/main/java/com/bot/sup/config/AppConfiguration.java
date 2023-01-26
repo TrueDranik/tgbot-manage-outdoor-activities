@@ -5,7 +5,7 @@ import com.bot.sup.api.telegram.handler.registration.activity.type.ActivityTypeM
 import com.bot.sup.api.telegram.handler.registration.client.ClientRecordMessageProcessor;
 import com.bot.sup.api.telegram.handler.registration.description.AboutUsMessageProcessor;
 import com.bot.sup.api.telegram.handler.registration.instructor.InstructorMessageProcessor;
-import com.bot.sup.common.enums.*;
+import com.bot.sup.common.enums.states.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

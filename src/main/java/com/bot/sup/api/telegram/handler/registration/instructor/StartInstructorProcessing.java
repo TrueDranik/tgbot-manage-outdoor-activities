@@ -1,7 +1,7 @@
 package com.bot.sup.api.telegram.handler.registration.instructor;
 
 import com.bot.sup.cache.UserStateCache;
-import com.bot.sup.common.enums.InstructorStateEnum;
+import com.bot.sup.common.enums.states.InstructorStateEnum;
 import com.bot.sup.common.properties.message.InstructorMessageProperties;
 import com.bot.sup.model.UserState;
 import com.bot.sup.service.MessageService;

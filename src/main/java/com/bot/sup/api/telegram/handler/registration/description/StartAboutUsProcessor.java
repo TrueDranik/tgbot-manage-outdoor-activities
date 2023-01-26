@@ -1,7 +1,7 @@
 package com.bot.sup.api.telegram.handler.registration.description;
 
 import com.bot.sup.cache.UserStateCache;
-import com.bot.sup.common.enums.AboutUsStateEnum;
+import com.bot.sup.common.enums.states.AboutUsStateEnum;
 import com.bot.sup.model.UserState;
 import com.bot.sup.service.MessageService;
 import lombok.RequiredArgsConstructor;

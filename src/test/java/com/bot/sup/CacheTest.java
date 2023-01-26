@@ -1,7 +1,7 @@
 package com.bot.sup;
 
 import com.bot.sup.cache.UserStateCache;
-import com.bot.sup.common.enums.InstructorStateEnum;
+import com.bot.sup.common.enums.states.InstructorStateEnum;
 import com.bot.sup.model.UserState;
 import com.bot.sup.model.entity.Instructor;
 import lombok.extern.slf4j.Slf4j;
