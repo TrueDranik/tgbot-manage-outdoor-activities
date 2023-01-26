@@ -4,7 +4,8 @@ import com.bot.sup.api.telegram.handler.registration.HandleRegistration;
 import com.bot.sup.api.telegram.handler.registration.MessageProcessor;
 import com.bot.sup.api.telegram.handler.registration.MessageProcessorUtil;
 import com.bot.sup.cache.UserStateCache;
-import com.bot.sup.common.enums.ClientRecordStateEnum;
+import com.bot.sup.common.enums.states.ClientRecordStateEnum;
+import com.bot.sup.common.enums.states.StateEnum;
 import com.bot.sup.model.UserState;
 import com.bot.sup.model.entity.Client;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class FillingClientImpl implements HandleRegistration {
     private final Map<ClientRecordStateEnum, ClientRecordMessageProcessor> clientRecordMessageProcessorMap;
 
     @Override
-    public BotApiMethod<?> getMessage(Message message) {
+    public BotApiMethod<?> resolveState(Message message) {
         Long chatId = message.getChatId();
         UserState userState = userStateCache.getByTelegramId(chatId);
         Client client = (Client) userState.getEntity();
@@ -33,10 +34,6 @@ public class FillingClientImpl implements HandleRegistration {
             userStateCache.createOrUpdateState(userState);
         }
 
-        return processInputMessage(message, chatId, client);
-    }
-
-    public BotApiMethod<?> processInputMessage(Message message, Long chatId, Client client) {
         ClientRecordStateEnum clientRecordCurrentState = (ClientRecordStateEnum) userStateCache.getByTelegramId(chatId).getState();
         MessageProcessor messageProcessor = clientRecordMessageProcessorMap.get(clientRecordCurrentState);
 
@@ -44,7 +41,7 @@ public class FillingClientImpl implements HandleRegistration {
     }
 
     @Override
-    public Enum<?> getType() {
+    public StateEnum<?> getType() {
         return ClientRecordStateEnum.FILLING_CLIENT;
     }
 }

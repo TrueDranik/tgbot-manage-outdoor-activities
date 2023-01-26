@@ -4,7 +4,8 @@ import com.bot.sup.api.telegram.handler.registration.HandleRegistration;
 import com.bot.sup.api.telegram.handler.registration.MessageProcessor;
 import com.bot.sup.api.telegram.handler.registration.MessageProcessorUtil;
 import com.bot.sup.cache.UserStateCache;
-import com.bot.sup.common.enums.ActivityTypeStateEnum;
+import com.bot.sup.common.enums.states.ActivityTypeStateEnum;
+import com.bot.sup.common.enums.states.StateEnum;
 import com.bot.sup.model.UserState;
 import com.bot.sup.model.entity.ActivityType;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class FillingActivityType implements HandleRegistration {
     private final Map<ActivityTypeStateEnum, ActivityTypeMessageProcessor> activityTypeMessageProcessorMap;
 
     @Override
-    public BotApiMethod<?> getMessage(Message message) {
+    public BotApiMethod<?> resolveState(Message message) {
         Long chatId = message.getChatId();
         UserState userState = userStateCache.getByTelegramId(chatId);
         ActivityType activityType = (ActivityType) userState.getEntity();
@@ -32,10 +33,6 @@ public class FillingActivityType implements HandleRegistration {
             userState.setState(ActivityTypeStateEnum.START_PROCESSING);
         }
 
-        return processInputMessage(message, chatId, activityType);
-    }
-
-    public BotApiMethod<?> processInputMessage(Message message, Long chatId, ActivityType activityType) {
         ActivityTypeStateEnum activityTypeCurrentState = (ActivityTypeStateEnum) userStateCache.getByTelegramId(chatId).getState();
         MessageProcessor messageProcessor = activityTypeMessageProcessorMap.get(activityTypeCurrentState);
 
@@ -43,7 +40,7 @@ public class FillingActivityType implements HandleRegistration {
     }
 
     @Override
-    public Enum<?> getType() {
+    public StateEnum<?> getType() {
         return ActivityTypeStateEnum.FILLING_ACTIVITY_TYPE;
     }
 }

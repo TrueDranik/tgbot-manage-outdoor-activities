@@ -4,7 +4,8 @@ import com.bot.sup.api.telegram.handler.registration.HandleRegistration;
 import com.bot.sup.api.telegram.handler.registration.MessageProcessor;
 import com.bot.sup.api.telegram.handler.registration.MessageProcessorUtil;
 import com.bot.sup.cache.UserStateCache;
-import com.bot.sup.common.enums.AboutUsStateEnum;
+import com.bot.sup.common.enums.states.AboutUsStateEnum;
+import com.bot.sup.common.enums.states.StateEnum;
 import com.bot.sup.model.UserState;
 import com.bot.sup.model.entity.AboutUs;
 import com.bot.sup.service.AboutUsService;
@@ -26,7 +27,7 @@ public class FillingAboutUs implements HandleRegistration {
     private final UserStateCache userStateCache;
 
     @Override
-    public BotApiMethod<?> getMessage(Message message) {
+    public BotApiMethod<?> resolveState(Message message) {
         Long chatId = message.getChatId();
         Optional<AboutUs> aboutUs = aboutUsService.findById(1L);
         UserState userState = userStateCache.getByTelegramId(chatId);
@@ -35,10 +36,6 @@ public class FillingAboutUs implements HandleRegistration {
             userState.setState(AboutUsStateEnum.START_PROCESSOR);
         }
 
-        return processInputMessage(message, chatId, aboutUs);
-    }
-
-    public BotApiMethod<?> processInputMessage(Message message, Long chatId, Optional<AboutUs> aboutUs) {
         AboutUs ab = aboutUs.orElseGet(AboutUs::new);
         AboutUsStateEnum aboutUsCurrentState = (AboutUsStateEnum) userStateCache.getByTelegramId(chatId).getState();
         MessageProcessor messageProcessor = aboutUsMessageProcessorMap.get(aboutUsCurrentState);
@@ -47,7 +44,7 @@ public class FillingAboutUs implements HandleRegistration {
     }
 
     @Override
-    public Enum<?> getType() {
+    public StateEnum<?> getType() {
         return AboutUsStateEnum.FILLING_ABOUT_US;
     }
 }
