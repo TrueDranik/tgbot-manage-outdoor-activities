@@ -30,7 +30,7 @@ public class CallbackActivityFormatOptionImpl implements Callback {
         Long chatId = callbackQuery.getMessage().getChatId();
         String activityFormatId = callbackQuery.getData().split("/")[1];
 
-        Optional<ActivityFormat> activityFormat = Optional.ofNullable(activityFormatService.findActivityFormatById(chatId));
+        Optional<ActivityFormat> activityFormat = Optional.ofNullable(activityFormatService.findActivityFormatById(Long.valueOf(activityFormatId)));
         String activityFormatName = activityFormat.isEmpty() ? "Формат активности не найден" : activityFormat.get().getName();
 
         return EditMessageText.builder()

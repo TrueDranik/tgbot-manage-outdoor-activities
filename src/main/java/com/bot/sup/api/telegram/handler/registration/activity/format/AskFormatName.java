@@ -32,7 +32,7 @@ public class AskFormatName implements ActivityFormatMessageProcessor {
         activityFormatService.save((ActivityFormat) activityFormat);
 
         InlineKeyboardMarkup keyboardMarkup = KeyboardUtil
-                .keyboardMarkup(CallbackEnum.SUP_ACTIVITY_FORMAT.toString(), mainMessageProperties.getDone());
+                .keyboardMarkup(CallbackEnum.LIST_ACTIVITY_FORMAT.toString(), mainMessageProperties.getDone());
 
         return messageService.getReplyMessageWithKeyboard(chatId,
                 String.format(activityMessageProperties.getRegisteredActivity(), ((ActivityFormat) activityFormat).getName()),
