@@ -14,12 +14,12 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findBookingByScheduleId(Long scheduleId);
 
     Booking findBookingById(Long id);
+
     @Query("select b from Booking b where b.schedule.id = :scheduleId and b.paymentStatus = :paymentStatus")
     List<Booking> findBookingByScheduleIdByPaymentStatus(@Param("scheduleId") Long scheduleId, @Param("paymentStatus") String paymentStatus);
 
     @Query("select b from Booking b where b.schedule.id = :scheduleId and  b.isActive = true ")
     List<Booking> findBookingByScheduleIdAndActiveIsTrue(@Param("scheduleId") Long scheduleId);
-
 
     void delete(Booking entity);
 
@@ -37,6 +37,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "inner join schedule_client sc on c.id = sc.client_id " +
             "inner join schedule s on s.id = sc.schedule_id " +
             "where sc.schedule_id = ?1 and sc.client_id = ?2", nativeQuery = true)
-    Optional<Booking> findBookingByClientIByScheduleId(Long scheduleId, Long clientId);
-
+    Optional<Booking> findBookingByClientAndByScheduleId(Long scheduleId, Long clientId);
 }
