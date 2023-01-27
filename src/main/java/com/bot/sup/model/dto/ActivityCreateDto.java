@@ -1,12 +1,14 @@
 package com.bot.sup.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
-@Data
+@Getter
+@Setter
 @Schema(description = "Информация об активности")
 public class ActivityCreateDto {
     @Schema(description = "Name activity")

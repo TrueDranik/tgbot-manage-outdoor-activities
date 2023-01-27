@@ -28,7 +28,7 @@ public class ImageDataService {
         try (BufferedInputStream inputStream = new BufferedInputStream(file.getInputStream())) {
             imageData.setName(file.getOriginalFilename());
             imageData.setType(file.getContentType());
-            imageData.setImageData(inputStream.readAllBytes());
+            imageData.setImagedata(inputStream.readAllBytes());
         }
 
         imageDataRepository.save(imageData);
@@ -47,7 +47,7 @@ public class ImageDataService {
                 .id(dbImage.getId())
                 .name(dbImage.getName())
                 .type(dbImage.getType())
-                .imageData(dbImage.getImageData()).build();
+                .imagedata(dbImage.getImagedata()).build();
     }
 
     public ImageData findByName(String name) {
@@ -58,7 +58,7 @@ public class ImageDataService {
     @Transactional
     public byte[] getImage(String name) {
         ImageData dbImage = findByName(name);
-        return ImageUtil.decompressImage(dbImage.getImageData());
+        return ImageUtil.decompressImage(dbImage.getImagedata());
     }
 
     @Transactional

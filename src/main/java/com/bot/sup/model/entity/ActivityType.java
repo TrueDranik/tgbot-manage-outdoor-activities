@@ -5,18 +5,15 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "activity_type")
 @Getter
 @Setter
+@Entity
 public class ActivityType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "name", unique = true)
+    @Column(unique = true)
     private String name;
-
-    @Column(name = "description", length = 3000)
+    @Column(length = 3000)
     private String description;
 }

@@ -110,6 +110,7 @@ public class BookingServiceImpl implements BookingService {
         sortedByPaymentStatusDto.setReturnedBookings(getBookingByScheduleIdByPaymentStatus(scheduleId, PaymentStatusEnum.RETURNED.name()));
         sortedByPaymentStatusDto.setRefundRequestedBookings(getBookingByScheduleIdByPaymentStatus(scheduleId, PaymentStatusEnum.REFUND_REQUESTED.name()));
         sortedByPaymentStatusDto.setCancelWithoutRefundBookings(getBookingByScheduleIdByPaymentStatus(scheduleId, PaymentStatusEnum.CANCEL_WITHOUT_REFUND.name()));
+        sortedByPaymentStatusDto.setPrepaidBookings(getBookingByScheduleIdByPaymentStatus(scheduleId, PaymentStatusEnum.PREPAID.name()));
 
         return sortedByPaymentStatusDto;
     }
