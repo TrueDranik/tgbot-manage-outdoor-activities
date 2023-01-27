@@ -56,3 +56,13 @@ server:
   forward-headers-strategy: framework
   servlet:
     context-path: /admin/api
+management:
+  endpoint:
+    health:
+      sensitive: false
+      show-details: always
+  health:
+    db:
+      enabled: true
+    defaults:
+      enabled: true
