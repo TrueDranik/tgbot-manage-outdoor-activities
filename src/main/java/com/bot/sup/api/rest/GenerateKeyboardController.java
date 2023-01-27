@@ -2,8 +2,6 @@ package com.bot.sup.api.rest;
 
 import com.bot.sup.service.GenerateKeyboard;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -15,8 +13,8 @@ public class GenerateKeyboardController {
     private final GenerateKeyboard generateKeyboard;
 
     @GetMapping("/message/{telegramId}")
-    public ResponseEntity<Integer> getMessageId(@PathVariable("telegramId") Long telegramId) {
-        return new ResponseEntity<>(generateKeyboard.getMessageId(telegramId), HttpStatus.OK);
+    public Integer getMessageId(@PathVariable("telegramId") Long telegramId) {
+        return generateKeyboard.getMessageId(telegramId);
     }
 
     @PostMapping("/main-menu")

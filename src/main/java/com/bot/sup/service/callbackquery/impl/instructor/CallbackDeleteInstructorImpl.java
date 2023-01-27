@@ -3,8 +3,8 @@ package com.bot.sup.service.callbackquery.impl.instructor;
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.InstructorMessageProperties;
 import com.bot.sup.common.properties.message.MainMessageProperties;
-import com.bot.sup.repository.InstructorRepository;
 import com.bot.sup.service.callbackquery.Callback;
+import com.bot.sup.service.instructor.InstructorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,21 +18,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class CallbackDeleteInstructorImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
     private final InstructorMessageProperties instructorMessageProperties;
-    private final InstructorRepository instructorRepository;
-
-    public static final CallbackEnum ACTIVITIES = CallbackEnum.DELETE_INSTRUCTOR;
+    private final InstructorService instructorService;
 
     @Transactional
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         Long chatId = callbackQuery.getMessage().getChatId();
         String instructorId = callbackQuery.getData().split("/")[1];
-        deleteInstructor(Long.parseLong(instructorId));
+        instructorService.deleteInstructor(Long.parseLong(instructorId));
 
         return EditMessageText.builder().messageId(callbackQuery.getMessage().getMessageId())
                 .text(instructorMessageProperties.getDeleteInstructor())
@@ -40,7 +38,6 @@ public class CallbackDeleteInstructorImpl implements Callback {
                 .replyMarkup(createKeyboardForDeleteInstructor())
                 .build();
     }
-
 
     private InlineKeyboardMarkup createKeyboardForDeleteInstructor() {
         List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
@@ -56,13 +53,8 @@ public class CallbackDeleteInstructorImpl implements Callback {
                 .build();
     }
 
-    @Transactional
-    public void deleteInstructor(Long instructorId) {
-        instructorRepository.deleteByTelegramId(instructorId);
-    }
-
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return CallbackEnum.DELETE_INSTRUCTOR;
     }
 }

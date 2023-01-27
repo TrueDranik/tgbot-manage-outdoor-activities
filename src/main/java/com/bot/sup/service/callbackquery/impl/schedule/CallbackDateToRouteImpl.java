@@ -5,9 +5,8 @@ import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.Schedule;
 import com.bot.sup.model.entity.SelectedSchedule;
-import com.bot.sup.repository.ScheduleRepository;
-import com.bot.sup.repository.SelectedScheduleRepository;
 import com.bot.sup.service.callbackquery.Callback;
+import com.bot.sup.service.schedule.impl.ScheduleServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,17 +25,13 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CallbackDateToRouteImpl implements Callback {
-    private final ScheduleRepository scheduleRepository;
-    private final SelectedScheduleRepository selectedScheduleRepository;
+    private final ScheduleServiceImpl scheduleService;
     private final MainMessageProperties mainMessageProperties;
     private final ScheduleMessageProperties scheduleMessageProperties;
-
-    private static final CallbackEnum ACTIVITIES = CallbackEnum.DATE_TO_ROUTE;
 
     @Transactional
     @Override
@@ -47,14 +42,12 @@ public class CallbackDateToRouteImpl implements Callback {
 
         String datePattern = "dd.MM.yyyy";
 
-        Optional<SelectedSchedule> selectedActivity = selectedScheduleRepository.findByTelegramId(chatId);
-        if (selectedActivity.isPresent()) {
-            selectedScheduleRepository.deleteByTelegramId(chatId);
+        SelectedSchedule selectedActivity = scheduleService.findSelectedScheduleByTelegramId(chatId);
+        if (selectedActivity != null) {
+            scheduleService.deleteSelectedScheduleByTelegramId(chatId);
         }
 
-
-        List<Schedule> schedules = scheduleRepository
-                .selectScheduleByActivityFormatIdAndEventDate(Long.valueOf(activityFormatId), LocalDate.parse(eventDate));
+        List<Schedule> schedules = scheduleService.findScheduleByActivityFormatIdAndEventDate(Long.valueOf(activityFormatId), LocalDate.parse(eventDate));
 
         if (createInlineKeyboard(schedules, activityFormatId, eventDate).getKeyboard().size() <= 1) {
             return EditMessageText.builder()
@@ -127,6 +120,6 @@ public class CallbackDateToRouteImpl implements Callback {
 
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return CallbackEnum.DATE_TO_ROUTE;
     }
 }

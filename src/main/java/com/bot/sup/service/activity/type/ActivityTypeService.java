@@ -1,20 +1,19 @@
 package com.bot.sup.service.activity.type;
 
-import com.bot.sup.model.dto.ActivityTypeCreateDto;
-import com.bot.sup.model.entity.ActivityType;
+import com.bot.sup.model.dto.ActivityTypeDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public interface ActivityTypeService {
-    List<ActivityType> getAllActivityType();
+    List<ActivityTypeDto> getAllActivityType();
 
-    ActivityType getActivityTypeById(Long id);
+    ActivityTypeDto getActivityTypeById(Long id);
 
-    ActivityType createActivityType(ActivityTypeCreateDto activityTypeCreateDto);
+    ActivityTypeDto createActivityType(ActivityTypeDto activityTypeCreateDto);
 
-    ActivityType updateActivityType(Long id, ActivityTypeCreateDto activityTypeCreateDto);
+    ActivityTypeDto updateActivityType(Long id, ActivityTypeDto activityTypeCreateDto);
 
     void deleteActivityType(Long id);
 }

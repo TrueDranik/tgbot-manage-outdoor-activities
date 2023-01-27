@@ -1,9 +1,11 @@
 package com.bot.sup.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Schema(title = "Формат активности")
 public class ActivityFormatCreateDto {
     @Schema(title = "Именование формата", defaultValue = "Format")

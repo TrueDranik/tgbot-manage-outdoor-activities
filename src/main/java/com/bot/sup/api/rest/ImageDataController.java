@@ -22,22 +22,17 @@ public class ImageDataController {
     private final ImageDataService imageDataService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ImageDataCreateDto> uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
-        ImageDataCreateDto imageDataCreateDto = imageDataService.uploadImage(file);
-
-        return new ResponseEntity<>(imageDataCreateDto, HttpStatus.OK);
+    public ImageDataCreateDto uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
+        return imageDataService.uploadImage(file);
     }
 
     @GetMapping("/info/{name}")
-    public ResponseEntity<?> getImageInfoByName(@PathVariable("name") String name) {
-        ImageData image = imageDataService.getInfoByImageByName(name);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(image);
+    public ImageData getImageInfoByName(@PathVariable("name") String name) {
+        return imageDataService.getInfoByImageByName(name);
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<byte[]> getImageByName(@PathVariable("name") String name) throws IOException {
+    public ResponseEntity<byte[]> getImageByName(@PathVariable("name") String name) {
         byte[] image = imageDataService.getImage(name);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -46,13 +41,13 @@ public class ImageDataController {
     }
 
     @GetMapping("/download/{id}")
-    public ResponseEntity<ByteArrayResource> download(@PathVariable Long id) throws IOException {
-        ImageData image = imageDataService.getImageById(id);
+    public ResponseEntity<ByteArrayResource> download(@PathVariable Long id) {
+        ImageData image = imageDataService.findImageById(id);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=%s".formatted(image.getName()));
 
-        ByteArrayResource resource = new ByteArrayResource(image.getImageData());
+        ByteArrayResource resource = new ByteArrayResource(image.getImagedata());
 
         return ResponseEntity.ok()
                 .headers(headers)

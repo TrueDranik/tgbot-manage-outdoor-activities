@@ -15,7 +15,7 @@ import java.util.List;
 public interface ScheduleRepository extends JpaRepository<Schedule, Long>, JpaSpecificationExecutor<ScheduleDto> {
     List<Schedule> getSchedulesByActivity_ActivityFormat_Id(Long id);
 
-    Schedule getSchedulesById (Long id);
+    Schedule getSchedulesById(Long id);
 
     @Modifying
     @Query("SELECT s FROM Schedule s " +
@@ -24,15 +24,11 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>, JpaSp
             "WHERE a.activityFormat.id = ?1 and s.eventDate = ?2")
     List<Schedule> selectScheduleByActivityFormatIdAndEventDate(Long id, LocalDate eventDate);
 
-    void deleteScheduleById(Long id);
-
-    void deleteById(Long id);
+    @Modifying
+    @Query("update Schedule s set s.isActive = false where s.activity.id = :id ")
+    void setScheduleInactiveByActivityId(Long id);
 
     @Modifying
-    @Query("DELETE FROM Schedule s WHERE s.id = ?1")
-    void removeScheduleById(Long id);
-
-    List<Schedule> findSchedulesByActivity_Id(Long id);
-
-    List<Schedule> findSchedulesByRoute_Id(Long id);
+    @Query("update Schedule s set s.isActive = false where s.route.id = :id ")
+    void setScheduleInactiveByRouteId(Long id);
 }

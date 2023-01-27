@@ -4,8 +4,8 @@ import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.InstructorMessageProperties;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.model.entity.Instructor;
-import com.bot.sup.repository.InstructorRepository;
 import com.bot.sup.service.callbackquery.Callback;
+import com.bot.sup.service.instructor.InstructorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -24,14 +24,12 @@ import java.util.List;
 public class CallbackListInstructorsImpl implements Callback {
     private final MainMessageProperties mainMessageProperties;
     private final InstructorMessageProperties instructorMessageProperties;
-    private final InstructorRepository instructorRepository;
-
-    public static final CallbackEnum ACTIVITIES = CallbackEnum.LIST_INSTRUCTORS;
+    private final InstructorService instructorService;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) {
         List<List<InlineKeyboardButton>> buttonEmptyInstructors = new ArrayList<>();
-        List<Instructor> instructor = instructorRepository.findAll();
+        List<Instructor> instructor = instructorService.findAll();
 
         if (instructor.isEmpty()) {
             buttonEmptyInstructors.add(Collections.singletonList(
@@ -96,6 +94,6 @@ public class CallbackListInstructorsImpl implements Callback {
 
     @Override
     public CallbackEnum getSupportedActivities() {
-        return ACTIVITIES;
+        return CallbackEnum.LIST_INSTRUCTORS;
     }
 }

@@ -5,6 +5,7 @@ import com.bot.sup.common.enums.PaymentTypeEnum;
 import com.bot.sup.model.dto.BookingCreateDto;
 import com.bot.sup.model.dto.BookingDto;
 import com.bot.sup.model.dto.BookingUpdateDto;
+import com.bot.sup.model.dto.BookingsSortedByPaymentStatusDto;
 import com.bot.sup.service.booking.BookingService;
 import com.bot.sup.service.client.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,8 +39,6 @@ public class BookingController {
         return bookingService.getBookingByScheduleIdByPaymentStatus(Long.valueOf(id), paymentStatus);
     }
 
-
-
     @GetMapping("/type")
     public Map<PaymentTypeEnum, String> getPaymentType() {
         return PaymentTypeEnum.getTitles();
@@ -55,6 +54,11 @@ public class BookingController {
         return bookingService.getCountFreePlaces(scheduleId);
     }
 
+    @GetMapping("/sortedBooking/{scheduleId}")
+    public BookingsSortedByPaymentStatusDto getBookings(@PathVariable Long scheduleId){
+        return bookingService.getAllBookingsByScheduleIdByPaymentStatus(scheduleId);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Создать ноую бронь")
@@ -68,5 +72,4 @@ public class BookingController {
     public BookingDto updateBooking(@RequestBody BookingUpdateDto bookingUpdateDto) {
         return bookingService.updateBooking(bookingUpdateDto);
     }
-
 }

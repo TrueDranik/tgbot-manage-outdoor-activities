@@ -17,18 +17,21 @@ public enum PaymentStatusEnum {
     NOT_PAID("Не оплачено"),
     REFUND_REQUESTED("Запрошен возврат"),
     CANCEL_WITHOUT_REFUND("Отмена без возврата"),
+    PREPAID("Внесена предоплата"),
     RETURNED("Возвращено");
+
     private final String title;
 
 
     private static final Map<PaymentStatusEnum, String> titles = new HashMap<>(PaymentStatusEnum.values().length);
 
-    static  {
+    static {
         for (PaymentStatusEnum value : PaymentStatusEnum.values()) {
             titles.put(value, value.getTitle());
         }
 
     }
+
     public static Map<PaymentStatusEnum, String> getTitles() {
         return titles;
     }

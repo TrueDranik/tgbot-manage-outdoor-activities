@@ -12,11 +12,15 @@ import java.util.Optional;
 public class AboutUsService {
     private final AboutUsRepository aboutUsRepository;
 
-    public void save(AboutUs aboutUs){
+    public void save(AboutUs aboutUs) {
         aboutUsRepository.save(aboutUs);
     }
 
     public Optional<AboutUs> findById(Long aboutUsId) {
         return aboutUsRepository.findById(aboutUsId);
+    }
+
+    public Optional<AboutUs> getAboutUs() {
+        return aboutUsRepository.getAboutUs();
     }
 }
