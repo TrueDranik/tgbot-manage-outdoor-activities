@@ -25,6 +25,7 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,8 +43,8 @@ public class CallbackDateToRouteImpl implements Callback {
 
         String datePattern = "dd.MM.yyyy";
 
-        SelectedSchedule selectedActivity = scheduleService.findSelectedScheduleByTelegramId(chatId);
-        if (selectedActivity != null) {
+        Optional<SelectedSchedule> selectedActivity = Optional.ofNullable(scheduleService.findSelectedScheduleByTelegramId(chatId));
+        if (selectedActivity.isPresent()) {
             scheduleService.deleteSelectedScheduleByTelegramId(chatId);
         }
 
