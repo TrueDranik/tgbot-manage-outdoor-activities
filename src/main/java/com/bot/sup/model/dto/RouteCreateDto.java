@@ -1,8 +1,10 @@
 package com.bot.sup.model.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class RouteCreateDto {
     private String name;
     private String startPointCoordinates;

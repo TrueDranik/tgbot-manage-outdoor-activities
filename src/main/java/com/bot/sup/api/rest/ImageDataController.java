@@ -47,7 +47,7 @@ public class ImageDataController {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=%s".formatted(image.getName()));
 
-        ByteArrayResource resource = new ByteArrayResource(image.getImageData());
+        ByteArrayResource resource = new ByteArrayResource(image.getImagedata());
 
         return ResponseEntity.ok()
                 .headers(headers)
