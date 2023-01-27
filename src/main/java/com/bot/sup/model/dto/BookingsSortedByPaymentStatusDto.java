@@ -13,5 +13,6 @@ public class BookingsSortedByPaymentStatusDto {
     List<BookingDto> refundRequestedBookings;
     List<BookingDto> cancelWithoutRefundBookings;
     List<BookingDto> returnedBookings;
+    List<BookingDto> prepaidBookings;
 
 }
