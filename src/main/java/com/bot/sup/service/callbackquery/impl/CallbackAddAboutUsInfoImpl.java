@@ -1,12 +1,12 @@
 package com.bot.sup.service.callbackquery.impl;
 
-import com.bot.sup.api.telegram.handler.StateContext;
+import com.bot.sup.api.telegram.handler.registration.StateContext;
 import com.bot.sup.cache.UserStateCache;
-import com.bot.sup.common.enums.states.AboutUsStateEnum;
+import com.bot.sup.common.enums.states.InformationAboutUsStateEnum;
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.model.UserState;
 import com.bot.sup.model.entity.AboutUs;
-import com.bot.sup.service.AboutUsService;
+import com.bot.sup.service.InformationAboutUsService;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,13 +22,13 @@ import java.util.Optional;
 public class CallbackAddAboutUsInfoImpl implements Callback {
     private final StateContext stateContext;
     private final UserStateCache userStateCache;
-    private final AboutUsService aboutUsService;
+    private final InformationAboutUsService informationAboutUsService;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
-        AboutUsStateEnum botStateEnum = AboutUsStateEnum.FILLING_ABOUT_US;
-        Optional<AboutUs> aboutUs = aboutUsService.findById(1L);
+        InformationAboutUsStateEnum botStateEnum = InformationAboutUsStateEnum.FILLING_ABOUT_US;
+        Optional<AboutUs> aboutUs = informationAboutUsService.findById(1L);
 
         UserState userState = UserStateUtil.getUserState(chatId, botStateEnum, aboutUs, false);
         userStateCache.createOrUpdateState(userState);

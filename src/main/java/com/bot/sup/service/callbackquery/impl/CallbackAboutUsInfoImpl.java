@@ -2,7 +2,7 @@ package com.bot.sup.service.callbackquery.impl;
 
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.model.entity.AboutUs;
-import com.bot.sup.service.AboutUsService;
+import com.bot.sup.service.InformationAboutUsService;
 import com.bot.sup.service.callbackquery.Callback;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,12 +20,12 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CallbackAboutUsInfoImpl implements Callback {
-    private final AboutUsService aboutUsService;
+    private final InformationAboutUsService informationAboutUsService;
 
     @Override
     public PartialBotApiMethod<?> getCallbackQuery(CallbackQuery callbackQuery) throws TelegramApiException {
         Long chatId = callbackQuery.getMessage().getChatId();
-        Optional<AboutUs> aboutUs = aboutUsService.getAboutUs();
+        Optional<AboutUs> aboutUs = informationAboutUsService.getAboutUs();
         String fullDescription = aboutUs.isEmpty() || aboutUs.get().getFullDescription().isEmpty()
                 ? "❓ Информация отсутствует!" : aboutUs.get().getFullDescription();
 

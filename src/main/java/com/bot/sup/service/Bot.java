@@ -1,7 +1,7 @@
 package com.bot.sup.service;
 
 import com.bot.sup.api.telegram.command.BaseCommand;
-import com.bot.sup.api.telegram.handler.StateContext;
+import com.bot.sup.api.telegram.handler.registration.StateContext;
 import com.bot.sup.cache.UserStateCache;
 import com.bot.sup.common.CallbackMap;
 import com.bot.sup.common.properties.TelegramProperties;

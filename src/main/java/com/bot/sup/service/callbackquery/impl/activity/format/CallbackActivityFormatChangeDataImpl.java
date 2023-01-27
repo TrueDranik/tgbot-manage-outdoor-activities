@@ -1,6 +1,6 @@
 package com.bot.sup.service.callbackquery.impl.activity.format;
 
-import com.bot.sup.api.telegram.handler.StateContext;
+import com.bot.sup.api.telegram.handler.registration.StateContext;
 import com.bot.sup.cache.UserStateCache;
 import com.bot.sup.common.enums.states.ActivityFormatStateEnum;
 import com.bot.sup.common.enums.CallbackEnum;
