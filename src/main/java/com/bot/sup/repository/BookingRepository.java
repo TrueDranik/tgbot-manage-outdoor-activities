@@ -15,6 +15,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     Booking findBookingById(Long id);
 
+    Integer countAllByScheduleIdAndPaymentStatus(Long scheduleId, String paymentStatus);
+
     @Query("select b from Booking b where b.schedule.id = :scheduleId and b.paymentStatus = :paymentStatus")
     List<Booking> findBookingByScheduleIdByPaymentStatus(@Param("scheduleId") Long scheduleId, @Param("paymentStatus") String paymentStatus);
 

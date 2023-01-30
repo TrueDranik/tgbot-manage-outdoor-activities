@@ -5,7 +5,7 @@ import com.bot.sup.mapper.BookingMapper;
 import com.bot.sup.model.dto.BookingCreateDto;
 import com.bot.sup.model.dto.BookingDto;
 import com.bot.sup.model.dto.BookingUpdateDto;
-import com.bot.sup.model.dto.BookingsSortedByPaymentStatusDto;
+import com.bot.sup.model.dto.CountBookingByPaymentStatusDto;
 import com.bot.sup.model.entity.Booking;
 import com.bot.sup.model.entity.Client;
 import com.bot.sup.model.entity.Schedule;
@@ -103,13 +103,14 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingsSortedByPaymentStatusDto getAllBookingsByScheduleIdByPaymentStatus(Long scheduleId) {
-        BookingsSortedByPaymentStatusDto sortedByPaymentStatusDto = new BookingsSortedByPaymentStatusDto();
-        sortedByPaymentStatusDto.setPaidBookings(getBookingByScheduleIdByPaymentStatus(scheduleId, PaymentStatusEnum.PAID.name()));
-        sortedByPaymentStatusDto.setNotPaidBookings(getBookingByScheduleIdByPaymentStatus(scheduleId, PaymentStatusEnum.NOT_PAID.name()));
-        sortedByPaymentStatusDto.setReturnedBookings(getBookingByScheduleIdByPaymentStatus(scheduleId, PaymentStatusEnum.RETURNED.name()));
-        sortedByPaymentStatusDto.setRefundRequestedBookings(getBookingByScheduleIdByPaymentStatus(scheduleId, PaymentStatusEnum.REFUND_REQUESTED.name()));
-        sortedByPaymentStatusDto.setCancelWithoutRefundBookings(getBookingByScheduleIdByPaymentStatus(scheduleId, PaymentStatusEnum.CANCEL_WITHOUT_REFUND.name()));
+    public CountBookingByPaymentStatusDto getAllBookingsByScheduleIdByPaymentStatus(Long scheduleId) {
+        CountBookingByPaymentStatusDto sortedByPaymentStatusDto = new CountBookingByPaymentStatusDto();
+        sortedByPaymentStatusDto.setPaidBookings(bookingRepository.countAllByScheduleIdAndPaymentStatus(scheduleId, PaymentStatusEnum.PAID.name()));
+        sortedByPaymentStatusDto.setNotPaidBookings(bookingRepository.countAllByScheduleIdAndPaymentStatus(scheduleId, PaymentStatusEnum.NOT_PAID.name()));
+        sortedByPaymentStatusDto.setReturnedBookings(bookingRepository.countAllByScheduleIdAndPaymentStatus(scheduleId, PaymentStatusEnum.RETURNED.name()));
+        sortedByPaymentStatusDto.setRefundRequestedBookings(bookingRepository.countAllByScheduleIdAndPaymentStatus(scheduleId, PaymentStatusEnum.REFUND_REQUESTED.name()));
+        sortedByPaymentStatusDto.setCancelWithoutRefundBookings(bookingRepository.countAllByScheduleIdAndPaymentStatus(scheduleId, PaymentStatusEnum.CANCEL_WITHOUT_REFUND.name()));
+        sortedByPaymentStatusDto.setPrepaidBookings(bookingRepository.countAllByScheduleIdAndPaymentStatus(scheduleId, PaymentStatusEnum.PREPAID.name()));
 
         return sortedByPaymentStatusDto;
     }

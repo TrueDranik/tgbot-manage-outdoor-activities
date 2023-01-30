@@ -4,7 +4,6 @@ import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.common.properties.message.MainMessageProperties;
 import com.bot.sup.common.properties.message.ScheduleMessageProperties;
 import com.bot.sup.model.entity.Schedule;
-import com.bot.sup.model.entity.SelectedSchedule;
 import com.bot.sup.service.callbackquery.Callback;
 import com.bot.sup.service.schedule.impl.ScheduleServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -42,10 +41,7 @@ public class CallbackDateToRouteImpl implements Callback {
 
         String datePattern = "dd.MM.yyyy";
 
-        SelectedSchedule selectedActivity = scheduleService.findSelectedScheduleByTelegramId(chatId);
-        if (selectedActivity != null) {
-            scheduleService.deleteSelectedScheduleByTelegramId(chatId);
-        }
+        scheduleService.deleteSelectedScheduleByTelegramId(chatId);
 
         List<Schedule> schedules = scheduleService.findScheduleByActivityFormatIdAndEventDate(Long.valueOf(activityFormatId), LocalDate.parse(eventDate));
 

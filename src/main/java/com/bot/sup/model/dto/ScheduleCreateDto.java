@@ -1,12 +1,14 @@
 package com.bot.sup.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@Data
+@Getter
+@Setter
 @Schema(title = "Расписание")
 public class ScheduleCreateDto {
     @Schema(title = "id активности", defaultValue = "1")

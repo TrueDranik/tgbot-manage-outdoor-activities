@@ -53,7 +53,7 @@ public class CallbackScheduleInfoImpl implements Callback {
             photo = this.getClass().getClassLoader().getResourceAsStream("map.jpg");
             imageName = "map.jpg";
         } else {
-            photo = new ByteArrayInputStream(imageData.get().getImageData());
+            photo = new ByteArrayInputStream(imageData.get().getImagedata());
             imageName = imageData.get().getName();
         }
 
