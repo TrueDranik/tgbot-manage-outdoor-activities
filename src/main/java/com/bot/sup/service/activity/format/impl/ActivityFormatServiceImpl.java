@@ -28,12 +28,12 @@ public class ActivityFormatServiceImpl implements ActivityFormatService {
     }
 
     public List<ActivityFormat> findAll() {
-        return activityFormatRepository.findAll();
+        return activityFormatRepository.findActivityFormatsByIsActiveIsTrue();
     }
 
     @Override
     public List<ActivityFormatDto> getAllActivityFormat() {
-        List<ActivityFormat> activityFormats = activityFormatRepository.findAll();
+        List<ActivityFormat> activityFormats = findAll();
 
         return activityFormatMapper.domainsToDtos(activityFormats);
     }
@@ -67,8 +67,9 @@ public class ActivityFormatServiceImpl implements ActivityFormatService {
     @Override
     public void deleteActivityFormat(Long id) {
         ActivityFormat activityFormat = findActivityFormatById(id);
-
-        activityFormatRepository.delete(activityFormat);
+        activityFormat.setIsActive(false);
+        
+        activityFormatRepository.save(activityFormat);
     }
 
     public ActivityFormat findActivityFormatById(Long id) {
