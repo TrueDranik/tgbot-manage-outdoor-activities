@@ -29,6 +29,7 @@ public class AskFormatNameState implements ActivityFormatMessageProcessor {
         Long chatId = message.getChatId();
 
         ((ActivityFormat) activityFormat).setName(message.getText());
+        ((ActivityFormat) activityFormat).setIsActive(true);
         activityFormatService.save((ActivityFormat) activityFormat);
 
         InlineKeyboardMarkup keyboardMarkup = KeyboardUtil

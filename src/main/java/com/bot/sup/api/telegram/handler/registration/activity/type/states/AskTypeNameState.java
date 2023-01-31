@@ -27,6 +27,7 @@ public class AskTypeNameState implements ActivityTypeMessageProcessor {
         Long chatId = message.getChatId();
 
         ((ActivityType) activityType).setName(message.getText());
+        ((ActivityType) activityType).setIsActive(true);
 
         activityTypeService.save((ActivityType) activityType);
 
