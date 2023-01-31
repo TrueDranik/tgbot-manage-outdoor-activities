@@ -12,4 +12,5 @@ public class ActivityFormatCreateDto {
     private String name;
     @Schema(title = "Доп. информация для формата", nullable = true, defaultValue = " ")
     private String description;
+    private Boolean isActive;
 }

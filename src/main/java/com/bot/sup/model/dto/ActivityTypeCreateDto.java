@@ -12,4 +12,5 @@ public class ActivityTypeCreateDto {
     private String name;
     @Schema(title = "Доп. информация для типа", nullable = true, defaultValue = " ")
     private String description;
+    private Boolean isActive;
 }
