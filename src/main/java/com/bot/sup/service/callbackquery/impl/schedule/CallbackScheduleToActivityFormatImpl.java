@@ -45,14 +45,16 @@ public class CallbackScheduleToActivityFormatImpl implements Callback {
         List<InlineKeyboardButton> rowSecond = new ArrayList<>();
 
         activityFormats.forEach(i -> {
-                    rowMain.add(InlineKeyboardButton.builder()
-                            .text(i.getName())
-                            .callbackData(CallbackEnum.ACTIVITYFORMAT_TO_DATE + "/" + i.getId())
-                            .build());
-                    if (rowMain.size() == 2) {
-                        List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);
-                        mainKeyboard.add(temporaryKeyboardRow);
-                        rowMain.clear();
+                    if (Boolean.TRUE.equals(i.getIsActive())) {
+                        rowMain.add(InlineKeyboardButton.builder()
+                                .text(i.getName())
+                                .callbackData(CallbackEnum.ACTIVITYFORMAT_TO_DATE + "/" + i.getId())
+                                .build());
+                        if (rowMain.size() == 2) {
+                            List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(rowMain);
+                            mainKeyboard.add(temporaryKeyboardRow);
+                            rowMain.clear();
+                        }
                     }
                 }
         );

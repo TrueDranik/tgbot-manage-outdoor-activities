@@ -16,4 +16,5 @@ public class ActivityFormat {
     private String name;
     @Column(length = 3000)
     private String description;
+    private Boolean isActive;
 }

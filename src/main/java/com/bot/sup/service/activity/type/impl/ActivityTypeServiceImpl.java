@@ -28,13 +28,13 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
     }
 
     public List<ActivityType> findAll() {
-        return activityTypeRepository.findAll();
+        return activityTypeRepository.findActivityTypesByIsActiveIsTrue();
     }
 
 
     @Override
     public List<ActivityTypeDto> getAllActivityType() {
-        List<ActivityType> activityTypes = activityTypeRepository.findAll();
+        List<ActivityType> activityTypes = findAll();
 
         return activityTypeMapper.domainsToDtos(activityTypes);
     }
@@ -68,8 +68,9 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
     @Override
     public void deleteActivityType(Long id) {
         ActivityType activityTypeById = findActivityTypeById(id);
+        activityTypeById.setIsActive(false);
 
-        activityTypeRepository.delete(activityTypeById);
+        activityTypeRepository.save(activityTypeById);
     }
 
     public ActivityType findActivityTypeById(Long id) {
