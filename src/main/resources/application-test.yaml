@@ -1,13 +1,14 @@
 telegram:
   url:
-    constructor: https://tgsupbot-admin.reliab.tech/#/creationSchedule
-    activity: https://tgsupbot-admin.reliab.tech/#/activity
-    updateActivity: https://tgsupbot-admin.reliab.tech/#/updateActivity
-    route: https://tgsupbot-admin.reliab.tech/#/route
-    updateRoute: https://tgsupbot-admin.reliab.tech/#/updateRoute
-    updateSchedule: https://tgsupbot-admin.reliab.tech/#/updateDateTimeSchedule
-  botUsername: '@SupAdminTest_bot'
-  botToken: 5655610927:AAG58hHGVMC9OdMkS2lfRYa5DbzxgvXBOa4
+    constructor: https://tgsupbot-admin-dev.reliab.tech/#/creationSchedule
+    activity: https://tgsupbot-admin-dev.reliab.tech/#/activity
+    updateActivity: https://tgsupbot-admin-dev.reliab.tech/#/updateActivity
+    route: https://tgsupbot-admin-dev.reliab.tech/#/route
+    updateRoute: https://tgsupbot-admin-dev.reliab.tech/#/updateRoute
+    updateSchedule: https://tgsupbot-admin-dev.reliab.tech/#/updateDateTimeSchedule
+    getClientRecords: https://tgsupbot-admin.reliab.tech/#/clientsRecords
+  botUsername: '@supbotabmtestbot'
+  botToken: 5854653645:AAFGWfMtsB9wbz_SXyLTj76nwnJZ8REIXq4
 
 spring:
   liquibase:
