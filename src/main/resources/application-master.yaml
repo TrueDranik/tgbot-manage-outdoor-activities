@@ -1,14 +1,14 @@
 telegram:
   url:
-    constructor: https://tgsupbot-admin-dev.reliab.tech/#/creationSchedule
-    activity: https://tgsupbot-admin-dev.reliab.tech/#/activity
-    updateActivity: https://tgsupbot-admin-dev.reliab.tech/#/updateActivity
-    route: https://tgsupbot-admin-dev.reliab.tech/#/route
-    updateRoute: https://tgsupbot-admin-dev.reliab.tech/#/updateRoute
-    updateSchedule: https://tgsupbot-admin-dev.reliab.tech/#/updateDateTimeSchedule
+    constructor: https://tgsupbot-admin.reliab.tech/#/creationSchedule
+    activity: https://tgsupbot-admin.reliab.tech/#/activity
+    updateActivity: https://tgsupbot-admin.reliab.tech/#/updateActivity
+    route: https://tgsupbot-admin.reliab.tech/#/route
+    updateRoute: https://tgsupbot-admin.reliab.tech/#/updateRoute
+    updateSchedule: https://tgsupbot-admin.reliab.tech/#/updateDateTimeSchedule
     getClientRecords: https://tgsupbot-admin.reliab.tech/#/clientsRecords
-  botUsername: '@supbotabmtestbot'
-  botToken: 5854653645:AAFGWfMtsB9wbz_SXyLTj76nwnJZ8REIXq4
+  botUsername: '@sup31_bot'
+  botToken: 5617783598:AAEVI_edk9ptSp6aFrjRjZ8XeMMdn9m3PEc
 
 spring:
   liquibase:
@@ -21,20 +21,18 @@ spring:
     hibernate:
       ddl-auto: none
     properties:
-      #      hibernate:
-      #        enable_lazy_load_no_trans: 'true'
       javax:
         persistence:
           query:
             timeout: '0'
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   datasource:
+    password: postgres_sub
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: '5'
     username: postgres_sub
-    password: postgres_sub
-    url: jdbc:postgresql://10.120.10.6:5434/postgres_sub_test
+    url: jdbc:postgresql://10.120.10.6:5433/postgres_sub
   jackson:
     serialization:
       FAIL_ON_EMPTY_BEANS: 'false'
@@ -50,7 +48,6 @@ springdoc:
     path: /swagger-ui.html
     csrf:
       enabled: false
-#    config-url: /v3/api-docs/swagger-config
 
 server:
   error:
@@ -59,10 +56,3 @@ server:
   forward-headers-strategy: framework
   servlet:
     context-path: /admin/api
-
-#server:
-#  ssl:
-#    key-store-type: PKCS12
-#    key-store-password: changeit
-#    enabled: true
-#    key-store: classpath:java_ssl.p12

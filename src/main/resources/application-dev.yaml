@@ -7,8 +7,8 @@ telegram:
     updateRoute: https://tgsupbot-admin-dev.reliab.tech/#/updateRoute
     updateSchedule: https://tgsupbot-admin-dev.reliab.tech/#/updateDateTimeSchedule
     getClientRecords: https://tgsupbot-admin-dev.reliab.tech/#/clientsRecords
-  botUsername: '@Dbydhd_bot'
-  botToken: 5713362745:AAFhdPygZuBXLPHKG3rtR8DaQyn2jOG7M3E
+  botUsername: 'https://t.me/sup31AdminTest_bot'
+  botToken: 5896715348:AAH8qH5j8rJuovHVo3auHcru3rUFuiNTY7A
 
 spring:
   liquibase:
@@ -60,16 +60,7 @@ server:
   forward-headers-strategy: framework
   servlet:
     context-path: /admin/api
-management:
-  endpoint:
-    health:
-      sensitive: false
-      show-details: always
-  health:
-    db:
-      enabled: true
-    defaults:
-      enabled: true
+
 #server:
 #  ssl:
 #    key-store-type: PKCS12
