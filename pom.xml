@@ -135,6 +135,7 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -147,7 +148,19 @@
                     </excludes>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-changelog-plugin</artifactId>
+                <version>2.3</version>
+            </plugin>
+
         </plugins>
     </build>
 
+    <scm>
+        <connection>scm:git:https://gitlab.reliab.tech/reliabtech/tgsupbot/tgsupbotadmin</connection>
+        <developerConnection>scm:git:https://gitlab.reliab.tech/reliabtech/tgsupbot/tgsupbotadmin</developerConnection>
+        <url>scm:git:https://gitlab.reliab.tech/reliabtech/tgsupbot/tgsupbotadmin</url>
+    </scm>
 </project>

@@ -1,9 +1,9 @@
 package com.bot.sup.service.callbackquery.impl.schedule;
 
-import com.bot.sup.api.telegram.handler.StateContext;
+import com.bot.sup.api.telegram.handler.registration.StateContext;
 import com.bot.sup.cache.UserStateCache;
 import com.bot.sup.common.enums.CallbackEnum;
-import com.bot.sup.common.enums.ClientRecordStateEnum;
+import com.bot.sup.common.enums.states.ClientRecordStateEnum;
 import com.bot.sup.model.UserState;
 import com.bot.sup.model.entity.Client;
 import com.bot.sup.service.callbackquery.Callback;

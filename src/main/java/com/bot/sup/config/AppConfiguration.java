@@ -1,11 +1,11 @@
 package com.bot.sup.config;
 
-import com.bot.sup.api.telegram.handler.registration.activity.format.ActivityFormatMessageProcessor;
-import com.bot.sup.api.telegram.handler.registration.activity.type.ActivityTypeMessageProcessor;
-import com.bot.sup.api.telegram.handler.registration.client.ClientRecordMessageProcessor;
-import com.bot.sup.api.telegram.handler.registration.description.AboutUsMessageProcessor;
-import com.bot.sup.api.telegram.handler.registration.instructor.InstructorMessageProcessor;
-import com.bot.sup.common.enums.*;
+import com.bot.sup.api.telegram.handler.registration.activity.format.states.ActivityFormatMessageProcessor;
+import com.bot.sup.api.telegram.handler.registration.activity.type.states.ActivityTypeMessageProcessor;
+import com.bot.sup.api.telegram.handler.registration.client.states.ClientRecordMessageProcessor;
+import com.bot.sup.api.telegram.handler.registration.information.states.InformationAboutUsMessageProcessor;
+import com.bot.sup.api.telegram.handler.registration.instructor.states.InstructorMessageProcessor;
+import com.bot.sup.common.enums.states.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -35,9 +35,9 @@ public class AppConfiguration {
     }
 
     @Bean
-    public Map<AboutUsStateEnum, AboutUsMessageProcessor> abouUsMessageProcessorMap(List<AboutUsMessageProcessor> processors) {
+    public Map<InformationAboutUsStateEnum, InformationAboutUsMessageProcessor> abouUsMessageProcessorMap(List<InformationAboutUsMessageProcessor> processors) {
         return processors.stream()
-                .collect(Collectors.toMap(AboutUsMessageProcessor::getCurrentState, Function.identity()));
+                .collect(Collectors.toMap(InformationAboutUsMessageProcessor::getCurrentState, Function.identity()));
     }
 
     @Bean

@@ -5,7 +5,7 @@ import com.bot.sup.common.enums.PaymentTypeEnum;
 import com.bot.sup.model.dto.BookingCreateDto;
 import com.bot.sup.model.dto.BookingDto;
 import com.bot.sup.model.dto.BookingUpdateDto;
-import com.bot.sup.model.dto.BookingsSortedByPaymentStatusDto;
+import com.bot.sup.model.dto.CountBookingByPaymentStatusDto;
 import com.bot.sup.service.booking.BookingService;
 import com.bot.sup.service.client.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -55,7 +55,7 @@ public class BookingController {
     }
 
     @GetMapping("/sortedBooking/{scheduleId}")
-    public BookingsSortedByPaymentStatusDto getBookings(@PathVariable Long scheduleId){
+    public CountBookingByPaymentStatusDto getBookings(@PathVariable Long scheduleId){
         return bookingService.getAllBookingsByScheduleIdByPaymentStatus(scheduleId);
     }
 

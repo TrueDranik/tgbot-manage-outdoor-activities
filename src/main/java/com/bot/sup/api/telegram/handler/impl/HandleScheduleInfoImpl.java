@@ -91,7 +91,7 @@ public class HandleScheduleInfoImpl {
                 .build());
         secondRow.add(InlineKeyboardButton.builder()
                 .text(scheduleMessageProperties.getCancelSchedule())
-                .callbackData(CallbackEnum.SCHEDULE_CANCEL + "/" + scheduleId)
+                .callbackData(CallbackEnum.SCHEDULE_CANCEL + "/" + activityFormatId + "/" + eventDate + "/" + scheduleId)
                 .build());
 
         thirdRow.add(InlineKeyboardButton.builder()

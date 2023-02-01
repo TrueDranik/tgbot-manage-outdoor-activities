@@ -45,7 +45,7 @@ public class CallbackDeleteActivityTypeImpl implements Callback {
         buttons.add(Collections.singletonList(
                 InlineKeyboardButton.builder()
                         .text(mainMessageProperties.getBack())
-                        .callbackData(CallbackEnum.SUP_ACTIVITY_TYPE.toString())
+                        .callbackData(CallbackEnum.LIST_ACTIVITY_TYPE.toString())
                         .build()));
 
         return InlineKeyboardMarkup.builder()

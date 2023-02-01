@@ -64,14 +64,16 @@ public class CallbackListActivityTypeImpl implements Callback {
         List<InlineKeyboardButton> secondRow = new ArrayList<>();
 
         activityTypes.forEach(i -> {
-            mainRow.add(InlineKeyboardButton.builder()
-                    .text(i.getName())
-                    .callbackData(CallbackEnum.ACTIVITY_TYPE_OPTION + "/" + i.getId())
-                    .build());
-            if (mainRow.size() == 2) {
-                List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(mainRow);
-                mainKeyboard.add(temporaryKeyboardRow);
-                mainRow.clear();
+            if (Boolean.TRUE.equals(i.getIsActive())) {
+                mainRow.add(InlineKeyboardButton.builder()
+                        .text(i.getName())
+                        .callbackData(CallbackEnum.ACTIVITY_TYPE_OPTION + "/" + i.getId())
+                        .build());
+                if (mainRow.size() == 2) {
+                    List<InlineKeyboardButton> temporaryKeyboardRow = new ArrayList<>(mainRow);
+                    mainKeyboard.add(temporaryKeyboardRow);
+                    mainRow.clear();
+                }
             }
         });
 

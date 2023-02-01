@@ -1,8 +1,8 @@
 package com.bot.sup.service.callbackquery.impl.activity.type;
 
-import com.bot.sup.api.telegram.handler.StateContext;
+import com.bot.sup.api.telegram.handler.registration.StateContext;
 import com.bot.sup.cache.UserStateCache;
-import com.bot.sup.common.enums.ActivityTypeStateEnum;
+import com.bot.sup.common.enums.states.ActivityTypeStateEnum;
 import com.bot.sup.common.enums.CallbackEnum;
 import com.bot.sup.model.UserState;
 import com.bot.sup.model.entity.ActivityType;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import util.UserStateUtil;
+import com.bot.sup.util.UserStateUtil;
 
 @Service
 @RequiredArgsConstructor
